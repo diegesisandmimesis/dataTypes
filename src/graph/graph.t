@@ -116,4 +116,6 @@ class Graph: object
 			});
 		});
 	}
+
+	initializeGraph() {}
 ;

@@ -24,6 +24,10 @@ FiniteStateMachineState template 'stateID';
 #define isGraph(obj) ((obj != nil) && obj.ofKind(Graph))
 #define isVertex(obj) ((obj != nil) && obj.ofKind(Vertex))
 #define isEdge(obj) ((obj != nil) && obj.ofKind(Edge))
+
+Vertex template 'vertexID';
+Edge template ->vertex1;
+
 #endif // GRAPH
 
 

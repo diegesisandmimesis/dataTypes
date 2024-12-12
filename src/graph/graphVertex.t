@@ -32,5 +32,21 @@ class Vertex: object
 	}
 
 	removeEdges() {
+		local e, l;
+
+		l = _edgeTable.keysToList();
+		l.forEach(function(id) {
+			e = _edgeTable[id];
+			_edgeTable.removeElement(id);
+			e.clear();
+		});
+	}
+
+	getDegree() { return(_edgeTable.keysToList().length); }
+	isAdjacent(id) { return(_edgeTable[id] != nil); }
+
+	initializeVertex() {
+		if(!isGraph(location)) return;
+		location.addVertex(self);
 	}
 ;

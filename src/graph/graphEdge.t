@@ -14,11 +14,16 @@ class Edge: object
 	length = nil
 	_defaultLength = 1
 
-	construct(v0, v1, l?) {
+	_directed = nil
+
+	construct(v0, v1, l?, d?) {
 		if(!isVertex(v0) || !isVertex(v1)) return;
 		vertex0 = v0;
 		vertex1 = v1;
 		length = ((l != nil) ? l : _defaultLength);
+
+		if(d == true) _directed = true;
+		if(self.ofKind(DirectedEdge)) _directed = true;
 
 		initializeVertices();
 	}
@@ -30,7 +35,8 @@ class Edge: object
 
 	initializeVertices() {
 		vertex0.addEdge(vertex1, self);
-		vertex1.addEdge(vertex0, self);
+		if(!_directed)
+			vertex1.addEdge(vertex0, self);
 	}
 
 	initializeEdge() {
@@ -39,6 +45,8 @@ class Edge: object
 			if((location.location == nil)
 				|| !location.location.ofKind(Graph))
 				return;
+			if(location.location.ofKind(DirectedGraph))
+				_directed = true;
 			vertex0 = location;
 		}
 		initializeVertices();

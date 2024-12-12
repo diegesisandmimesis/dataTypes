@@ -7,3 +7,4 @@ source: src/graph/graph.t
 source: src/graph/graphVertex.t
 source: src/graph/graphEdge.t
 source: src/graph/graphDirected.t
+source: src/graph/graphInit.t
