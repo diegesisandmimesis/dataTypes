@@ -42,6 +42,8 @@ class Vertex: object
 		});
 	}
 
+	getEdges() { return(_edgeTable.valsToList()); }
+
 	getDegree() { return(_edgeTable.keysToList().length); }
 	isAdjacent(id) { return(_edgeTable[id] != nil); }
 

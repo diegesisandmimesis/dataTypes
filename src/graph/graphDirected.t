@@ -9,6 +9,11 @@
 
 class DirectedGraph: Graph
 	edgeClass = DirectedEdge
+	directed = true
+;
+/*
+class DirectedGraph: Graph
+	edgeClass = DirectedEdge
 
 	addEdge(id0, id1, obj?) {
 		local v0, v1;
@@ -22,6 +27,8 @@ class DirectedGraph: Graph
 
 		v0.addEdge(v1, obj);
 
+		updateGraph();
+
 		return(obj);
 	}
 
@@ -33,12 +40,21 @@ class DirectedGraph: Graph
 		if((v1 = canonicalizeVertex(id1)) == nil) return(nil);
 		v0.removeEdge(v1);
 
+		updateGraph();
+
 		return(true);
 	}
 ;
+*/
 
 class DirectedEdge: Edge
+	directed = true
+;
+/*
+class DirectedEdge: Edge
+	directed = true
 	initializeVertices() {
 		vertex0.addEdge(vertex1, self);
 	}
 ;
+*/

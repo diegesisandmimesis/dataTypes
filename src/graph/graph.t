@@ -11,6 +11,11 @@ class Graph: object
 	vertexClass = Vertex
 	edgeClass = Edge
 
+	// "Cache" objects for quicker lookups
+	_edgeList = nil
+
+	directed = nil
+
 	_vertexTable = perInstance(new LookupTable)
 
 	// Add a vertex to the graph.
@@ -37,6 +42,7 @@ class Graph: object
 	_addVertex(obj) {
 		if(!isVertex(obj) || (obj.vertexID == nil)) return(nil);
 		_vertexTable[obj.vertexID] = obj;
+		graphUpdated();
 		return(true);
 	}
 
@@ -58,6 +64,7 @@ class Graph: object
 		// Have it remove all its edges.  This will ping any
 		// vertices this vertex is connected to.
 		v.removeEdges();
+		graphUpdated();
 
 		return(true);
 	}
@@ -72,17 +79,23 @@ class Graph: object
 		return(getVertex(v));
 	}
 
+	getVertices() { return(_vertexTable.valsToList()); }
+
 	addEdge(id0, id1, obj?) {
 		local v0, v1;
 
 		if((id0 == nil) || (id1 == nil)) return(nil);
 		if((v0 = canonicalizeVertex(id0)) == nil) return(nil);
 		if((v1 = canonicalizeVertex(id1)) == nil) return(nil);
+
 		if(!isEdge(obj))
 			obj = edgeClass.createInstance(v0, v1);
 
 		v0.addEdge(v1, obj);
-		v1.addEdge(v0, obj);
+		if(directed != true)
+			v1.addEdge(v0, obj);
+
+		graphUpdated();
 
 		return(obj);
 	}
@@ -93,9 +106,32 @@ class Graph: object
 		if((id0 == nil) || (id1 == nil)) return(nil);
 		if((v0 = canonicalizeVertex(id0)) == nil) return(nil);
 		if((v1 = canonicalizeVertex(id1)) == nil) return(nil);
+
 		v0.removeEdge(v1);
-		v1.removeEdge(v0);
+		if(directed != true)
+			v1.removeEdge(v0);
+
+		graphUpdated();
+
 		return(true);
+	}
+
+	getEdges() {
+		local r;
+
+		if(_edgeList != nil)
+			return(_edgeList);
+
+		r = new Vector();
+		getVertices().forEach(function(v) {
+			v.getEdges().forEach(function(e) {
+				r.appendUnique(e);
+			});
+		});
+
+		_edgeList = r;
+
+		return(r);
 	}
 
 	log() {
@@ -115,6 +151,10 @@ class Graph: object
 				"\t\tedge <q><<e>></q>\n ";
 			});
 		});
+	}
+
+	graphUpdated() {
+		_edgeList = nil;
 	}
 
 	initializeGraph() {}
