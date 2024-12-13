@@ -42,6 +42,11 @@ class Vertex: object
 		});
 	}
 
+	getEdge(v) {
+		if(!isVertex(v)) return(nil);
+		return(_edgeTable[v.vertexID]);
+	}
+
 	getEdges() { return(_edgeTable.valsToList()); }
 
 	getDegree() { return(_edgeTable.keysToList().length); }

@@ -8,15 +8,22 @@
 #include "dataStructures.h"
 
 class Graph: object
+	// Boolean indicating if the graph is directed.
+	directed = nil
+
+	// Classes to use for vertices and edges.
 	vertexClass = Vertex
 	edgeClass = Edge
+
+	// Table to hold our vertices.
+	_vertexTable = perInstance(new LookupTable)
 
 	// "Cache" objects for quicker lookups
 	_edgeList = nil
 
-	directed = nil
-
-	_vertexTable = perInstance(new LookupTable)
+	// Used for initialization.
+	_vertexList = nil
+	_edgeMatrix = nil
 
 	// Add a vertex to the graph.
 	//	addVertex(foo);		If foo is a Vertex instance, add it
@@ -100,6 +107,16 @@ class Graph: object
 		return(obj);
 	}
 
+	getEdge(id0, id1) {
+		local v0, v1;
+
+		if((id0 == nil) || (id1 == nil)) return(nil);
+		if((v0 = canonicalizeVertex(id0)) == nil) return(nil);
+		if((v1 = canonicalizeVertex(id1)) == nil) return(nil);
+
+		return(v0.getEdge(v1));
+	}
+
 	removeEdge(id0, id1) {
 		local v0, v1;
 
@@ -157,5 +174,40 @@ class Graph: object
 		_edgeList = nil;
 	}
 
-	initializeGraph() {}
+	initializeGraph() {
+		if(!_initializeGraphVertexList()) return;
+		if(!_initializeGraphEdgeMatrix()) return;
+	}
+
+	_initializeGraphVertexList() {
+		if(_vertexList == nil) return(nil);
+
+		_vertexList.forEach({ x: addVertex(x) });
+
+		return(true);
+	}
+
+	_initializeGraphEdgeMatrix() {
+		local e, i, j, l, off, v, v0, v1;
+
+		if(_edgeMatrix == nil) return(nil);
+
+		l = _vertexList.length;
+		if(_edgeMatrix.length != (l * l)) return(nil);
+
+		for(j = 1; j <= l; j++) {
+			off = (j - 1) * l;
+			for(i = 1; i <= l; i++) {
+				v = _edgeMatrix[off + i];
+				if(toInteger(v) == 0) continue;
+				v0 = getVertex(_vertexList[j]);
+				v1 = getVertex(_vertexList[i]);
+				if((e = getEdge(v0, v1)) != nil) continue;
+				e = edgeClass.createInstance(v0, v1, v);
+				addEdge(v0, v1, e);
+			}
+		}
+
+		return(true);
+	}
 ;

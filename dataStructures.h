@@ -28,6 +28,8 @@ FiniteStateMachineState template 'stateID';
 Vertex template 'vertexID';
 Edge template ->vertex1;
 
+Graph template @_vertexList @_edgeMatrix;
+
 #endif // GRAPH
 
 
