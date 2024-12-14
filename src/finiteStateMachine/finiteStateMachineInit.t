@@ -8,6 +8,7 @@
 #include "dataStructures.h"
 
 finiteStateMachineInit: InitObject
+	execBeforeMe = static [ graphInit ]
 	execute() {
 		forEachInstance(FiniteStateMachineState,
 			{ x: x.initializeFiniteStateMachineState() });

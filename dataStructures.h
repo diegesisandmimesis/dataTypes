@@ -11,12 +11,17 @@
 
 #ifdef FINITE_STATE_MACHINE
 
-#define DefineFSM(name) \
+#define DefineFSM(name, v0) \
 	function name() { return(name##FSM.getState()); }; \
 	function name##ID() { local st; return(((st = name##FSM.getState()) == nil) ? nil : st.getStateID()); } \
-	name##FSM: FSM
+	name##FSM: FSM \
+		@v0
+
+FiniteStateMachine template @_vertexList @_edgeMatrix?;
 
 FiniteStateMachineState template 'stateID';
+
+Transition template '_id0' '_id1';
 
 #endif // FINITE_STATE_MACHINE
 
@@ -27,8 +32,14 @@ FiniteStateMachineState template 'stateID';
 
 Vertex template 'vertexID';
 Edge template ->vertex1;
+Edge template '_id0' '_id1';
 
 Graph template @_vertexList @_edgeMatrix;
+
+#define DeclareGraph(name, v0, v1) \
+	name: Graph \
+		@v0 \
+		@v1
 
 #endif // GRAPH
 

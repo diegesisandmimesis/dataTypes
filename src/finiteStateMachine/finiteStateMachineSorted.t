@@ -49,7 +49,7 @@ class FiniteStateMachineSorted: FSM
 		// If the state doesn't already have an order, we give
 		// it one based on the order it was added to our table.
 		if(obj.order == nil)
-			obj.order = _stateTable.getEntryCount();
+			obj.order = getStates().length();
 
 		return(true);
 	}
@@ -87,9 +87,7 @@ class FiniteStateMachineSorted: FSM
 	getSortedStates() {
 		local l;
 
-		if(_stateTable == nil)
-			return([]);
-		l = _stateTable.valsToList().subset({ x: x.isActive() });
+		l = getStates().subset({ x: x.isActive() });
 		l = l.sort(true, { a, b:
 			nilToInt(a.order, 99) - nilToInt(b.order, 99) });
 		return(l);

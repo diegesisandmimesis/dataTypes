@@ -11,6 +11,9 @@ class Edge: object
 	vertex0 = nil
 	vertex1 = nil
 
+	_id0 = nil
+	_id1 = nil
+
 	length = nil
 	_defaultLength = 1
 
@@ -41,6 +44,14 @@ class Edge: object
 
 	initializeEdge() {
 		if(location == nil) return;
+		if(location.ofKind(Graph)) {
+			if(vertex0 == nil)
+				if((vertex0 = location.getVertex(_id0)) == nil)
+					return;
+			if(vertex1 == nil)
+				if((vertex1 = location.getVertex(_id1)) == nil)
+					return;
+		}
 		if(location.ofKind(Vertex)) {
 			if((location.location == nil)
 				|| !location.location.ofKind(Graph))
