@@ -4,10 +4,25 @@
 
 #define FINITE_STATE_MACHINE
 #define GRAPH
+#define RULEBOOK
 
 #ifndef nilToInt
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
 #endif // nilToInt
+
+#ifndef isThing
+#define isThing(obj) ((obj != nil) && obj.ofKind(Thing))
+#endif // isThing
+
+#ifndef isAction
+#define isAction(obj) ((obj != nil) && obj.ofKind(Action))
+#endif // isAction
+
+#ifndef isLocation
+#define isLocation(obj) ((obj != nil) && obj.ofKind(BasicLocation))
+#endif // isLocation
+
+#define isTuple(obj) ((obj != nil) && obj.ofKind(Tuple))
 
 #ifdef FINITE_STATE_MACHINE
 
@@ -26,6 +41,7 @@ Transition template '_id0' '_id1';
 #endif // FINITE_STATE_MACHINE
 
 #ifdef GRAPH
+
 #define isGraph(obj) ((obj != nil) && obj.ofKind(Graph))
 #define isVertex(obj) ((obj != nil) && obj.ofKind(Vertex))
 #define isEdge(obj) ((obj != nil) && obj.ofKind(Edge))
@@ -42,6 +58,15 @@ Graph template @_vertexList @_edgeMatrix;
 		@v1
 
 #endif // GRAPH
+
+#ifdef RULEBOOK
+
+#define isRule(obj) ((obj != nil) && obj.ofKind(Rule))
+#define isRulebook(obj) ((obj != nil) && obj.ofKind(Rulebook))
+
+Rule template 'ruleID';
+
+#endif // RULEBOOK
 
 
 #define DATA_STRUCTURES_H

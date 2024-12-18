@@ -33,12 +33,6 @@ class FiniteStateMachineState: Vertex
 class FSMState: FiniteStateMachineState;
 
 // Basic state machine.
-// This machine consists only of a table of possible states, of which
-// at any time either exactly one or none are the current state.
-// The latter--allowing the state machine to have a null state--is
-// probably a misfeature, but it's implemented this way to make failures
-// a little more graceful (hopefully).  Specifically this is to handle the
-// case of state machines that are declared but never initialized.
 class FiniteStateMachine: Graph
 	directed = true
 	vertexClass = (stateClass)
