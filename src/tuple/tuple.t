@@ -95,8 +95,13 @@ class Tuple: object
 	matchSrcAndDstActors(v0, v1)
 		{ return(matchSrcActor(v0) && matchDstActor(v1)); }
 
-	matchTupleExact(v) {
-		if(!isTuple(v)) return(nil);
+	toTuple(data?) {
+		if(isTuple(data)) return(data);
+		return(new Tuple(data));
+	}
+
+	exactMatchTuple(v) {
+		v = toTuple(v);
 		if(action != v.action) return(nil);
 		if(dstObject != v.dstObject) return(nil);
 		if(srcActor != v.srcActor) return(nil);
@@ -106,8 +111,10 @@ class Tuple: object
 		return(true);
 	}
 
+	isEqual(v) { return(exactMatchTuple(v)); }
+
 	matchTuple(v) {
-		if(!isTuple(v)) return(nil);
+		v = toTuple(v);
 		if(action && !matchAction(v.action)) return(nil);
 		if(dstObject && !matchDstObject(v.dstObject)) return(nil);
 		if(srcActor && !matchSrcActor(v.srcActor)) return(nil);
