@@ -5,6 +5,7 @@
 #define FINITE_STATE_MACHINE
 #define GRAPH
 #define RULEBOOK
+#define TRIGGER
 
 #ifndef nilToInt
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
@@ -23,6 +24,10 @@
 #endif // isLocation
 
 #define isTuple(obj) ((obj != nil) && obj.ofKind(Tuple))
+
+#define gOutermostRoom(obj) (isThing(obj) ? obj.getOutermostRoom() : nil)
+
+#define noClobber(obj, v) (obj = (obj == nil) ? v : nil)
 
 #ifdef FINITE_STATE_MACHINE
 

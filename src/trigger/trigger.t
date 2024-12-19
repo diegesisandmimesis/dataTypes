@@ -9,7 +9,8 @@
 
 #ifdef TRIGGER
 
-class Trigger: Rule
+class Trigger: Rule, Tuple
+	match(data?) { return(matchTuple(gTuple(data))); }
 ;
 
 #endif // TRIGGER

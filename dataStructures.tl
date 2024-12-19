@@ -14,3 +14,4 @@ source: src/finiteStateMachine/finiteStateMachineInit.t
 source: src/rulebook/rule.t
 source: src/rulebook/rulebook.t
 source: src/rulebook/rulebookInit.t
+source: src/trigger/trigger.t

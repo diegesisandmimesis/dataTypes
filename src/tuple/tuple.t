@@ -7,6 +7,10 @@
 
 #include "dataStructures.h"
 
+modify TadsObject
+	foozle = nil
+;
+
 class Tuple: object
 	srcObject = nil		// object action comes from
 	srcActor = nil		// actor action comes from
@@ -125,3 +129,39 @@ class Tuple: object
 		return(true);
 	}
 ;
+
+// Function that returns a Tuple instance configured to reflect the
+// current turn.
+// If a data object is passed 
+function gTuple(data?) {
+	if(!isTuple(data)) data = new Tuple(data);
+	noClobber(data.srcActor, gActor);
+	if(gIobj == nil) {
+		noClobber(data.dstObject, gDobj);
+	} else {
+		noClobber(data.srcObject, gDobj);
+		noClobber(data.dstObject, gIobj);
+	}
+	noClobber(data.action, gAction);
+	noClobber(data.room, gOutermostRoom(gActor));
+	return(data);
+}
+
+function gNestedTuple(data?) {
+	local t;
+
+	if(!isTuple(data)) data = new Tuple(data);
+	t = gTuple();
+	if((t.action == nil) || (t.action.originalAction) == nil) return(data);
+	t = t.action.originalAction;
+	noClobber(data.srcActor, t.issuer_);
+	if(t.iobjCur_ == nil) {
+		noClobber(data.dstObject, t.dobjCur_);
+	} else {
+		noClobber(data.srcObject, t.dobjCur_);
+		noClobber(data.dstObject, t.iobjCur_);
+	}
+	noClobber(data.action, t);
+	noClobber(data.room, gOutermostRoom(data.srcActor));
+	return(data);
+}
