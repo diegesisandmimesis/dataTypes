@@ -26,49 +26,28 @@ versionInfo: GameID;
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		"\nIn this demo the player object has an afterAction()
-		method that should output the value of gTuple every
-		turn.<.p>\n ";
+		"This demo includes a Trigger that matches when the
+		action is <b>&gt;TAKE PEBBLE</b> and me.afterAction()
+		reports on whether or not it matches this turn.<.p>\n ";
 		runGame(true);
 	}
-;
-
-function _debugObject(obj) {
-	if(obj == nil) return;
-	aioSay('\n===<<toString(obj)>> start===\n ');
-	obj.getPropList().sort(nil,
-		{ a, b: toString(a).compareTo(toString(b)) })
-		.forEach(function(o) {
-			if(!obj.propDefined(o, PropDefDirectly)) return;
-			aioSay('\n\t<<toString(o)>>:
-				<<toString((obj).(o))>>\n ');
-	});
-	aioSay('\n===<<toString(obj)>> end===\n ');
-}
-
-class Pebble: Thing '(small) (round) pebble' 'pebble'
-	"A small, round pebble. "
-	isEquivalent = true
 ;
 
 startRoom: Room 'Void'
 	"This is a featureless void. "
 ;
++pebble: Thing '(small) (round) pebble' 'pebble' "A small, round pebble. ";
 +me: Person
-	trigger = nil
-
-	beforeAction() {
-		if(trigger == nil) {
-			trigger = new Trigger('foo');
-			trigger.srcActor = self;
-			trigger.dstObject = pebble1;
-			trigger.action = TakeAction;
-		}
-		aioSay('\n===trigger===\n ');
-		aioSay('<<toString(trigger.match())>> ');
-		aioSay('\n===trigger===\n ');
+	afterAction() {
+		if(trigger.match())
+			extraReport('The action is &gt;TAKE PEBBLE. ');
+		else
+			extraReport('The action is not &gt;TAKE PEBBLE. ');
 	}
 ;
-+box: Container '(wooden) box' 'box' "It's a wooden box. ";
-++pebble1: Pebble;
-+pebble2: Pebble;
+
+trigger: Trigger
+	srcActor = me
+	dstObject = pebble
+	action = TakeAction
+;
