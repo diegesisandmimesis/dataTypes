@@ -27,16 +27,51 @@ gameMain: GameMainDef
 	newGame() {
 		local g;
 
+		// Create a directed graph with two vertices
 		g = new DirectedGraph();
 		g.addVertex('foo');
 		g.addVertex('bar');
+
+		// Create foo -> bar.  This should NOT create bar -> foo.
 		g.addEdge('foo', 'bar');
-		g.log();
 
+		// Make sure we got foo -> bar
+		if(!isEdge(g.getEdge('foo', 'bar'))) {
+			"FAILURE:  failed to create initial edge\n ";
+			return;
+		}
+
+		// Make sure we DIDN'T get bar -> foo
+		if(isEdge(g.getEdge('bar', 'foo'))) {
+			"FAILURE:  created undirected graph\n ";
+			return;
+		}
+
+		// Create bar -> foo
 		g.addEdge('bar', 'foo');
-		g.log();
 
+		// Make sure we got the new edge
+		if(!isEdge(g.getEdge('bar', 'foo'))) {
+			"FAILURE:  failed to add edge\n ";
+			return;
+		}
+
+		// Remove foo -> bar
 		g.removeEdge('foo', 'bar');
-		g.log();
+
+		// Make sure the edge was removed
+		if(isEdge(g.getEdge('foo', 'bar'))) {
+			"FAILURE:  failed to remove edge\n ";
+			return;
+		}
+
+		// Make sure we didn't ALSO remove bar -> foo
+		if(!isEdge(g.getEdge('bar', 'foo'))) {
+			"FAILURE:  removed extra edge\n ";
+			return;
+		}
+
+		// We're done, hurray
+		"Passed all tests\n ";
 	}
 ;

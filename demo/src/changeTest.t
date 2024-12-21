@@ -24,16 +24,54 @@
 
 versionInfo: GameID;
 gameMain: GameMainDef
+	tests = 0				// total test
+	failures = 0				// number of failures
+	results = perInstance(new Vector())	// results of each test
+
+	// List of tests to run.
+	// Each line is a test.  First element is the state to transition
+	// to, second is the state the FSM should be in after the transition.
+	// Mostly to check for cases where the FSM doesn't reject
+	// state changes without declared transitions.
+	_tests = static [
+		[ nil, 'foo' ],		// test initial state
+		[ 'bar', 'bar' ],	// foo -> bar is an edge, should pass
+		[ 'baz', 'baz' ],	// bar -> baz is also an edge
+		[ 'foo', 'baz' ],	// foo -> baz is not an edge,
+					//	state should stay baz
+		[ 'bar', 'baz' ]	// bar -> baz is an edge, but
+					//	baz -> bar should not be one
+	]
+
 	newGame() {
-		"Foozle.\n ";
-		"\nfoozle = <<toString(foozleID())>>\n ";
-		foozleFSM.setState('bar');
-		"\nfoozle = <<toString(foozleID())>>\n ";
-		foozleFSM.toState('baz');
-		"\nfoozle = <<toString(foozleID())>>\n ";
+		local i;
+
+		_tests.forEach(function(o) {
+			_test(o[1], o[2]);
+		});
+		if(failures == 0) {
+			"Passed all tests (<<toString(tests)>>)\n ";
+		} else {
+			"FAILED <<toString(failures)>> of <<toString(tests)>>
+				tests\n ";
+			for(i = 1; i <= results.length; i++) {
+				if(results[i] != true)
+					"\n\tFAILED test <<toString(i)>>\n ";
+			}
+		}
+	}
+
+	_test(toID, id) {
+		tests += 1;
+		if(toID) foozleFSM.toState(toID);
+		results.append(foozleID() == id);
+		if(results[results.length()] != true)
+			failures += 1;
 	}
 ;
 
+// State machine with three states and the following transitions:
+// 	foo -> bar -> baz
 DefineFSM(foozle, [ 'foo', 'bar', 'baz' ]);
 +Transition 'foo' 'bar';
 +Transition 'bar' 'baz';

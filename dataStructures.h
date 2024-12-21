@@ -2,34 +2,13 @@
 // dataStructures.h
 //
 
-#define FINITE_STATE_MACHINE
-#define GRAPH
-#define RULEBOOK
-#define TRIGGER
-
-#ifndef nilToInt
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
-#endif // nilToInt
-
-#ifndef isThing
 #define isThing(obj) ((obj != nil) && obj.ofKind(Thing))
-#endif // isThing
-
-#ifndef isAction
 #define isAction(obj) ((obj != nil) && obj.ofKind(Action))
-#endif // isAction
-
-#ifndef isLocation
 #define isLocation(obj) ((obj != nil) && obj.ofKind(BasicLocation))
-#endif // isLocation
-
 #define isTuple(obj) ((obj != nil) && obj.ofKind(Tuple))
-
 #define gOutermostRoom(obj) (isThing(obj) ? obj.getOutermostRoom() : nil)
-
 #define noClobber(obj, v) (obj = (obj == nil) ? v : nil)
-
-#ifdef FINITE_STATE_MACHINE
 
 #define DefineFSM(name, v0) \
 	function name() { return(name##FSM.getState()); }; \
@@ -43,9 +22,6 @@ FiniteStateMachineState template 'stateID';
 
 Transition template '_id0' '_id1';
 
-#endif // FINITE_STATE_MACHINE
-
-#ifdef GRAPH
 
 #define isGraph(obj) ((obj != nil) && obj.ofKind(Graph))
 #define isVertex(obj) ((obj != nil) && obj.ofKind(Vertex))
@@ -62,16 +38,29 @@ Graph template @_vertexList @_edgeMatrix;
 		@v0 \
 		@v1
 
-#endif // GRAPH
-
-#ifdef RULEBOOK
 
 #define isRule(obj) ((obj != nil) && obj.ofKind(Rule))
 #define isRulebook(obj) ((obj != nil) && obj.ofKind(Rulebook))
 
 Rule template 'ruleID';
 
-#endif // RULEBOOK
 
+#ifdef SCENE
+
+#include "beforeAfter.h"
+#ifndef BEFORE_AFTER_H
+#error "The scene functions of this module require the beforeAfter module."
+#error "https://github.com/diegesisandmimesis/beforeAfter"
+#error "It should be in the same parent directory as this module.  So if"
+#error "dataStructures is in /home/user/tads/dataStructures, then"
+#error "beforeAfter should be in /home/user/tads/beforeAfter ."
+#endif // BEFORE_AFTER_H
+
+#define isScene(obj) ((obj != nil) && obj.ofKind(Scene))
+
+#endif // SCENE
+
+//TestCase template 'testCaseID'? [ testArgs ];
+//#define isTestCase(obj) ((obj != nil) && obj.ofKind(TestCase))
 
 #define DATA_STRUCTURES_H

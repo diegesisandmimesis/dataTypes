@@ -24,14 +24,59 @@
 
 versionInfo: GameID;
 gameMain: GameMainDef
+	tests = 0				// total number of tests
+	failures = 0				// number of tests failed
+	results = perInstance(new Vector())	// results of each test
+
+	// Tests.
+	// Each line is a test.  First two args are vertices, last is
+	// whether or not the edge between them should exist.
+	_tests = static [
+		[ 'foo', 'bar', true ],
+		[ 'bar', 'foo', true ],
+		[ 'foo', 'baz', true ],
+		[ 'baz', 'foo', true ],
+		[ 'bar', 'baz', true ],
+		[ 'baz', 'bar', true ]
+	]
+
 	newGame() {
-		myGraph.log();
-		matrixGraph.log();
-		g2.log();
+		local i;
+
+		// We're just testing a couple of different ways to declare
+		// a graph, and we're verifying that all of them produce
+		// the same graph.
+		_runTests(graph0);
+		_runTests(graph1);
+		_runTests(graph2);
+
+		if(failures == 0) {
+			"Passed all tests (<<toString(tests)>>)\n ";
+		} else {
+			"FAILED <<toString(failures)>> of <<toString(tests)>>
+				tests\n ";
+			for(i = 1; i <= results.length; i++) {
+				if(results[i] != true)
+					"\n\tFAILED test <<toString(i)>>\n ";
+			}
+		}
+	}
+
+	_runTests(g) {
+		_tests.forEach(function(o) {
+			_runTest(g, o[1], o[2], o[3]);
+		});
+	}
+
+	_runTest(g, v0, v1, t) {
+		tests += 1;
+		results.append(isEdge(g.getEdge(v0, v1)) == t);
+		if(results[results.length()] != true) failures += 1;
 	}
 ;
 
-myGraph: DirectedGraph;
+// "Long form" graph declaration.
+graph0: DirectedGraph;
 +foo: Vertex 'foo';
 ++Edge ->bar;
 ++Edge ->baz;
@@ -42,7 +87,8 @@ myGraph: DirectedGraph;
 ++Edge ->foo;
 ++Edge ->bar;
 
-matrixGraph: Graph
+// "Short form" graph declaration
+graph1: Graph
 	@[	'foo',	'bar',	'baz' ]
 	@[
 		0,	1,	1,
@@ -51,7 +97,8 @@ matrixGraph: Graph
 	]
 ;
 
-DeclareGraph(g2, [ 'foo', 'bar', 'baz' ],
+// Declaration using the macro
+DeclareGraph(graph2, [ 'foo', 'bar', 'baz' ],
 	[
 		0,	1,	1,
 		1,	0,	1,

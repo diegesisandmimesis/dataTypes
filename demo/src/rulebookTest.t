@@ -24,53 +24,93 @@
 
 versionInfo: GameID;
 gameMain: GameMainDef
-	newGame() {
-		"Default:\n ";
-		defaultRulebook.log('nil');
-		defaultRule1.foozle = true;
-		defaultRulebook.log('true');
+	tests = 0
+	failures = 0
+	results = perInstance(new Vector())
 
-		"<.p>Any:\n ";
-		anyRulebook.log('nil');
+	// All we're doing here is testing whether the default/"all", "any",
+	// and "none" rulebook types work.  We do this using one rulebook
+	// of each type, each of which includes rules that match or don't
+	// match entirely based on their "foozle" property.
+	newGame() {
+		local i;
+
+		// Test the default, which is "match all"
+		// We start with one rule true and one false, so by default
+		// the rulebook should be false.
+		_runTest(defaultRulebook, nil);
+		// Set the other rule true, and both should be true and
+		// so the rulebook should also be true.
+		defaultRule1.foozle = true;
+		_runTest(defaultRulebook, true);
+
+		// Test "match any"
+		// We start out with no matches, so the rulebook should be
+		// false.
+		_runTest(anyRulebook, nil);
+		// Mark one rule true, rulebook should now be true.
 		anyRule2.foozle = true;
-		anyRulebook.log('true');
+		_runTest(anyRulebook, true);
+		// Mark the othe rule true, rulebook should stay true.
 		anyRule1.foozle = true;
-		anyRulebook.log('true');
+		_runTest(anyRulebook, true);
+		// Now mark both rules false, rulebook should be false.
 		anyRule1.foozle = nil;
 		anyRule2.foozle = nil;
-		anyRulebook.log('nil');
+		_runTest(anyRulebook, nil);
 
-		"<.p>None:\n ";
-		noneRulebook.log('true');
+		// "Match none" rulebook
+		// We start with no rules true, so rulebook should start true
+		_runTest(noneRulebook, true);
+		// Mark one rule true, rulebook should now be false
 		noneRule1.foozle = true;
-		noneRulebook.log('nil');
+		_runTest(noneRulebook, nil);
+		// Mark other rule true, rulebook should stay false
 		noneRule2.foozle = true;
-		noneRulebook.log('nil');
+		_runTest(noneRulebook, nil);
+		// Mark both rules nil, rulebook should now be true.
 		noneRule1.foozle = nil;
 		noneRule2.foozle = nil;
-		noneRulebook.log('true');
+		_runTest(noneRulebook, true);
+
+		if(failures == 0) {
+			"Passed all tests\n ";
+		} else {
+			"FAILED <<toString(failures)>> of <<toString(tests)>>
+				test\n ";
+			for(i = 1; i <= results.length; i++) {
+				if(results[i] != true)
+					"\n\tFAILED test <<i>>\n ";
+			}
+		}
+	}
+
+	_runTest(rb, v) {
+		tests += 1;
+		results.append(rb.eval() == v);
+		if(results[results.length] != true)
+			failures += 1;
 	}
 ;
 
-class TestRulebook: Rulebook
-	log(txt) {
-		"<<txt>>: <<toString(eval())>>\n ";
-	}
-;
-
+class TestRulebook: Rulebook;
+// Silly rule whose state is equal to its "foozle" property
 class DefaultRule: Rule
 	foozle = nil
 	match(data?) { return(foozle == true); }
 ;
 
+// Default rulebook, "match all", starts with one rule true.
 defaultRulebook: TestRulebook;
 +defaultRule1: DefaultRule 'default1';
 +defaultRule2: DefaultRule 'default2' foozle = true;
 
+// "Match any" rulebook, both rules start false.
 anyRulebook: TestRulebook, RulebookMatchAny;
 +anyRule1: DefaultRule 'any1';
 +anyRule2: DefaultRule 'any2';
 
+// "Match none" rulebook, both rules start false.
 noneRulebook: TestRulebook, RulebookMatchNone;
 +noneRule1: DefaultRule 'none1';
 +noneRule2: DefaultRule 'none2';

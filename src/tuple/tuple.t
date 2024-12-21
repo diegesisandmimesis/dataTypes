@@ -7,10 +7,6 @@
 
 #include "dataStructures.h"
 
-modify TadsObject
-	foozle = nil
-;
-
 class Tuple: object
 	srcObject = nil		// object action comes from
 	srcActor = nil		// actor action comes from

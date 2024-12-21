@@ -2,8 +2,10 @@
 -D MESSAGESTYLE=neu
 -D GRAPH_CHEEGER
 -Fy obj -Fo obj
+-Fs ../..
 -o games/heapTest.t3
 -lib system
 -lib adv3/adv3
+-lib intMath/intMath
 -lib ../dataStructures
 -source src/heapTest.t

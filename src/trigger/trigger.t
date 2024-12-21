@@ -7,10 +7,7 @@
 
 #include "dataStructures.h"
 
-#ifdef TRIGGER
-
+// A Trigger is a Rule that is also a Tuple.
 class Trigger: Rule, Tuple
 	match(data?) { return(matchTuple(gTuple(data))); }
 ;
-
-#endif // TRIGGER

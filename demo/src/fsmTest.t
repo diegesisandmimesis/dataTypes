@@ -25,8 +25,14 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		"Foozle.\n ";
-		"\nfoozle = <<toString(foozleID())>>\n ";
+		// Trivial test to verify the FSM declaration macro,
+		// FSM initialization, and the existence of the FSM ID
+		// function.
+		if(foozleID() != 'foo') {
+			"FAILURE:  failed to init FSM\n ";
+		} else {
+			"Passed all tests\n ";
+		}
 	}
 ;
 

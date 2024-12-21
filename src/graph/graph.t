@@ -174,7 +174,10 @@ class Graph: object
 		_edgeList = nil;
 	}
 
-	initializeGraph() {
+	// Handle "short form" graph declarations.  This is when
+	// everything is in the Graph declaration itself, as opposed
+	// to having separate +Vertex and +Edge declarations.
+	preinitGraph() {
 		if(!_initializeGraphVertexList()) return;
 		if(!_initializeGraphEdgeMatrix()) return;
 	}
@@ -210,4 +213,11 @@ class Graph: object
 
 		return(true);
 	}
+
+	// Handle "long form" graph declarations.  This is when you have
+	// a Graph declaration followed by +Vertex and/or +Edge
+	// declarations.
+	// Right now we don't do anything--it's all handled by the Vertex
+	// and Edge declarations (but might not be for subclasses of Graph).
+	initializeGraph() {}
 ;

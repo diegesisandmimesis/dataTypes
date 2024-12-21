@@ -10,8 +10,6 @@
 finiteStateMachineInit: InitObject
 	execBeforeMe = static [ graphInit ]
 	execute() {
-		forEachInstance(FiniteStateMachineState,
-			{ x: x.initializeFiniteStateMachineState() });
 		forEachInstance(FiniteStateMachine,
 			{ x: x.initializeFiniteStateMachine() });
 	}

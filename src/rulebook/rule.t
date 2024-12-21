@@ -7,8 +7,6 @@
 
 #include "dataStructures.h"
 
-#ifdef RULEBOOK
-
 class RulebookObject: object
 	active = true		// active flag
 	value = nil		// current value
@@ -81,5 +79,3 @@ class Rule: RulebookObject
 		return(nil);
 	}
 ;
-
-#endif // RULEBOOK

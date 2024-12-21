@@ -24,9 +24,23 @@
 
 versionInfo: GameID;
 gameMain: GameMainDef
-	newGame() {
-		local g;
+	tests = 0
+	failures = 0
+	results = perInstance(new Vector())
 
+	_tests = static [
+		[ 'foo', 'bar', true ],
+		[ 'bar', 'foo', true ],
+		[ 'foo', 'baz', true ],
+		[ 'baz', 'foo', true ],
+		[ 'bar', 'baz', true ],
+		[ 'baz', 'bar', true ]
+	]
+
+	newGame() {
+		local g, i;
+
+		// Declare a simple three vertex undirected complete graph.
 		g = new Graph();
 		g.addVertex('foo');
 		g.addVertex('bar');
@@ -34,7 +48,34 @@ gameMain: GameMainDef
 		g.addEdge('foo', 'bar');
 		g.addEdge('foo', 'baz');
 		g.addEdge('bar', 'baz');
+
+		_runTests(g);
 		g.removeEdge('foo', 'bar');
-		g.log();
+
+		_runTest(g, 'foo', 'bar', nil);
+		_runTest(g, 'bar', 'foo', nil);
+
+		if(failures == 0) {
+			"Passed all tests (<<toString(tests)>>)\n ";
+		} else {
+			"FAILED <<toString(failures)>> of <<toString(tests)>>
+				tests\n ";
+			for(i = 1; i <= results.length; i++) {
+				if(results[i] != true)
+					"\n\tFAILED test <<toString(i)>>\n ";
+			}
+		}
+	}
+
+	_runTest(g, v0, v1, t) {
+		tests += 1;
+		results.append(isEdge(g.getEdge(v0, v1)) == t);
+		if(results[results.length()] != true) failures += 1;
+	}
+
+	_runTests(g) {
+		_tests.forEach(function(o) {
+			_runTest(g, o[1], o[2], o[3]);
+		});
 	}
 ;

@@ -19,21 +19,13 @@ class FiniteStateMachineState: Vertex
 	setActive(v) { active = v; }
 
 	getStateID() { return(stateID); }
-
-	initializeFiniteStateMachineState() {
-		if((location == nil)
-			|| !location.ofKind(FiniteStateMachine))
-			return;
-
-		location.addState(self);
-	}
 ;
 
 // Convenience class;  just supplies a shorter name.
 class FSMState: FiniteStateMachineState;
 
 // Basic state machine.
-class FiniteStateMachine: Graph
+class FiniteStateMachine: DirectedGraph
 	directed = true
 	vertexClass = (stateClass)
 	edgeClass = (transitionClass)
@@ -89,4 +81,4 @@ class FiniteStateMachine: Graph
 
 class FSM: FiniteStateMachine;
 
-class Transition: Edge;
+class Transition: DirectedEdge;

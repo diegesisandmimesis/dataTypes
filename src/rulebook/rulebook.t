@@ -7,8 +7,6 @@
 
 #include "dataStructures.h"
 
-#ifdef RULEBOOK
-
 class Rulebook: RulebookObject
 	rulebookID = nil
 
@@ -83,5 +81,3 @@ class RulebookMatchNone: Rulebook
 		return(!defaultValue);
 	}
 ;
-
-#endif // RULEBOOK

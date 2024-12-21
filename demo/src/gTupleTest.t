@@ -26,16 +26,19 @@ versionInfo: GameID;
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		"\nIn this demo the player object has an afterAction()
-		method that should output the value of gTuple every
-		turn.<.p>\n ";
+		"\nIn this demo the player object has beforeAction() and
+		afterAction() methods that should output the value of gTuple
+		and gNestedTuple every turn.<.p>
+		Something to try is <b>&gt;TAKE PEBBLE FROM BOX</b> to
+		see how the two different actions (TakeFrom and Take) look
+		in the before and after methods.<.p>\n ";
 		runGame(true);
 	}
 ;
 
-function _debugObject(obj) {
+function _debugObject(obj, lbl?) {
 	if(obj == nil) return;
-	aioSay('\n===<<toString(obj)>> start===\n ');
+	aioSay('\n===<<(lbl ? lbl : toString(obj))>> start===\n ');
 	obj.getPropList().sort(nil,
 		{ a, b: toString(a).compareTo(toString(b)) })
 		.forEach(function(o) {
@@ -43,7 +46,7 @@ function _debugObject(obj) {
 			aioSay('\n\t<<toString(o)>>:
 				<<toString((obj).(o))>>\n ');
 	});
-	aioSay('\n===<<toString(obj)>> end===\n ');
+	aioSay('\n===<<(lbl ? lbl : toString(obj))>> end===\n ');
 }
 
 class Pebble: Thing '(small) (round) pebble' 'pebble'
@@ -60,10 +63,10 @@ startRoom: Room 'Void'
 
 		aioSay('\n===BEFORE ACTION start===\n ');
 		t = gTuple();
-		_debugObject(t);
+		_debugObject(t, 'gTuple');
 		"<.p>\n ";
 		t = gNestedTuple();
-		_debugObject(t);
+		_debugObject(t, 'gNestedTuple');
 		aioSay('\n===BEFORE ACTION end===\n ');
 	}
 	afterAction() {
