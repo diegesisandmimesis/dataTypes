@@ -22,11 +22,15 @@
 
 #include "dataStructures.h"
 
+pebble: Thing '(small) (round) pebble' 'pebble' "A small, round pebble. ";
+foo: object;
+
 versionInfo: GameID;
 gameMain: GameMainDef
 	tests = 0
 	failures = 0
 	results = perInstance(new Vector())
+
 
 	// All we're doing here is testing whether the default/"all", "any",
 	// and "none" rulebook types work.  We do this using one rulebook
@@ -87,7 +91,8 @@ gameMain: GameMainDef
 
 	_runTest(rb, v) {
 		tests += 1;
-		results.append(rb.eval() == v);
+		rb.eval();
+		results.append(rb.getValue() == v);
 		if(results[results.length] != true)
 			failures += 1;
 	}

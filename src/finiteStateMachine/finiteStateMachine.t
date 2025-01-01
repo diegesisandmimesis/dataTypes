@@ -23,6 +23,7 @@ class FiniteStateMachineState: Vertex
 
 // Convenience class;  just supplies a shorter name.
 class FSMState: FiniteStateMachineState;
+class StateMachineState: FiniteStateMachineState;
 
 // Basic state machine.
 class FiniteStateMachine: DirectedGraph
@@ -80,5 +81,6 @@ class FiniteStateMachine: DirectedGraph
 ;
 
 class FSM: FiniteStateMachine;
+class StateMachine: FiniteStateMachine;
 
 class Transition: DirectedEdge;

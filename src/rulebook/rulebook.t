@@ -25,20 +25,15 @@ class Rulebook: RulebookObject
 		return(true);
 	}
 
-	eval(type?) {
-		if(!isActive()) return(nil);
-		if(isRulebook(type) && !self.ofKind(type)) return(nil);
-		if(updateValue()) setValue(match());
-		return(getValue());
-	}
-
 	initializeRulebook() {}
 
+	// Evaluate all our rules.
 	match(data?) {
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(_rulebook[i].eval(Rule) != true)
+			_rulebook[i].eval(Rule);
+			if(_rulebook[i].getValue() != true)
 				return(defaultValue);
 		}
 
@@ -55,7 +50,8 @@ class RulebookMatchAny: Rulebook
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(_rulebook[i].eval(Rule) == true)
+			_rulebook[i].eval(Rule);
+			if(_rulebook[i].getValue() == true)
 				return(!defaultValue);
 		}
 
@@ -74,7 +70,8 @@ class RulebookMatchNone: Rulebook
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(_rulebook[i].eval(Rule) == true)
+			_rulebook[i].eval(Rule);
+			if(_rulebook[i].getValue() == true)
 				return(defaultValue);
 		}
 
