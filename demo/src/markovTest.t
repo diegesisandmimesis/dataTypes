@@ -29,12 +29,17 @@ gameMain: GameMainDef
 	results = perInstance(new Vector())
 
 	newGame() {
-		local i;
+		local i, r;
 
-		for(i = 0; i < 10; i++) {
-			aioSay('\n<<toString(chain0.getStateID())>>\n ');
-			aioSay('\n<<toString(chain0.pickTransition())>>\n ');
+		r = new Vector(3);
+		for(i = 0; i < 1000; i++) {
+			r.appendUnique(chain0.pickTransition());
 		}
+
+		if(r.length == 3)
+			"Passed\n ";
+		else
+			"FAILED\n ";
 	}
 ;
 
