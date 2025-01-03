@@ -89,8 +89,8 @@ graph0: DirectedGraph;
 
 // "Short form" graph declaration
 graph1: Graph
-	@[	'foo',	'bar',	'baz' ]
-	@[
+	[	'foo',	'bar',	'baz' ]
+	[
 		0,	1,	1,
 		1,	0,	1,
 		1,	1,	0

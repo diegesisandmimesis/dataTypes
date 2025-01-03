@@ -15,6 +15,24 @@
 #define isAction(obj) (isType(obj, Action))
 #define isLocation(obj) ((obj != nil) && obj.ofKind(BasicLocation))
 
+#define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
+#define isCollection(obj) ((obj != nil) && obj.ofKind(Collection))
+
+#ifndef isInteger
+#define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
+#endif // isInteger
+
+// Define a PRNG test if we don't already have one.
+// This is a kludge-within-a-kludge:  we will ALWAYS return nil if isPRNG
+// wasn't already defined (because this module doesn't define a PRNG class).
+// So in theory we could use "#define isPRNG(obj) (nil)".  But then the
+// compiler would complaing about "if(isPRNG(obj)) { [something] }" because
+// the conditional stanza will always be unreachable.  So we do the below,
+// which will always return nil, but in a less straightforward way.
+#ifndef isPRNG
+#define isPRNG(obj) ((obj != nil) && nil)
+#endif // isPRNG
+
 // Like adv3's nilToList but for integers
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
 
@@ -23,6 +41,27 @@
 
 // Set obj to be v, but only if obj is currently nil
 #define noClobber(obj, v) (obj = (obj == nil) ? v : nil)
+
+//
+// Graph definitions
+//
+
+// Type tests
+#define isGraph(obj) (isType(obj, Graph))
+#define isVertex(obj) (isType(obj, Vertex))
+#define isEdge(obj) (isType(obj, Edge))
+
+// Templates
+Vertex template 'vertexID';
+Edge template ->vertex1;
+Edge template '_id0' '_id1';
+Graph template [ _vertexList ] [ _edgeMatrix ];
+
+// Declaration macros
+#define DeclareGraph(name, v0, v1) \
+	name: Graph \
+		v0 \
+		v1
 
 //
 // State machine definitions
@@ -44,25 +83,29 @@ Transition template '_id0' '_id1';
 		@v0
 
 //
-// Graph definitions
+// Markov chain definitions
 //
 
+#ifdef MARKOV_CHAINS
+
+#include "intMath.h"
+#ifndef INT_MATH_H
+#error "The Markov chain functions of this module require the intMath module."
+#error "https://github.com/diegesisandmimesis/intMath"
+#error "It should be in the same parent directory as this module.  So if"
+#error "dataStructures is in /home/user/tads/dataStructures, then"
+#error "intMath should be in /home/user/tads/intMath ."
+#endif // INT_MATH_H
+
 // Type tests
-#define isGraph(obj) (isType(obj, Graph))
-#define isVertex(obj) (isType(obj, Vertex))
-#define isEdge(obj) (isType(obj, Edge))
+#define isMarkovChain(obj) (isType(obj, MarkovChain))
+#define isMarkovTransition(obj) (isType(obj, MarkovTransition))
+#define isMarkovState(obj) (isType(obj, MarkovState))
 
 // Templates
-Vertex template 'vertexID';
-Edge template ->vertex1;
-Edge template '_id0' '_id1';
-Graph template @_vertexList @_edgeMatrix;
+MarkovChain template [ _vertexList ] [ _edgeMatrix ] [ _markovIV ];
 
-// Declaration macros
-#define DeclareGraph(name, v0, v1) \
-	name: Graph \
-		@v0 \
-		@v1
+#endif // MARKOV_CHAINS
 
 //
 // Rulebook definitions

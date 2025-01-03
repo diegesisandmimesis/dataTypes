@@ -36,6 +36,9 @@ class Edge: object
 		vertex1 = nil;
 	}
 
+	getLength() { return(length); }
+	setLength(v) { length = v; }
+
 	initializeVertices() {
 		vertex0.addEdge(vertex1, self);
 		if(!directed)
@@ -43,6 +46,7 @@ class Edge: object
 	}
 
 	initializeEdge() {
+		if(length == nil) length = _defaultLength;
 		if(location == nil) return;
 		if(location.ofKind(Graph)) {
 			if(vertex0 == nil)

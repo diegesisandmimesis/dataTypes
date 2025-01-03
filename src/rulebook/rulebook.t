@@ -28,16 +28,27 @@ class Rulebook: RulebookObject
 	initializeRulebook() {}
 
 	// Evaluate all our rules.
+	// By default we return the default value unless all rules are
+	// true.
 	match(data?) {
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			_rulebook[i].eval(Rule);
-			if(_rulebook[i].getValue() != true)
+			if(checkRule(_rulebook[i]) != true)
 				return(defaultValue);
 		}
 
 		return(!defaultValue);
+	}
+
+	// How we check an individual rule.
+	// This is broken out into its own method so subclasses can do
+	// other things (like only calling eval() during specific phases of
+	// the turn lifecycle).
+	checkRule(obj) {
+		if(!isRule(obj)) return(nil);
+		obj.eval(Rule);
+		return(obj.getValue());
 	}
 ;
 
@@ -50,8 +61,7 @@ class RulebookMatchAny: Rulebook
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			_rulebook[i].eval(Rule);
-			if(_rulebook[i].getValue() == true)
+			if(checkRule(_rulebook[i]) == true)
 				return(!defaultValue);
 		}
 
@@ -65,13 +75,13 @@ class RulebookMatchAny: Rulebook
 // is just a synonym.
 class RulebookMatchAll: Rulebook;
 
+// Rulebook that returns true if NONE of its rules match, nil otherwise.
 class RulebookMatchNone: Rulebook
 	match(data?) {
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			_rulebook[i].eval(Rule);
-			if(_rulebook[i].getValue() == true)
+			if(checkRule(_rulebook[i]) == true)
 				return(defaultValue);
 		}
 

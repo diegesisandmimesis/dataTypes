@@ -11,6 +11,9 @@ source: src/graph/graphInit.t
 source: src/finiteStateMachine/finiteStateMachine.t
 source: src/finiteStateMachine/finiteStateMachineSorted.t
 source: src/finiteStateMachine/finiteStateMachineInit.t
+source: src/markovChain/markovState.t
+source: src/markovChain/markovTransition.t
+source: src/markovChain/markovChain.t
 source: src/rulebook/rulebookObject.t
 source: src/rulebook/rule.t
 source: src/rulebook/rulebook.t
