@@ -50,6 +50,8 @@ gameMain: GameMainDef
 		_runTests(graph1);
 		_runTests(graph2);
 
+		_runTests(graph3);
+
 		if(failures == 0) {
 			"Passed all tests (<<toString(tests)>>)\n ";
 		} else {
@@ -86,6 +88,18 @@ graph0: DirectedGraph;
 +baz: Vertex 'baz';
 ++Edge ->foo;
 ++Edge ->bar;
+
+// Same as above, using IDs instead of obj references in edge declarations
+graph3: DirectedGraph;
++Vertex 'foo';
+++Edge 'bar';
+++Edge 'baz';
++Vertex 'bar';
+++Edge 'foo';
+++Edge 'baz';
++Vertex 'baz';
+++Edge 'foo';
+++Edge 'bar';
 
 // "Short form" graph declaration
 graph1: Graph

@@ -52,9 +52,6 @@ class Edge: object
 			if(vertex0 == nil)
 				if((vertex0 = location.getVertex(_id0)) == nil)
 					return;
-			if(vertex1 == nil)
-				if((vertex1 = location.getVertex(_id1)) == nil)
-					return;
 		}
 		if(location.ofKind(Vertex)) {
 			if((location.location == nil)
@@ -63,7 +60,12 @@ class Edge: object
 			if(location.location.ofKind(DirectedGraph))
 				directed = true;
 			vertex0 = location;
+			if(vertex1 == nil)
+				if((vertex1 = location.location.getVertex(_id1))
+					== nil)
+					return;
 		}
 		initializeVertices();
 	}
+
 ;

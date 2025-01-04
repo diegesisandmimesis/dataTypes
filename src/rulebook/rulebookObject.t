@@ -68,17 +68,11 @@ class RulebookObject: object
 		return(true);
 	}
 
-	// Optional argument is the rule type, which should be a subclass
-	// of Rule.  If given, rule will only be evaluated if this rule
-	// is an instance of the given type.
 	// Return value is whether or not we actually evaluated the value,
 	// it is NOT the value itself.
-	eval(type?, data?) {
+	eval(data?) {
 		// We only evaluate active rules.
 		if(!isActive()) return(nil);
-
-		// Check the type, if a type was given.
-		if((type != nil) && !self.ofKind(type)) return(nil);
 
 		// If we're not supposed to update right now, don't.
 		if(!updateValue()) return(nil);

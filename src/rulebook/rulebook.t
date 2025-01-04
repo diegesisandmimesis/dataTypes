@@ -34,7 +34,7 @@ class Rulebook: RulebookObject
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(checkRule(_rulebook[i]) != true)
+			if(checkRule(_rulebook[i], data) != true)
 				return(defaultValue);
 		}
 
@@ -45,9 +45,9 @@ class Rulebook: RulebookObject
 	// This is broken out into its own method so subclasses can do
 	// other things (like only calling eval() during specific phases of
 	// the turn lifecycle).
-	checkRule(obj) {
+	checkRule(obj, data?) {
 		if(!isRule(obj)) return(nil);
-		obj.eval(Rule);
+		obj.eval(data);
 		return(obj.getValue());
 	}
 ;
@@ -61,7 +61,7 @@ class RulebookMatchAny: Rulebook
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(checkRule(_rulebook[i]) == true)
+			if(checkRule(_rulebook[i], data) == true)
 				return(!defaultValue);
 		}
 
@@ -81,7 +81,7 @@ class RulebookMatchNone: Rulebook
 		local i;
 
 		for(i = 1; i <= _rulebook.length; i++) {
-			if(checkRule(_rulebook[i]) == true)
+			if(checkRule(_rulebook[i], data) == true)
 				return(defaultValue);
 		}
 

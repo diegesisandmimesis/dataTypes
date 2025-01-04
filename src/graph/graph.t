@@ -49,6 +49,7 @@ class Graph: object
 	_addVertex(obj) {
 		if(!isVertex(obj) || (obj.vertexID == nil)) return(nil);
 		_vertexTable[obj.vertexID] = obj;
+		obj.setGraph(self);
 		graphUpdated();
 		return(true);
 	}

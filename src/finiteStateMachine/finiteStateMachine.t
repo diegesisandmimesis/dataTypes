@@ -14,11 +14,15 @@ class FiniteStateMachineState: Vertex
 	stateID = (vertexID)
 	active = true
 
+	stateMachine = (_graph)
+
 	isActive = (active == true)
 	getActive = (isActive())
 	setActive(v) { active = v; }
 
 	getStateID() { return(stateID); }
+
+	getStateMachine() { return(stateMachine); }
 ;
 
 // Convenience class;  just supplies a shorter name.
@@ -44,18 +48,35 @@ class FiniteStateMachine: DirectedGraph
 	getStateID()
 		{ return(currentState ? currentState.getStateID() : nil); }
 
+	// Set the current state.  This is the "just do it" method--it
+	// doesn't do any checking or bookkeeping.  Most callers
+	// probably want toState() (below) instead.
 	setState(v) {
 		v = canonicalizeVertex(v);
 		currentState = ((v && v.ofKind(stateClass)) ? v : nil);
 	}
 
+	// Change to the given state.  This method implements checks and
+	// does bookkeeping, and so is _probably_ what most callers should
+	// use instead of setState() above.
 	toState(id) {
 		local e, v0, v1;
 
+		// Make sure we have a current state.  No current state,
+		// no valid transitions.
 		if((v0 = getState()) == nil) return(nil);
+
+		// Make sure the requested ID is a valid vertex.
 		if((v1 = canonicalizeVertex(id)) == nil) return(nil);
+
+		// Make sure the requested new state is reachable from
+		// the current state.
 		if((e = v0.getEdge(v1)) == nil) return(nil);
+
+		// Set it.
 		setState(v1);
+
+		// Return the edge we used to get there.
 		return(e);
 	}
 

@@ -54,6 +54,7 @@
 // Templates
 Vertex template 'vertexID';
 Edge template ->vertex1;
+Edge template '_id1';
 Edge template '_id0' '_id1';
 Graph template [ _vertexList ] [ _edgeMatrix ];
 

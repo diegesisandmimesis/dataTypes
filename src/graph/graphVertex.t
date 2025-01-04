@@ -8,11 +8,19 @@
 #include "dataStructures.h"
 
 class Vertex: object
+	// Unique-ish ID for this vertex
 	vertexID = nil
 
+	// Graph we're a part of
+	_graph = nil
+
+	// Table to hold our edges
 	_edgeTable = perInstance(new LookupTable)
 
 	construct(id) { vertexID = id; }
+
+	getGraph() { return(_graph); }
+	setGraph(v) { if(isGraph(v)) _graph = v; }
 
 	addEdge(v, e) {
 		if(!isVertex(v) || !isEdge(e)) return(nil);
