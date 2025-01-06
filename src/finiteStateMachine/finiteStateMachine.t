@@ -20,9 +20,9 @@ class FiniteStateMachineState: Vertex
 	getActive = (isActive())
 	setActive(v) { active = v; }
 
-	getStateID() { return(stateID); }
+	getFSMStateID() { return(stateID); }
 
-	getStateMachine() { return(stateMachine); }
+	getFSM() { return(stateMachine); }
 ;
 
 // Convenience class;  just supplies a shorter name.
@@ -44,27 +44,27 @@ class FiniteStateMachine: DirectedGraph
 	addState(obj) { return(addVertex(obj)); }
 
 	// Getter and setter methods.
-	getState() { return(currentState); }
-	getStateID()
-		{ return(currentState ? currentState.getStateID() : nil); }
+	getFSMState() { return(currentState); }
+	getFSMStateID()
+		{ return(currentState ? currentState.getFSMStateID() : nil); }
 
 	// Set the current state.  This is the "just do it" method--it
 	// doesn't do any checking or bookkeeping.  Most callers
-	// probably want toState() (below) instead.
-	setState(v) {
+	// probably want toFSMState() (below) instead.
+	setFSMState(v) {
 		v = canonicalizeVertex(v);
 		currentState = ((v && v.ofKind(stateClass)) ? v : nil);
 	}
 
 	// Change to the given state.  This method implements checks and
 	// does bookkeeping, and so is _probably_ what most callers should
-	// use instead of setState() above.
-	toState(id) {
+	// use instead of setFSMState() above.
+	toFSMState(id) {
 		local e, v0, v1;
 
 		// Make sure we have a current state.  No current state,
 		// no valid transitions.
-		if((v0 = getState()) == nil) return(nil);
+		if((v0 = getFSMState()) == nil) return(nil);
 
 		// Make sure the requested ID is a valid vertex.
 		if((v1 = canonicalizeVertex(id)) == nil) return(nil);
@@ -74,13 +74,13 @@ class FiniteStateMachine: DirectedGraph
 		if((e = v0.getEdge(v1)) == nil) return(nil);
 
 		// Set it.
-		setState(v1);
+		setFSMState(v1);
 
 		// Return the edge we used to get there.
 		return(e);
 	}
 
-	getStates() { return(_vertexTable.valsToList()); }
+	getFSMStates() { return(_vertexTable.valsToList()); }
 
 	// Init-time method.
 	initializeFiniteStateMachine() {
@@ -95,7 +95,7 @@ class FiniteStateMachine: DirectedGraph
 		local l;
 
 		if(currentState != nil) return;
-		l = getStates();
+		l = getFSMStates();
 		if((l == nil) || (l.length < 1)) return;
 		currentState = l[1];
 	}
@@ -104,4 +104,19 @@ class FiniteStateMachine: DirectedGraph
 class FSM: FiniteStateMachine;
 class StateMachine: FiniteStateMachine;
 
-class Transition: DirectedEdge;
+class Transition: DirectedEdge
+	getFSM() { return(getGraph()); }
+	getFSMState() {
+		local m;
+
+		if((m = getFSM()) == nil) return(nil);
+		return(m.getFSMState());
+	}
+
+	getFSMStateID() {
+		local m;
+
+		if((m = getFSM()) == nil) return(nil);
+		return(m.getFSMStateID());
+	}
+;

@@ -54,7 +54,7 @@ class MarkovTest0: StatTestRMS
 	svc = 'MarkovTest0'
 	outcomes = static [ 'foo', 'bar' ]
 	pickOutcome() {
-		chain0.setState('baz');
+		chain0.setFSMState('baz');
 		return(chain0.pickTransition());
 	}
 ;
@@ -64,7 +64,7 @@ class MarkovTest1: StatTestRMS
 	svc = 'MarkovTest1'
 	outcomes = static [ 'foo', 'bar', 'baz' ]
 	pickOutcome() {
-		chain0.setState('bar');
+		chain0.setFSMState('bar');
 		return(chain0.pickTransition());
 	}
 ;

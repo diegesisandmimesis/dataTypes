@@ -78,8 +78,8 @@ Transition template '_id0' '_id1';
 
 // Declaration macros
 #define DefineFSM(name, v0) \
-	function name() { return(name##FSM.getState()); }; \
-	function name##ID() { local st; return(((st = name##FSM.getState()) == nil) ? nil : st.getStateID()); } \
+	function name() { return(name##FSM.getFSMState()); }; \
+	function name##ID() { local st; return(((st = name##FSM.getFSMState()) == nil) ? nil : st.getFSMStateID()); } \
 	name##FSM: FSM \
 		@v0
 

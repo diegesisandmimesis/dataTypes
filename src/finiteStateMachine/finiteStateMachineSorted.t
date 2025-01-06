@@ -49,7 +49,7 @@ class FiniteStateMachineSorted: FSM
 		// If the state doesn't already have an order, we give
 		// it one based on the order it was added to our table.
 		if(obj.order == nil)
-			obj.order = getStates().length();
+			obj.order = getFSMStates().length();
 
 		return(true);
 	}
@@ -72,7 +72,7 @@ class FiniteStateMachineSorted: FSM
 
 		// We DO have an ID, so we find it in the list of active
 		// states.
-		i = l.indexWhich({ x: x.getStateID() == fromID });
+		i = l.indexWhich({ x: x.getFSMStateID() == fromID });
 
 		// If that failed or if the ID is the last state, fail.
 		if((i == nil) || (i == l.length))
@@ -87,7 +87,7 @@ class FiniteStateMachineSorted: FSM
 	getSortedStates() {
 		local l;
 
-		l = getStates().subset({ x: x.isActive() });
+		l = getFSMStates().subset({ x: x.isActive() });
 		l = l.sort(true, { a, b:
 			nilToInt(a.order, 99) - nilToInt(b.order, 99) });
 		return(l);

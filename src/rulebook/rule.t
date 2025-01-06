@@ -24,4 +24,6 @@ class Rule: RulebookObject
 			return(location.addRule(self));
 		return(nil);
 	}
+
+	getRulebook() { return(rulebook); }
 ;

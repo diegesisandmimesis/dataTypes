@@ -14,6 +14,8 @@ class Edge: object
 	_id0 = nil
 	_id1 = nil
 
+	_graph = nil
+
 	length = nil
 	_defaultLength = 1
 
@@ -38,6 +40,13 @@ class Edge: object
 
 	getLength() { return(length); }
 	setLength(v) { length = v; }
+
+	getGraph() {
+		if(_graph == nil)
+			if(isVertex(vertex0)) _graph = vertex0.getGraph();
+
+		return(_graph);
+	}
 
 	initializeVertices() {
 		vertex0.addEdge(vertex1, self);

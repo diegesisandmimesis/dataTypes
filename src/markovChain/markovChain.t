@@ -88,7 +88,7 @@ class MarkovChain: StateMachine
 		_markovIV = _markovProbabilityToWeight(_markovIV);
 
 		// Pick a random one and set it as the default state.
-		setState(randomElementWeighted(l, _markovIV,
+		setFSMState(randomElementWeighted(l, _markovIV,
 			(prng ? prng : _prng)));
 
 		return(true);
@@ -151,14 +151,14 @@ class MarkovChain: StateMachine
 		local v;
 
 		if(id == nil)
-			if((id = getStateID()) == nil)
+			if((id = getFSMStateID()) == nil)
 				return(nil);
 
 		if((v = getVertex(id)) == nil) return(nil);
 		if((id = v.pickTransition(prng ? prng : _prng)) == nil)
 			return(nil);
 
-		setState(id);
+		setFSMState(id);
 
 		return(id);
 	}

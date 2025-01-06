@@ -63,7 +63,7 @@ gameMain: GameMainDef
 
 	_test(toID, id) {
 		tests += 1;
-		if(toID) foozleFSM.toState(toID);
+		if(toID) foozleFSM.toFSMState(toID);
 		results.append(foozleID() == id);
 		if(results[results.length()] != true)
 			failures += 1;
