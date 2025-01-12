@@ -137,6 +137,13 @@ Rule template 'ruleID';
 		action = a##Action \
 		room = rm
 
+//
+// Trigger definitions
+//
+
+// Type tests
+#define isTrigger(obj) (isType(obj, Trigger))
+
 
 #ifdef SCENE
 

@@ -89,6 +89,8 @@ class Graph: object
 
 	getVertices() { return(_vertexTable.valsToList()); }
 
+	getVertexIDs() { return(_vertexTable.keysToList()); }
+
 	addEdge(id0, id1, obj?) {
 		local v0, v1;
 

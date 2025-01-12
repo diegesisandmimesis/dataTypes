@@ -41,7 +41,7 @@ class FiniteStateMachine: DirectedGraph
 	transitionClass = Transition
 
 	// Add the given state to our table.
-	addState(obj) { return(addVertex(obj)); }
+	addFSMState(id, obj?) { return(addVertex(id, obj)); }
 
 	// Getter and setter methods.
 	getFSMState() { return(currentState); }

@@ -56,6 +56,7 @@ class Vertex: object
 	}
 
 	getEdges() { return(_edgeTable.valsToList()); }
+	getEdgeIDs() { return(_edgeTable.keysToList()); }
 
 	getDegree() { return(_edgeTable.keysToList().length); }
 	isAdjacent(id) { return(_edgeTable[id] != nil); }
