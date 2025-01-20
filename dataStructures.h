@@ -13,10 +13,12 @@
 // Defines to test for common adv3 object types
 #define isThing(obj) (isType(obj, Thing))
 #define isAction(obj) (isType(obj, Action))
-#define isLocation(obj) ((obj != nil) && obj.ofKind(BasicLocation))
+#define isLocation(obj) (isType(obj, BasicLocation))
+#define isRoom(obj) (isType(obj, Room))
+#define isActor(obj) (isType(obj, Actor))
 
 #define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
-#define isCollection(obj) ((obj != nil) && obj.ofKind(Collection))
+#define isCollection(obj) (isType(obj, Collection))
 
 #ifndef isInteger
 #define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
