@@ -5,7 +5,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 class Graph: object
 	// Boolean indicating if the graph is directed.

@@ -8,7 +8,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 class FiniteStateMachineStateSorted: FSMState
 	order = nil		// Integer order for this state

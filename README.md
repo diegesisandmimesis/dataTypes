@@ -1,4 +1,4 @@
-# dataStructures
+# dataTypes
 
 A TADS3/adv3 module providing several basic data structures.
 
@@ -41,7 +41,6 @@ In this example we'll use ``/home/username/tads`` as the base directory.
 
 * Clone this repo:
 
-``git clone https://github.com/diegesisandmimesis/dataStructures.git``
+``git clone https://github.com/diegesisandmimesis/dataTypes.git``
 
 ### Compiling and Running Demos
-

@@ -20,14 +20,14 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 #include "intMath.h"
 #ifndef INT_MATH_H
 #error "This demo requires the intMath module."
 #error "https://github.com/diegesisandmimesis/intMath"
 #error "It should be in the same parent directory as this module.  So if"
-#error "dataStructures is in /home/user/tads/dataStructures, then"
+#error "dataTypes is in /home/user/tads/dataTypes, then"
 #error "intMath should be in /home/user/tads/intMath ."
 #endif // INT_MATH_H
 
@@ -40,7 +40,7 @@ gameMain: GameMainDef
 		local lst, r, t;
 
 		// Get the permutations of the test data.
-		lst = permutations(testData);
+		lst = testData.permutations();
 
 		// Generate a unique array of the sorted forms of
 		// the permuations.  This should be exactly one element

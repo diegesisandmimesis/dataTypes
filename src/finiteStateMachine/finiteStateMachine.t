@@ -5,7 +5,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 // Basic state.
 // In its simples form a state is just an ID and a flag to indicate

@@ -5,7 +5,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 // Preinit is for "short form" graph declarations--where everything
 // is part of the graph declaration itself (as opposed to +Vertex

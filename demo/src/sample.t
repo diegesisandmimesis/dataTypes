@@ -4,7 +4,7 @@
 // Version 1.0
 // Copyright 2022 Diegesis & Mimesis
 //
-// This is a very simple demonstration "game" for the dataStructures library.
+// This is a very simple demonstration "game" for the dataTypes library.
 //
 // It can be compiled via the included makefile with
 //
@@ -19,17 +19,17 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 versionInfo: GameID
-        name = 'dataStructures Library Demo Game'
+        name = 'dataTypes Library Demo Game'
         byline = 'Diegesis & Mimesis'
-        desc = 'Demo game for the dataStructures library. '
+        desc = 'Demo game for the dataTypes library. '
         version = '1.0'
         IFID = '12345'
 	showAbout() {
 		"This is a simple test game that demonstrates the features
-		of the dataStructures library.
+		of the dataTypes library.
 		<.p>
 		Consult the README.txt document distributed with the library
 		source for a quick summary of how to use the library in your

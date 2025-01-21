@@ -9,5 +9,5 @@
 -lib intMath/intMath
 -lib notReallyRandom/notReallyRandom
 -lib statTest/statTest
--lib ../dataStructures
+-lib ../dataTypes
 -source src/markovStatTest.t

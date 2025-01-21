@@ -20,7 +20,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 #include "statTest.h"
 #ifndef STAT_TEST_H

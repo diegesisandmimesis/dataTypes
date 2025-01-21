@@ -5,6 +5,6 @@
 -o games/gTupleTest.t3
 -lib system
 -lib adv3/adv3
--lib ../dataStructures
+-lib ../dataTypes
 -source src/gTupleTest.t
 -source reflect.t

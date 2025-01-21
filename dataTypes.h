@@ -1,33 +1,50 @@
 //
-// dataStructures.h
+// dataTypes.h
 //
 
 //
 // General definitions
 //
 
-#define DefineTypeCheck(cls) \
-#ifndef is##cls \
-#define is##cls(obj) {} \
-#endif
-
 // Utility define for testing an object to see if it is an instance of some
 // class
+#ifndef isType
 #define isType(obj, cls) ((obj != nil) && obj.ofKind(cls))
+#endif
 
 // Defines to test for common adv3 object types
+#ifndef isThing
 #define isThing(obj) (isType(obj, Thing))
+#endif
+#ifndef isAction
 #define isAction(obj) (isType(obj, Action))
+#endif
+#ifndef isLocation
 #define isLocation(obj) (isType(obj, BasicLocation))
+#endif
+#ifndef isRoom
 #define isRoom(obj) (isType(obj, Room))
+#endif
+#ifndef isActor
 #define isActor(obj) (isType(obj, Actor))
+#endif
 
+#ifndef isCollection
 #define isCollection(obj) (isType(obj, Collection))
+#endif
+#ifndef isList
 #define isList(obj) (isType(obj, List))
+#endif
+#ifndef isObject
 #define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
+#endif
+#ifndef isVector
 #define isVector(obj) (isType(obj, Vector))
+#endif
 
+#ifndef isInteger
 #define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
+#endif
 
 // Like adv3's nilToList but for integers
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
@@ -101,7 +118,7 @@ Transition template '_id0' '_id1';
 #error "The Markov chain functions of this module require the intMath module."
 #error "https://github.com/diegesisandmimesis/intMath"
 #error "It should be in the same parent directory as this module.  So if"
-#error "dataStructures is in /home/user/tads/dataStructures, then"
+#error "dataTypes is in /home/user/tads/dataTypes, then"
 #error "intMath should be in /home/user/tads/intMath ."
 #endif // INT_MATH_H
 
@@ -151,4 +168,4 @@ Rule template 'ruleID';
 // Type tests
 #define isTrigger(obj) (isType(obj, Trigger))
 
-#define DATA_STRUCTURES_H
+#define DATA_TYPES_H

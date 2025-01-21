@@ -20,7 +20,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 pebble: Thing '(small) (round) pebble' 'pebble' "A small, round pebble. ";
 foo: object;

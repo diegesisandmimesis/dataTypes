@@ -5,7 +5,7 @@
 #include <adv3.h>
 #include <en_us.h>
 
-#include "dataStructures.h"
+#include "dataTypes.h"
 
 // A Trigger is a Rule that is also a Tuple.
 class Trigger: Rule, Tuple

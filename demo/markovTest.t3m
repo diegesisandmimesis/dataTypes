@@ -8,5 +8,5 @@
 -lib adv3/adv3
 -lib intMath/intMath
 -lib notReallyRandom/notReallyRandom
--lib ../dataStructures
+-lib ../dataTypes
 -source src/markovTest.t

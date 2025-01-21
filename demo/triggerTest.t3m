@@ -5,6 +5,6 @@
 -o games/triggerTest.t3
 -lib system
 -lib adv3/adv3
--lib ../dataStructures
+-lib ../dataTypes
 -source src/triggerTest.t
 -source reflect.t
