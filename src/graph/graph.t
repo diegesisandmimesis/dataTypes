@@ -220,7 +220,10 @@ class Graph: object
 
 	// Convenience method to make it easier for subclasses to decorate
 	// newly-created edge instances.
-	createEdge(v0, v1, v) { return(edgeClass.createInstance(v0, v1, v)); }
+	createEdge(v0, v1, len?, d?) {
+		return(edgeClass.createInstance(canonicalizeVertex(v0),
+			canonicalizeVertex(v1), len, d));
+	}
 
 	// Handle "long form" graph declarations.  This is when you have
 	// a Graph declaration followed by +Vertex and/or +Edge

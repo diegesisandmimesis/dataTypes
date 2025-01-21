@@ -9,7 +9,7 @@
 
 // Module ID for the library
 dataTypesModuleID: ModuleID {
-        name = 'Data Structures Library'
+        name = 'Data Types Library'
         byline = 'Diegesis & Mimesis'
         version = '1.0'
         listingOrder = 99
