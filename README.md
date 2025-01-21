@@ -18,9 +18,11 @@ module.
 
 ## Table of Contents
 
-[Getting Started] (#getting-started)
+[Getting Started](#getting-started)
 
-[Data Types] (#dataTypes)
+[Data Types](#data-types)
+ * [Graph](#graph)
+ * [Vertex](https://github.com/diegesisandmimesis/dataTypes#vertex)
 
 ## Getting Started
 
@@ -51,8 +53,9 @@ In this example we'll use ``/home/username/tads`` as the base directory.
 
 ### Compiling and Running Demos
 
+
+<a name="data-types"/></a>
 ## Data Types
-<a name="dataTypes"/>
 
 ### Graph
 
@@ -64,6 +67,7 @@ In general vertices and edges should be managed via the methods on ``Graph``
 rather than by directly manipulating the individual ``Vertex`` and ``Edge``
 objects.
 
+<a name="graph"/></a>
 #### Graph
 
 ##### Properties
@@ -154,6 +158,7 @@ objects.
 
   Class for directed graphs.
 
+<a name="vertex"/></a>
 #### Vertex
 
 ##### Properties
