@@ -49,128 +49,254 @@ In this example we'll use ``/home/username/tads`` as the base directory.
 
 ### Graph
 
+In this module graph consists of three kinds of components:  a single
+``Graph`` instance; one or more ``Vertex`` instances; and one or more ``Edge``
+instances.
+
+In general vertices and edges should be managed via the methods on ``Graph``
+rather than by directly manipulating the individual ``Vertex`` and ``Edge``
+objects.
+
 #### Graph
 
-Vertex methods:
+##### Properties
 
-* ``addVertex(vertexID, vertexInstance?)``
+* ``directed = nil``
 
- Adds a vertex to the graph, creating a new ``Vertex`` instance if one is not
-provided.
+  Boolean indicating whether or not the graph is directed.
 
- Returns the added ``Vertex``.
+* ``vertexClass = Vertex``
 
-* ``getVertex(vertexID)``
+  Default class to use when creating vertices.
 
- Returns the given ``Vertex`` or ``nil`` on failure.
+* ``edgeClass = Edge``
 
-* ``removeVertex(vertex)``
+  Default class to use when creating edges.
 
- Removes the given vertex.  Argument can be the vertex ID or the ``Vertex``
-instance.
+##### Methods
 
-* ``getVertices()``
+* **Vertex Methods**
+ * ``addVertex(vertexID, vertexInstance?)``
 
- Returns a ``Vector`` of the graph's ``Vertex`` instances.
+   Adds a vertex to the graph, creating a new ``Vertex`` instance if one is
+   not provided.
 
-* ``getVertexIDs()``
+   Returns the added ``Vertex``.
 
- Returns a ``Vector`` of the graph's vertex IDs.
+ * ``getVertex(vertexID)``
 
+   Returns the given ``Vertex`` or ``nil`` on failure.
 
-Edge methods:
+ * ``removeVertex(vertex)``
 
-* ``addEdge(vertex0, vertex1, edgeInstance?)``
+   Removes the given vertex.  Argument can be the vertex ID or the
+   ``Vertex`` instance.
 
- Adds an edge to the graph, creating a new ``Edge`` instance if one is not
-given.
+ * ``getVertices()``
 
- The first two arguments specify the vertices connected by the edge.  They
-can be either vertex IDs or ``Vertex`` instances.
+   Returns a ``Vector`` of the graph's ``Vertex`` instances.
 
-* ``getEdge(vertex0, vertex1)``
+ * ``getVertexIDs()``
 
- Returns the given ``Edge`` or ``nil`` if it does not exist.
+   Returns a ``Vector`` of the graph's vertex IDs.
 
- The arguments can be either vertex IDs or ``Vertex`` instances.
+* **Edge Methods**
 
-* ``removeEdge(vertex0, vertex1)``
+ * ``addEdge(vertex0, vertex1, edgeInstance?)``
 
- Removes the given edge.  Returns ``true`` on success, ``nil`` otherwise.
+   Adds an edge to the graph, creating a new ``Edge`` instance if one is
+   not given.
 
- The arguments can be either vertex IDs or ``Vertex`` instances.
+   The first two arguments specify the vertices connected by the edge.
+   They can be either vertex IDs or ``Vertex`` instances.
 
-* ``getEdges()``
+ * ``getEdge(vertex0, vertex1)``
 
- Returns a ``Vector`` containing all of the graph's ``Edge`` instances.
+   Returns the given ``Edge`` or ``nil`` if it does not exist.
 
-* ``createEdge(vertex0, vertex1, length?, directed?)``
+   The arguments can be either vertex IDs or ``Vertex`` instances.
 
- Convenience method for creating a new ``Edge`` instance.
+ * ``removeEdge(vertex0, vertex1)``
 
- The vertices can be IDs or ``Vertex`` instances.
+    Removes the given edge.  Returns ``true`` on success, ``nil`` otherwise.
 
- The ``length`` and
-``directed`` arguments are optional.  If given, ``length`` is the length
-of the edge and ``directed`` is a boolean indicating whether or not the edge is directed.  Both take their default values from the ``edgeClass`` defined on the graph.
+    The arguments can be either vertex IDs or ``Vertex`` instances.
+
+ * ``getEdges()``
+
+    Returns a ``Vector`` containing all of the graph's ``Edge`` instances.
+
+ * ``createEdge(vertex0, vertex1, length?, directed?)``
+
+    Convenience method for creating a new ``Edge`` instance.
+
+    The vertices can be IDs or ``Vertex`` instances.
+
+    The ``length`` and ``directed`` arguments are optional.  If given,
+    ``length`` is the length of the edge and ``directed`` is a boolean
+    indicating whether or not the edge is directed.  Both take their
+    default values from the ``edgeClass`` defined on the graph.
+
+##### Subclasses
+
+* ``Graph``
+
+  The base class.  Undirected.
+
+* ``DirectedGraph``
+
+  Class for directed graphs.
 
 #### Vertex
 
+##### Properties
+
+* ``vertexID = nil``
+
+  Unique-ish ID for the vertex.  Should be a single-quoted string.
+
+##### Methods
+
 * ``addEdge(vertexInstance, edgeInstance)``
 
- Add an edge to this vertex.  Arguments must be instances, not IDs.
+  Add an edge to this vertex.  Arguments must be instances, not IDs.
 
- Returns boolean ``true`` on success, ``nil`` otherwise.
+  Returns boolean ``true`` on success, ``nil`` otherwise.
 
 * ``getEdge(vertexInstance)``
 
- Returns the edge connecting this vertex to the given vertex, if one
-exists.  Returns ``nil`` if no such edge exists.
+  Returns the edge connecting this vertex to the given vertex, if one
+  exists.  Returns ``nil`` if no such edge exists.
 
 * ``getEdges()``
 
- Returns a ``List`` of all of the vertice's ``Edge`` instances.
+  Returns a ``List`` of all of the vertice's ``Edge`` instances.
 
 * ``getEdgeIDs()``
 
- Returns ` ``List`` of all of the vertice's edge IDs.
+  Returns ` ``List`` of all of the vertice's edge IDs.
 
 * ``removeEdge(vertexInstance)``
 
- Removes the given vertex.
+  Removes the given vertex.
 
- Returns boolean ``true`` on success, ``nil`` otherwise.
+  Returns boolean ``true`` on success, ``nil`` otherwise.
 
 * ``removeEdges()``
 
- Removes all of the vertex's edges.
+  Removes all of the vertex's edges.
 
 * ``getDegree()``
 
- Returns the number of edges on this vertex.
+  Returns the number of edges on this vertex.
 
 * ``isAdjacent(vertexID)``
 
- Returns boolean ``true`` if the vertex is adjacent to a vertex with the given
-vertex ID, ``nil`` otherwise.
+  Returns boolean ``true`` if the vertex is adjacent to a vertex with the given
+  vertex ID, ``nil`` otherwise.
 
 #### Edge
 
+##### Properties
+
+* ``length = 1``
+
+  The edge length.
+
+* ``vertex0 = nil``
+
+  ``vertex1 = nil``
+
+  ``Vertex`` instances connected by this edge.  In a directed graph
+  the edge connects ``vertex0`` to ``vertex1``.  In an undirected graph
+  the order is arbitrary.
+
+##### Methods
+
 * ``getLength()``
 
- Returns the edge length.
+  Returns the edge length.
 
 * ``setLength(length)``
 
- Sets the edge length.
+  Sets the edge length.
 
- The argument should be a numeric value.  By default most classes expect an
-integer length, but some (like ``MarkovChain``) use floating point lengths.
+  The argument should be a numeric value.  By default most classes expect an
+  integer length, but some (like ``MarkovChain``) use floating point lengths.
+
+##### Subclasses
+
+* ``Edge``
+
+  The base class.  Undirected.
+
+* ``DirectedEdge``
+
+  Class for directed edges.
 
 
 ### FiniteStateMachine
 
+A finite state machine consists of a set of states of which exactly one is
+always the current state, and a set of allowed transitions between states.
+
+In this module ``FiniteStateMachine`` (or ``FSM``) is a kind of
+``DirectedGraph``, ``FiniteStateMachineState`` (or ``FSMState``) is a kind
+of ``Vertex``, and ``FiniteStateMachineTransition`` (or ``Transition``) is a
+kind of ``Edge``.
+
 #### FSM
+
+##### Properties
+
+* ``currentState = nil``
+
+  The FSM's current state.  When non-``nil``, should be an instance
+  of ``FSMState``.
+
+* ``stateClass = FiniteStateMachineState``
+
+  Class to use when creating new states.
+
+* ``transitionClass = FiniteStateMachineTransition``
+
+  Class to use when creating new transitions.
+
+##### Methods
+
+* ``addFSMState(stateID, fsmState?)``
+
+  Adds a state to the machine, creating a new ``FSMState`` instance if
+  one is not provided.
+
+  Returns the added ``FSMState``.
+
+* ``getFSMState()``
+
+  Returns the current state.
+
+* ``getFSMStateID()``
+
+  Returns the state ID of the current state.
+
+* ``setFSMState(state)``
+
+  Sets the current state.  This method doesn't check the validity of the
+  state transition, it merely handles updating the state.  Most callers
+  should probably use ``toFSMState()`` instead, unless bypassing the normal
+  state transition logic is desired.
+
+  The argument can be either a state ID or ``FSMState`` instance.
+
+* ``toFSMState(state)``
+
+  Handle a state transition to the requested state.  This method will
+  verify that the state transition is valid, returning ``true`` on
+  success and ``nil`` otherwise.
+
+  The argument can be either a state ID or ``FSMState`` instance.
+
+
 #### FSMState
 #### Transition
 

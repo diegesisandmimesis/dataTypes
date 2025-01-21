@@ -38,7 +38,7 @@ class FiniteStateMachine: DirectedGraph
 
 	// Class for states
 	stateClass = FiniteStateMachineState
-	transitionClass = Transition
+	transitionClass = FiniteStateMachineTransition
 
 	// Add the given state to our table.
 	addFSMState(id, obj?) { return(addVertex(id, obj)); }
@@ -104,7 +104,7 @@ class FiniteStateMachine: DirectedGraph
 class FSM: FiniteStateMachine;
 class StateMachine: FiniteStateMachine;
 
-class Transition: DirectedEdge
+class FiniteStateMachineTransition: DirectedEdge
 	getFSM() { return(getGraph()); }
 	getFSMState() {
 		local m;
@@ -120,3 +120,6 @@ class Transition: DirectedEdge
 		return(m.getFSMStateID());
 	}
 ;
+
+class FSMTransition: FiniteStateMachineTransition;
+class Transition: FiniteStateMachineTransition;
