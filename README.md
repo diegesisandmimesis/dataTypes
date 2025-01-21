@@ -16,6 +16,12 @@ state machine state transitions, see
 the [eventScheduler](https://github.com/diegesisandmimesis/eventScheduler)
 module.
 
+## Table of Contents
+
+[Getting Started] (#getting-started)
+
+[Data Types] (#dataTypes)
+
 ## Getting Started
 
 ### Dependencies
@@ -46,6 +52,7 @@ In this example we'll use ``/home/username/tads`` as the base directory.
 ### Compiling and Running Demos
 
 ## Data Types
+<a name="dataTypes"/>
 
 ### Graph
 
