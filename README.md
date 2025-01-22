@@ -19,29 +19,39 @@ module.
 ## Table of Contents
 
 [Getting Started](#getting-started)
- * [Dependencies](#dependencies)
- * [Installing](#install)
- * [Compiling and Running Demos](#running)
+* [Dependencies](#dependencies)
+* [Installing](#install)
+* [Compiling and Running Demos](#running)
 
 [Data Types](#data-types)
- * [Graph](#graph-section)
-   * [Graph](#graph)
-   * [Vertex](#vertex)
-   * [Edge](#edge)
- * [Finite State Machine](#fsm-section)
-   * [FSM](#fsm)
-   * [FSMState](#fsm-state)
-   * [Transition](#fsm-transition)
- * [Markov Chain](#markov-section)
-   * [MarkovChain](#markov-chain)
-   * [MarkovState](#markov-state)
-   * [MarkovTransition](#markov-transition)
- * [Rulebook](#rulebook-section)
-   * [RuleObject](#rule-object)
-   * [Rule](#rule)
-   * [Rulebook](#rulebook)
- * [Tuple](#tuple)
- * [Trigger](#trigger)
+* [Graph](#graph-section)
+  * [Graph](#graph)
+  * [Vertex](#vertex)
+  * [Edge](#edge)
+* [Finite State Machine](#fsm-section)
+  * [FSM](#fsm)
+  * [FSMState](#fsm-state)
+  * [Transition](#fsm-transition)
+* [Markov Chain](#markov-section)
+  * [MarkovChain](#markov-chain)
+  * [MarkovState](#markov-state)
+  * [MarkovTransition](#markov-transition)
+* [Rulebook](#rulebook-section)
+  * [RuleObject](#rule-object)
+  * [Rule](#rule)
+  * [Rulebook](#rulebook)
+* [Tuple](#tuple)
+* [Trigger](#trigger)
+
+[Changes To Stock Classes](#changes)
+* [Collection](#collection)
+* [TadsObject](#tads-object)
+* [Vector](#vector)
+
+[Macros](#macros)
+* [Type Tests](#type-tests)
+* [General Utility](#general-utility)
+* [Module Specific](#module-specific)
 
 <a name="getting-started"/></a>
 ## Getting Started
@@ -889,3 +899,147 @@ In this module a ``Trigger`` is a ``Rule`` that is also a ``Tuple``.
 
   Returns the corresponding property on the tuple computed by ``match()``
   (above).
+
+<a name="changes"/></a>
+## Changes To Stock Classes
+
+<a name="collection"/></a>
+### Collection
+
+#### Methods
+
+* ``permutations()``
+
+  Returns a ``Vector`` containing all the permuations of the elements of the
+  calling ``Collection``.
+
+  The maximum length of a ``Collection`` for which the TADS VM can generate
+  all the permutations is ``8``.  Called on a longer ``Collection``
+  ``permutations()`` will return ``nil``.
+
+  Permutations are generated using a recursive implementation of the Heap
+  algorithm.
+
+<a name="tads-object"/></a>
+### TadsObject
+
+#### Methods
+
+* ``copyProps(obj)``
+
+  Copies all of the properties directly defined on the passed object ``obj``
+  which correspond to properties defined (at all) on the calling object.
+
+  For example, given:
+
+  ```
+  obj0: object { foo = 1 bar = 2 }
+  obj1: object { foo = nil }
+  ```
+
+  Then ``obj1.copyProps(obj0)`` will produce:
+
+  ```
+  obj1: object { foo = 1 }
+  ```
+
+  Alternately, if instead ``obj0.copyProps(obj1)`` is executed, then:
+
+  ```
+  obj0: object { foo = nil bar = 2 }
+  ```
+
+<a name="vector"/></a>
+### Vector
+
+* ``swap(i, j)``
+
+  Swaps elements *i* and *j*.
+
+  Returns boolean ``true`` on success, ``nil`` on error.
+
+<a name="macros"/></a>
+## Macros
+
+<a name="type-tests"/></a>
+### Type Tests
+
+The module provides a number of macros that evaluate ``true`` if an argument
+is non-``nil`` and an instance of a given class.
+
+* ``isType(obj, cls)``
+
+   Evaluates as ``true`` if ``obj`` is non-``nil`` and an instance of
+   ``cls``.
+
+* ``isAction(obj)``
+
+  ``isActor(obj)``
+
+  ``isCollection(obj)``
+
+  ``isInteger(obj)``
+
+  ``isList(obj)``
+
+  ``isLocation(obj)``
+
+  ``isObject(obj)``
+
+  ``isRoom(obj)``
+
+  ``isThing(obj)``
+
+  ``isVector(obj)``
+
+  Evaluates as ``true`` if ``obj`` is non-``nil`` and is of
+  the named type.
+
+* ``isEdge(obj)``
+
+  ``isFSM(obj)``
+
+  ``isGraph(obj)``
+
+  ``isMarkovChain(obj)``
+
+  ``isMarkovTransition(obj)``
+
+  ``isMarkovState(obj)``
+
+  ``isRule(obj)``
+
+  ``isRulebook(obj)``
+
+  ``isTuple(obj)``
+
+  ``isTrigger(obj)``
+
+  ``isVertex(obj)``
+
+  Evaluates as ``true`` if ``obj`` is non-``nil`` and is of
+  the named, module-specific, type.
+
+<a name="general-utility"/></a>
+### General Utility
+
+* ``inRange(value, min, max)``
+
+  Evaluates ``true`` if ``value`` is an integer between ``min`` and
+  ``max`` (inclusive).
+
+* ``nilToInt(value, default)``
+
+  Evaluates to ``default`` if ``v`` is ``nil``, ``v`` (cast as an integer)
+  otherwise.
+
+  Example:  ``n = nil; m = nilToInt(n, 0)`` will yield ``m = 0``.
+  ``n = '5'; m = nilToInt(n, 0)`` will yield ``m = 5``.
+
+* ``noClobber(obj, value)``
+
+  Sets ``obj`` to be ``value``, but only if ``obj`` is currently ``nil``.
+
+  Example:  ``n = nil; noClobber(n, 2)`` will yield ``n = 2``.
+  ``n = 5;  noClobber(n, 2)`` will yield ``n = 5``.
+

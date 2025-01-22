@@ -21,9 +21,13 @@ modify Vector
 	swap(i, j) {
 		local tmp;
 
+		if(!inRange(i, 0, length()) || !inRange(j, 0, length()))
+			return(nil);
 		tmp = self[j];
 		self[j] = self[i];
 		self[i] = tmp;
+
+		return(true);
 	}
 ;
 

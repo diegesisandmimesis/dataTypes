@@ -46,6 +46,12 @@
 #define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
 #endif
 
+#ifndef inRange
+#define inRange(v, r0, r1) \
+	(isInteger(v) && isInteger(r0) && isInteger(r1) \
+		&& (v >= r0) && (v <= r1))
+#endif
+
 // Like adv3's nilToList but for integers
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
 
