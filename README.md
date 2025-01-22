@@ -134,6 +134,68 @@ objects.
 <a name="graph"/></a>
 #### Graph
 
+##### Declaring
+
+There are multiple syntaxes which may be used to declare a ``Graph``
+instance.
+
+First is the "long form" declaration, using the standard TADS3 lexical
+``+`` syntax:
+```
+// "Long form" graph declaration.
+graph: DirectedGraph;
++foo: Vertex 'foo';
+++Edge ->bar;
+++Edge ->baz;
++bar: Vertex 'bar';
+++Edge ->foo;
+++Edge ->baz;
++baz: Vertex 'baz';
+++Edge ->foo;
+++Edge ->bar;
+```
+
+This will create a graph with three vertices, ``foo``, ``bar``, and ``baz``,
+each of which is connected to all of the others.
+
+This is equivalent to:
+```
+// Same as above, using IDs instead of obj references in edge declarations
+graph: DirectedGraph;
++Vertex 'foo';
+++Edge 'bar';
+++Edge 'baz';
++Vertex 'bar';
+++Edge 'foo';
+++Edge 'baz';
++Vertex 'baz';
+++Edge 'foo';
+++Edge 'bar';
+```
+
+Graphs can also be declared using two arrays:  one of the vertices and then a
+"flattened" adjacency matrix.  For example:
+```
+// "Short form" graph declaration
+graph: Graph
+        [       'foo',  'bar',  'baz' ]
+        [
+                0,      1,      1,	// edges from "foo"...
+                1,      0,      1,	// edges from "bar"...
+                1,      1,      0	// edges from "baz"...
+        ]
+//		"foo"	"bar"	"baz"	// ...to this vertex
+;
+```
+The first array enumerates the vertex IDs, and the second is a one-dimensional
+array that works like a flattened 2D matrix.  Each element is the length of
+the corresponding edge.  So reading off the example above, the edge from
+"foo" to "foo" is length zero (it doesn't exist).  Then (next element in the
+array) the length of the edge from "foo" to "bar" is 1.  Then the length of
+the edge from "foo" to "baz" is 1.  Next row, "bar" to "foo" is 1, "bar" to
+"bar" is zero, and "bar" to "baz" is 1.  Finally "baz" to "foo" is 1,
+"baz" to "bar" is 1, and "baz" to "baz" is 0.
+
 ##### Properties
 
 * ``directed = nil``
