@@ -67,7 +67,7 @@ module.
   command line examples given below were tested on an Ubuntu linux
   machine.  Other OSes and git tools will have a slightly different usage.
 
-<a name="installing"/></a>
+<a name="install"/></a>
 ### Installing
 
 All of the [diegesisandmimesis](https://github.com/diegesisandmimesis) modules
