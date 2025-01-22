@@ -34,8 +34,9 @@ module.
    * [MarkovState](#markov-state)
    * [MarkovTransition](#markov-transition)
  * [Rulebook](#rulebook-section)
-   * [Rulebook](#rulebook)
+   * [RuleObject](#rule-object)
    * [Rule](#rule)
+   * [Rulebook](#rulebook)
  * [Tuple](#tuple)
  * [Trigger](#trigger)
 
@@ -505,17 +506,277 @@ edited as it is set by the parent ``MarkovChain`` during initialization.
 <a name="rulebook-section"/></a>
 ### Rulebook
 
-<a name="rulebook"/></a>
-#### Rulebook
+In this module a rulebook is a data structure containing one or more rules.
+Each rule consists of a method implementing some arbitrary check and
+returning a boolean ``true`` or ``nil`` value.  The returned value is then
+the value of the rule itself.  And the rulebook in turn has a boolean
+``true`` or ``nil`` value based on the value of its rules.
+
+The base ``Rulebook`` superclass has several subclasses for different
+basic rulebook behaviors:
+
+* ``RulebookMatchAll`` is a rulebook whose default value is ``nil`` and
+  becomes ``true`` when **all** of its rules are ``true``
+
+* ``RulebookMatchAny`` is a rulebook whose default value is ``nil`` and
+  becomes ``true`` when **any** of its rules are ``true``
+
+* ``RulebookMatchNone`` is a rulebook whose default value is ``true`` and
+  becomes ``nil`` when **any** of its rules are ``true``
+
+
+<a name="rule-object"/></a>
+#### RuleObject
+
+The ``RuleObject`` class is the base for both ``Rule`` and ``Rulebook``,
+providing most of the base lifecycle methods.
+
+##### Properties
+
+* ``active = true``
+
+  Boolean indicating if the rule/rulebook is currently active.  This is
+  **not** the same as the *value*.  The ``active`` flag rather determines
+  whether or not the rule/rulebook should even be evaluated.
+
+* ``value = nil``
+
+  The current value of the rule or rulebook.  This property should not be
+  set directly.
+
+* ``defaultValue = nil``
+
+  The default value.  The value of the object will be this unless and until
+  the match() method (below) returns ``true``, at which point the value
+  will be the inverse of the default value.
+
+##### Methods
+
+* ``isActive()``
+
+  ``setActive(active?)``
+
+  Getter and setter for the ``active`` property.
+
+* ``getValue()``
+
+  ``setValue(newValue?)``
+
+  Getter and setter for the object's ``value`` property.  This method
+  implements no checks or special logic, it merely handles the nuts and bolts
+  task of manipulating the underlying ``value`` property.
+
+  These methods should probably not be called directly;  the value should
+  normally be set by calling the ``eval()`` method (below) to figure out
+  what the value should be.
+
+* ``eval(data?)``
+
+  Evaluate the current value of the rule/rulebook.  The argument is an
+  arbitrary data object.
+
+  This method first checks to see if the value *should* be evaluated when
+  it is called (e.g. if the rule/rulebook is currently active).  If so
+  it will then call the ``match()`` method to apply whatever bespoke
+  logic the rule or rulebook implements.
+
+  This method will update the object's value (which can then be read
+  via ``getValue()``.
+
+  The return value is boolean ``true`` if the value was updated, ``nil``
+  otherwise.  It is **not** the value itself.
+
+* ``updateValue()``
+
+Returns boolean ``true`` if the rule/rulebook's value should be updated.
+
+* ``match(data?)``
+
+Method for applying whatever logic the rule or rulebook implements.
+
+This is designed to be overwritten by instances and subclasses to do
+whatever arbitrary checks the game logic needs.  It need not, and should
+not, implement any checks, try to save or update the object's value itself,
+or anything like that.
+
+The argument is an arbitrary data object.
+
 <a name="rule"/></a>
 #### Rule
+
+##### Properties
+
+* ``ruleID = nil``
+
+  Unique-ish ID for this rule.
+
+* ``rulebook = nil``
+
+  The rulebook this rule is in.
+
+##### Methods
+
+* ``getRulebook()``
+
+  Returns this rule's parent ``Rulebook``.
+
+<a name="rulebook"/></a>
+#### Rulebook
+
+##### Properties
+
+* ``rulebookID = nil``
+
+Unique-ish ID for this rulebook.
+
+##### Methods
+
+* ``addRule(ruleObj)``
+
+  Adds a ``Rule`` instance to our list.
+
+  Returns boolean ``true`` on success, ``nil`` otherwise.
+
+* ``removeRule(ruleObj)``
+
+  Removes a ``Rule`` instance from our list.
+
+  Returns boolean ``true`` on success, ``nil`` otherwise.
+
+* ``checkRule(ruleObj, data?)``
+
+  Method for checking an individual rule.
+
+  First argument is the ``Rule`` instance being checked.  Second argument
+  is an arbitrary data object.
+
+  This is intended to make it easier for subclasses to implement decisions
+  about when and how to check rules.
 
 <a name="tuple"/></a>
 ### Tuple
 
+A ``Tuple`` is a data structure for holding basic information about a turn
+and its action.
+
 #### Tuple
+
+##### Properties
+
+* ``action = nil``
+
+  An ``Action`` instance.
+
+* ``dstActor = nil``
+
+  The ``Actor`` instance receiving the action.  If ``dstObject`` is not
+  ``nil`` this will probably be ``dstObject.getCarryingActor()``.
+
+* ``dstObject = nil``
+
+  The ``Object`` instance receiving the action.
+
+* ``room = nil``
+
+  The location the action is taking place.  This will probably be the
+  outermost ``Room`` containing the actor taking the action.
+
+* ``srcActor = nil``
+
+  The actor taking the action.
+
+* ``srcObject = nil``
+
+  The object being used to do the action, if applicable.  If the command
+  is ``>HIT ROCK WITH PICKAXE`` then ``srcObject`` will be the pickaxe,
+  ``dstObject`` will be the rock, and the ``srcActor`` will be ``gActor``.
+
+##### Methods
+
+* ``matchAction(obj)``
+
+  ``matchDstActor(obj)``
+
+  ``matchDstObject(obj)``
+
+  ``matchLocation(obj)``
+
+  ``matchSrcActor(obj)``
+
+  ``matchSrcObject(obj)``
+
+  Returns boolean ``true`` if the passed ``obj`` matches the given property
+  on the ``Tuple``.
+
+  A match is when the argument and the property are identical (``==``) or
+  if ``obj.ofKind()`` is ``true`` for the given property.
+
+  For example if ``dstObject = Pebble`` and ``bobsPebble`` is an instance
+  of ``Pebble``, then ``matchDstObject(bobsPebble)`` will return ``true``.
+
+* ``matchSrcAndDstObjects(object0, object1)``
+
+  Returns boolean ``true`` if ``object0`` matches ``srcObject`` and
+  ``object1`` matches ``dstObject``.
+
+* ``matchSrcAndDstActors(actor0, actor1)``
+
+  Returns boolean ``true`` if ``actor0`` matches ``srcActor`` and
+  ``actor1`` matches ``dstActor``.
+
+* ``toTuple(data?)``
+
+  Returns a ``Tuple`` instance whose properties are set by the passed
+  data object.
+
+  That is, if ``data = object { srcActor = bob }``, then the return value will
+  be a ``Tuple`` whose ``srcActor`` property will be ``bob``.  Properties
+  not part of the ``Tuple`` class will not be set.
+
+  If ``data`` is already a ``Tuple`` it will be returned instead.
+
+* ``exactMatchTuple(tuple)``
+
+  Returns boolean ``true`` if ``tuple`` is an exact match for this ``Tuple``.
+
+  An exact match means that:
+
+  * ``tuple`` is a ``Tuple``
+  * all properties set on ``tuple`` are set on the called tuple and *vice versa*
+  * no properties are set on one but not the other
+  * all set properties are equal
 
 <a name="trigger"/></a>
 ### Trigger
 
+In this module a ``Trigger`` is a ``Rule`` that is also a ``Tuple``.
+
 #### Trigger
+
+##### Methods
+
+* ``match(data?)``
+
+  By default ``Trigger.match()`` will merge whatever is passed as an argument
+  with a ``Tuple`` representing the current turn and then return
+  boolean ``true`` if calling ``matchTuple()`` with the result is ``true``.
+
+  In other words if this trigger's ``action = TakeAction``
+  and ``dstObject = pebble``, then ``match()`` will return ``true`` on
+  a turn where the action is ``>TAKE PEBBLE`` and ``nil`` on a turn
+  where the action is ``>TAKE SANDWICH``.
+
+* ``getTriggerAction()``
+
+  ``getTriggerDstActor()``
+
+  ``getTriggerDstObject()``
+
+  ``getTriggerRoom()``
+
+  ``getTriggerSrcActor()``
+
+  ``getTriggerSrcObject()``
+
+  Returns the corresponding property on the tuple computed by ``match()``
+  (above).
