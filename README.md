@@ -21,8 +21,23 @@ module.
 [Getting Started](#getting-started)
 
 [Data Types](#data-types)
- * [Graph](#graph)
- * [Vertex](https://github.com/diegesisandmimesis/dataTypes#vertex)
+ * [Graph](#graph-section)
+   * [Graph](#graph)
+   * [Vertex](#vertex)
+   * [Edge](#edge)
+ * [Finite State Machine](#fsm-section)
+   * [FSM](#fsm)
+   * [FSMState](#fsm-state)
+   * [Transition](#fsm-transition)
+ * [Markov Chain](#markov-section)
+   * [MarkovChain](#markov-chain)
+   * [MarkovState](#markov-state)
+   * [MarkovTransition](#markov-transition)
+ * [Rulebook](#rulebook-section)
+   * [Rulebook](#rulebook)
+   * [Rule](#rule)
+ * [Tuple](#tuple)
+ * [Trigger](#trigger)
 
 ## Getting Started
 
@@ -57,6 +72,7 @@ In this example we'll use ``/home/username/tads`` as the base directory.
 <a name="data-types"/></a>
 ## Data Types
 
+<a name="graph-section"/></a>
 ### Graph
 
 In this module graph consists of three kinds of components:  a single
@@ -207,6 +223,7 @@ objects.
   Returns boolean ``true`` if the vertex is adjacent to a vertex with the given
   vertex ID, ``nil`` otherwise.
 
+<a name="edge"/></a>
 #### Edge
 
 ##### Properties
@@ -247,6 +264,7 @@ objects.
   Class for directed edges.
 
 
+<a name="fsm-section"/></a>
 ### FiniteStateMachine
 
 A finite state machine consists of a set of states of which exactly one is
@@ -257,6 +275,7 @@ In this module ``FiniteStateMachine`` (or ``FSM``) is a kind of
 of ``Vertex``, and ``FiniteStateMachineTransition`` (or ``Transition``) is a
 kind of ``Edge``.
 
+<a name="fsm"/></a>
 #### FSM
 
 ##### Properties
@@ -308,25 +327,195 @@ kind of ``Edge``.
 
   The argument can be either a state ID or ``FSMState`` instance.
 
-
+<a name="fsm-state"/></a>
 #### FSMState
+
+##### Properties
+
+* ``active = true``
+
+  Boolean flag indicating whether or not the state is currentl active.  Note
+  that this is not the same thing as being the FSM's current state.  The
+  active flag indicates whether or not the state is *eligible* to become
+  the current state.
+
+* ``stateID = nil``
+
+  The state's ID.  This should be a single-quoted string.
+
+##### Methods
+
+* ``isActive()``
+
+  Returns boolean ``true`` if the state is currently active (see note on
+  the ``active`` property above), ``nil`` otherwise.
+
+* ``setActive(val)``
+
+  Sets the state's ``active`` property to ``true`` if the argument is ``true``,
+  sets it to ``nil`` otherwise.
+
+<a name="fsm-transition"/></a>
 #### Transition
 
+##### Methods
+
+* ``getFSM()``
+
+  Returns the state's parent finite state machine.
+
+* ``getFSMState()``
+
+  Returns the parent FSM's current state.  Return value will be a
+  ``FSMState`` instance.
+
+* ``getFSMStateID()``
+
+  Returns the state ID of the parent FSM's current state.
+
+<a name="markov-section"/></a>
 ### MarkovChain
 
+A Markov chain is a state machine with probabilistic state transitions.
+
+A state machine is a directed graph, at any time one vertex is the current
+state, and the edges leading from the current state to adjacent states
+represent allowed state transitions.
+
+In this Markov chain implementation, the length of an edge represents the
+probability of the transition it represents.
+
+Edge lengths can be declared as floating point numbers or as integers.
+
+If floating point numbers are used then they will be interpreted as decimal
+percentages:  0.25 is a 25% chance of picking that transition, 0.33 is a 33%
+chance, and so on.  In this case all edges leading away from each state/vertex
+should sum to 1.0.
+
+If integers are used then they will be used as weights, with the probability
+of a transition being the ratio of the individual edge weight to the sum
+of the edge weights of all edges leading away from the state/vertex.  For
+example if there are two edges with weights 250 and 750, then the first
+will be selected 25% of the time and the other 75% of the time.  Equivalently
+the weights could be given as 1 and 3, respectively.
+
+If floating point probabilities are used in declaring a Markov chain they
+will be converted at preinit into integer weights.
+
+<a name="markov-chain"/></a>
 #### MarkovChain
+
+##### Properties
+
+* ``markovBaseWeight = 1000``
+
+The base weight to use for edges.  Only used if an explicit weight is not
+given.
+
+* ``stateClass = MarkovState``
+
+Class to use when creating new Markov states.
+
+* ``transitionClass = MarkovTransition``
+
+Class to use when creating new Markov transitions.
+
+##### Methods
+
+* ``getPRNG()``
+
+  ``setPRNG(prngInstance)``
+
+  Getter and setter for the chain's PRNG.  Useful if compiling with the
+  [notReallyRandom](https://github.com/diegesisandmimesis/notReallyRandom)
+  module.
+
+  If not specified, ``MarkovChain`` will default to using TADS3's native
+  ``rand()`` for randomness.
+
+* ``getWeight(state0, state1)``
+
+  Returns the transition weight for the transition from the first state to
+  the second state.  Arguments can be either state IDs or ``MarkovState``
+  instances.
+
+  Returns ``0`` (not ``nil``) if the transition in question does not exist
+  or is not valid.
+
+* ``setWeight(state0, state1, weight)``
+
+  Sets the weight on the edge from the first state to the second.  States
+  may be specified via state ID or as ``MarkovState`` instances.  The weight
+  should be an integer weight.
+
+* ``pickTransition(fromState?, prng?)``
+
+  Picks a random, weighted state transition.
+
+  The optional first argument is the state to start from, defaulting to
+  the Markov chain's current state.  If given the state can either be
+  a state ID or a ``MarkovState`` instance.
+
+  The optional second argument is a PRNG instance.  If none is given,
+  TADS3's ``rand()`` will be used.
+
+  Calling this method will attempt to change the Markov chain's state.
+
+  Return value is the state ID of the new state, or ``nil`` on error.
+
+<a name="markov-state"/></a>
 #### MarkovState
+
+##### Methods
+
+* ``getTransitions()``
+
+  Returns a ``List`` containing all of this state's ``MarkovTransition``
+  instances.
+
+* ``pickTransition(prng?)``
+
+  Select a random, weighted state transition.
+
+  This method will not change the state of the parent Markov chain, it
+  merely runs through the random selection process and reports the result.
+
+  Return value will be the selected ``MarkovTransition``.
+
+<a name="markov-transition"/></a>
 #### MarkovTransition
 
+##### Properties
+
+* ``markovBaseWeight = 1000``
+
+The base weight for this transition.  This property should probably not be
+edited as it is set by the parent ``MarkovChain`` during initialization.
+
+##### Methods
+
+* ``getWeight()``
+
+  ``setWeight(weight)``
+
+  Getter and setter for the transition weight.  These should probably not
+  be used directly, the corresponding methods on ``MarkovChain`` should
+  probably be used instead.
+
+<a name="rulebook-section"/></a>
 ### Rulebook
 
+<a name="rulebook"/></a>
 #### Rulebook
+<a name="rule"/></a>
 #### Rule
 
+<a name="tuple"/></a>
 ### Tuple
 
 #### Tuple
 
+<a name="trigger"/></a>
 ### Trigger
 
 #### Trigger

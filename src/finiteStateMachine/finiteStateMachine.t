@@ -18,7 +18,7 @@ class FiniteStateMachineState: Vertex
 
 	isActive = (active == true)
 	getActive = (isActive())
-	setActive(v) { active = v; }
+	setActive(v) { active = (v == true); }
 
 	getFSMStateID() { return(stateID); }
 

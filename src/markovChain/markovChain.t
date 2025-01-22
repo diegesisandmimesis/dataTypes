@@ -135,7 +135,7 @@ class MarkovChain: StateMachine
 	getWeight(v0, v1) {
 		local e;
 
-		if((e = getEdge(v0, v1)) == nil) return(nil);
+		if((e = getEdge(v0, v1)) == nil) return(0);
 		return(e.getWeight());
 	}
 
