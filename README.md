@@ -161,66 +161,66 @@ objects.
 ##### Methods
 
 * **Vertex Methods**
- * ``addVertex(vertexID, vertexInstance?)``
+  * ``addVertex(vertexID, vertexInstance?)``
 
-   Adds a vertex to the graph, creating a new ``Vertex`` instance if one is
-   not provided.
+    Adds a vertex to the graph, creating a new ``Vertex`` instance if one is
+    not provided.
 
-   Returns the added ``Vertex``.
+    Returns the added ``Vertex``.
 
- * ``getVertex(vertexID)``
+  * ``getVertex(vertexID)``
 
-   Returns the given ``Vertex`` or ``nil`` on failure.
+    Returns the given ``Vertex`` or ``nil`` on failure.
 
- * ``removeVertex(vertex)``
+  * ``removeVertex(vertex)``
 
-   Removes the given vertex.  Argument can be the vertex ID or the
-   ``Vertex`` instance.
+    Removes the given vertex.  Argument can be the vertex ID or the
+    ``Vertex`` instance.
 
- * ``getVertices()``
+  * ``getVertices()``
 
-   Returns a ``Vector`` of the graph's ``Vertex`` instances.
+    Returns a ``Vector`` of the graph's ``Vertex`` instances.
 
- * ``getVertexIDs()``
+  * ``getVertexIDs()``
 
-   Returns a ``Vector`` of the graph's vertex IDs.
+    Returns a ``Vector`` of the graph's vertex IDs.
 
 * **Edge Methods**
 
   * ``addEdge(vertex0, vertex1, edgeInstance?)``
 
-   Adds an edge to the graph, creating a new ``Edge`` instance if one is
-   not given.
+    Adds an edge to the graph, creating a new ``Edge`` instance if one is
+    not given.
 
-   The first two arguments specify the vertices connected by the edge.
-   They can be either vertex IDs or ``Vertex`` instances.
+    The first two arguments specify the vertices connected by the edge.
+    They can be either vertex IDs or ``Vertex`` instances.
 
- * ``getEdge(vertex0, vertex1)``
+  * ``getEdge(vertex0, vertex1)``
 
-   Returns the given ``Edge`` or ``nil`` if it does not exist.
-
-   The arguments can be either vertex IDs or ``Vertex`` instances.
-
- * ``removeEdge(vertex0, vertex1)``
-
-    Removes the given edge.  Returns ``true`` on success, ``nil`` otherwise.
+    Returns the given ``Edge`` or ``nil`` if it does not exist.
 
     The arguments can be either vertex IDs or ``Vertex`` instances.
 
- * ``getEdges()``
+  * ``removeEdge(vertex0, vertex1)``
 
-    Returns a ``Vector`` containing all of the graph's ``Edge`` instances.
+     Removes the given edge.  Returns ``true`` on success, ``nil`` otherwise.
 
- * ``createEdge(vertex0, vertex1, length?, directed?)``
+     The arguments can be either vertex IDs or ``Vertex`` instances.
 
-    Convenience method for creating a new ``Edge`` instance.
+  * ``getEdges()``
 
-    The vertices can be IDs or ``Vertex`` instances.
+     Returns a ``Vector`` containing all of the graph's ``Edge`` instances.
 
-    The ``length`` and ``directed`` arguments are optional.  If given,
-    ``length`` is the length of the edge and ``directed`` is a boolean
-    indicating whether or not the edge is directed.  Both take their
-    default values from the ``edgeClass`` defined on the graph.
+  * ``createEdge(vertex0, vertex1, length?, directed?)``
+
+     Convenience method for creating a new ``Edge`` instance.
+
+     The vertices can be IDs or ``Vertex`` instances.
+
+     The ``length`` and ``directed`` arguments are optional.  If given,
+     ``length`` is the length of the edge and ``directed`` is a boolean
+     indicating whether or not the edge is directed.  Both take their
+     default values from the ``edgeClass`` defined on the graph.
 
 ##### Subclasses
 
