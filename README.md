@@ -187,7 +187,7 @@ objects.
 
 * **Edge Methods**
 
- * ``addEdge(vertex0, vertex1, edgeInstance?)``
+  * ``addEdge(vertex0, vertex1, edgeInstance?)``
 
    Adds an edge to the graph, creating a new ``Edge`` instance if one is
    not given.
