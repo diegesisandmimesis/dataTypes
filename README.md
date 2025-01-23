@@ -24,19 +24,19 @@ module.
 * [Compiling and Running Demos](#running)
 
 [Data Types](#data-types)
-* [Graph](#graph-section)
+* [Graphs](#graph-section)
   * [Graph](#graph)
   * [Vertex](#vertex)
   * [Edge](#edge)
-* [Finite State Machine](#fsm-section)
+* [Finite State Machines](#fsm-section)
   * [FSM](#fsm)
   * [FSMState](#fsm-state)
   * [Transition](#fsm-transition)
-* [Markov Chain](#markov-section)
+* [Markov Chains](#markov-section)
   * [MarkovChain](#markov-chain)
   * [MarkovState](#markov-state)
   * [MarkovTransition](#markov-transition)
-* [Rulebook](#rulebook-section)
+* [Rules and Rulebooks](#rulebook-section)
   * [RuleObject](#rule-object)
   * [Rule](#rule)
   * [Rulebook](#rulebook)
@@ -131,7 +131,7 @@ will be the same except for the extensions (``.t3m`` for makefiles and
 ## Data Types
 
 <a name="graph-section"/></a>
-### Graph
+### Graphs
 
 In this module graph consists of three kinds of components:  a single
 ``Graph`` instance; one or more ``Vertex`` instances; and one or more ``Edge``
@@ -385,7 +385,7 @@ the edge from "foo" to "baz" is 1.  Next row, "bar" to "foo" is 1, "bar" to
 
 
 <a name="fsm-section"/></a>
-### FiniteStateMachine
+### Finite State Machines
 
 A finite state machine consists of a set of states of which exactly one is
 always the current state, and a set of allowed transitions between states.
@@ -494,7 +494,7 @@ kind of ``Edge``.
   Returns the state ID of the parent FSM's current state.
 
 <a name="markov-section"/></a>
-### MarkovChain
+### Markov Chains
 
 A Markov chain is a state machine with probabilistic state transitions.
 
@@ -655,7 +655,7 @@ edited as it is set by the parent ``MarkovChain`` during initialization.
   probably be used instead.
 
 <a name="rulebook-section"/></a>
-### Rulebook
+### Rules and Rulebooks
 
 In this module a rulebook is a data structure containing one or more rules.
 Each rule consists of a method implementing some arbitrary check and

@@ -32,6 +32,9 @@
 #ifndef isCollection
 #define isCollection(obj) (isType(obj, Collection))
 #endif
+#ifndef isEvent
+#define isEvent(obj) (isType(obj, Event))
+#endif
 #ifndef isList
 #define isList(obj) (isType(obj, List))
 #endif
