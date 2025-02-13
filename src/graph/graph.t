@@ -77,13 +77,22 @@ class Graph: object
 		return(true);
 	}
 
+	// Remove all our vertices.  We could just iterate over all our
+	// vertices and their edges calling the various remove methods on them,
+	// but since we're clearing everything out we can do it without worrying
+	// about any of the (slower) bookkeeping.
+	removeVertices() {
+		getVertices().forEach({ x: x._edgeTable = nil });
+		_vertexTable = new LookupTable();
+	}
+
 	// Given a vertex object or a valid vertex ID, return the matching
 	// vertex object.
 	// Used on Graph methods so they can take either an object or an
 	// ID as an argument.
 	canonicalizeVertex(v) {
 		if(v == nil) return(nil);
-		if(v.ofKind(vertexClass)) return(v);
+		if(v.ofKind(vertexClass)) return(getVertex(v.vertexID));
 		return(getVertex(v));
 	}
 

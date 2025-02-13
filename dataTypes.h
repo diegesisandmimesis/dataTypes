@@ -41,6 +41,9 @@
 #ifndef isObject
 #define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
 #endif
+#ifndef isString
+#define isString(obj) ((obj != nil) && (dataType(obj) == TypeSString))
+#endif
 #ifndef isVector
 #define isVector(obj) (isType(obj, Vector))
 #endif
