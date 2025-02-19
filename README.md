@@ -1020,6 +1020,8 @@ is non-``nil`` and an instance of a given class.
 
   ``isRoom(obj)``
 
+  ``isString(obj)``
+
   ``isThing(obj)``
 
   ``isVector(obj)``
