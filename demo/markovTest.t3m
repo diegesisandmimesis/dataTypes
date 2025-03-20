@@ -6,7 +6,7 @@
 -o games/markovTest.t3
 -lib system
 -lib adv3/adv3
--lib intMath/intMath
+#-lib intMath/intMath
 -lib notReallyRandom/notReallyRandom
 -lib ../dataTypes
 -source src/markovTest.t

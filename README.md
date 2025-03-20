@@ -275,14 +275,13 @@ Graphs can also be declared using two arrays:  one of the vertex IDs and then a
 "flattened" adjacency matrix.  For example:
 ```
 // "Short form" graph declaration
-graph: Graph
+graph: DirectedGraph
         [       'foo',  'bar',  'baz' ]
         [
                 0,      1,      1,	// edges from "foo"...
                 1,      0,      1,	// edges from "bar"...
                 1,      1,      0	// edges from "baz"...
         ]
-//		"foo"	"bar"	"baz"	// ...to this vertex
 ;
 ```
 The first array enumerates the vertex IDs, and the second is a one-dimensional

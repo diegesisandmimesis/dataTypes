@@ -52,6 +52,10 @@
 #define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
 #endif
 
+#ifndef isFunction
+#define isFunction(obj) ((dataType(obj) != TypeNil) && ((dataType(obj) == TypeProp) || (dataType(obj) == TypeCode) || (dataType(obj) == TypeFuncPtr)) || (dataType(obj) == TypeObject))
+#endif
+
 #ifndef inRange
 #define inRange(v, r0, r1) \
 	(isInteger(v) && isInteger(r0) && isInteger(r1) \

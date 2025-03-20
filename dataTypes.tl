@@ -1,5 +1,6 @@
 name: dataTypes Library
 source: dataTypes.t
+source: src/bind/bind.t
 source: src/tuple/tuple.t
 source: src/graph/graph.t
 source: src/graph/graphVertex.t
