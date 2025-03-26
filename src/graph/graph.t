@@ -100,6 +100,8 @@ class Graph: object
 
 	getVertexIDs() { return(_vertexTable.keysToList()); }
 
+	forEachVertex(cb) { getVertices().forEach({ x: cb(x) }); }
+
 	addEdge(id0, id1, obj?) {
 		local v0, v1;
 
@@ -162,6 +164,8 @@ class Graph: object
 
 		return(r);
 	}
+
+	forEachEdge(cb) { getEdges().forEach({ x: cb(x) }); }
 
 	log() {
 		local l, l2, v;

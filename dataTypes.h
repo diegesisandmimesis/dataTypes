@@ -9,7 +9,7 @@
 // Utility define for testing an object to see if it is an instance of some
 // class
 #ifndef isType
-#define isType(obj, cls) ((obj != nil) && obj.ofKind(cls))
+#define isType(obj, cls) ((obj != nil) && (dataType(obj) == TypeObject) && obj.ofKind(cls))
 #endif
 
 // Defines to test for common adv3 object types
@@ -54,6 +54,14 @@
 
 #ifndef isFunction
 #define isFunction(obj) ((dataType(obj) != TypeNil) && ((dataType(obj) == TypeProp) || (dataType(obj) == TypeCode) || (dataType(obj) == TypeFuncPtr)) || (dataType(obj) == TypeObject))
+#endif
+
+#ifndef isDirection
+#define isDirection(obj) (isType(obj, Direction))
+#endif
+
+#ifndef isDirProp
+#define isDirProp(v) ((dataType(v) != TypeNil) && (Direction.allDirections.indexWhich({ x: x.dirProp == v }) != nil))
 #endif
 
 #ifndef inRange
