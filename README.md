@@ -42,6 +42,7 @@ module.
   * [Rulebook](#rulebook)
 * [Tuple](#tuple)
 * [Trigger](#trigger)
+* [XY](#xy)
 
 [Changes To Stock Classes](#changes)
 * [Collection](#collection)
@@ -930,6 +931,90 @@ In this module a ``Trigger`` is a ``Rule`` that is also a ``Tuple``.
 
   Returns the corresponding property on the tuple computed by ``match()``
   (above).
+
+<a name="xy"/></a>
+### XY
+
+The ``XY`` class is a simple data structure for handling 2D coordinates.
+
+#### XY
+
+##### Methods
+
+* ``clone()``
+
+  Returns a new XY instance with the same values as the current one.
+
+* ``copy(v)``
+
+  Copies the values from the argument, which must be another ``XY``
+  instance.
+
+
+* ``length()``
+
+  Returns an integer approximation of the distance between the
+  coordinates and the origin.
+
+* ``add(v)``
+  ``subtract(v)``
+
+  Returns an ``XY`` instance equal to the sum or difference of the current
+  instance and the argument, which must be another ``XY`` instance.
+
+  Does not modify the either of the original instances.
+
+* ``multiply(n)``
+  ``divide(n)``
+
+  Returns an ``XY`` instance equal to the current instance scaled up or
+  down by a factor of ``n``, which must be an integer.
+
+  Does not modify the original instance.
+
+* ``distance(v)``
+
+  Returns an integer approximation of the scalar distance between the current
+  ``XY`` instance and the passed argument, which must also be an
+  ``XY`` instance.
+
+  This should be equivalent to ``subtract(v).length()``.
+
+* ``normalize()``
+
+  Treats the ``XY`` instance as a vector (in the mathematical sense, not
+  in the TADS3 ``Vector`` sense) and "normalizes" it.
+
+  A real normal is unit length, but that doesn't work here because
+  everything in the ``XY`` class is integer-valued.  So ``normalize()``
+  scales the base vector by a factor of 10 before "normalizing".  This
+  produces a "normal" whose length is approximately 10.
+
+  The expected use case is to compute the normal, multiply it by some
+  other scalar, and then divide the result by 10.  This should
+  produce an integer approximation of a vector of the same length
+  as the scalar in the direction of the orginal vector.
+
+* ``equals(v)``
+
+  Returns boolean ``true`` if the passed argument is an ``XY`` instance
+  whose values are the same as the current instance, ``nil`` otherwise.
+
+* ``isAdjacent(v)``
+
+  Returns boolean ``true`` if the passed argument is an ``XY`` instance
+  in the Moore neighborhood (checkerboard adjacent, including diagonals),
+  ``nil`` otherwise.
+
+* ``dot(v)``
+
+  Treats the current ``XY`` instance as a vector and computes the dot
+  product of it with the argument, which must be another ``XY`` instance.
+
+* ``toStr()``
+
+  Returns the values as an ordered pair.  Example:  with ``x = 1`` and
+  ``y = 2``, will return the string ``(1, 2)``.
 
 <a name="changes"/></a>
 ## Changes To Stock Classes

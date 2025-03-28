@@ -192,4 +192,6 @@ Rule template 'ruleID';
 // Type tests
 #define isTrigger(obj) (isType(obj, Trigger))
 
+#define isXY(obj) (isType(obj, XY))
+
 #define DATA_TYPES_H

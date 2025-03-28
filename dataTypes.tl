@@ -2,6 +2,7 @@ name: dataTypes Library
 source: dataTypes.t
 source: src/bind/bind.t
 source: src/tuple/tuple.t
+source: src/xy/xy.t
 source: src/graph/graph.t
 source: src/graph/graphVertex.t
 source: src/graph/graphEdge.t
