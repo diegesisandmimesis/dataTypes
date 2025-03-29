@@ -38,8 +38,9 @@ gameMain: GameMainDef
 
 		if(r.length == 3)
 			"Passed\n ";
-		else
+		else {
 			"FAILED\n ";
+		}
 	}
 ;
 

@@ -49,9 +49,13 @@ class Edge: object
 	}
 
 	initializeVertices() {
+		local g;
+
 		vertex0.addEdge(vertex1, self);
 		if(!directed)
 			vertex1.addEdge(vertex0, self);
+		if((g = getGraph()) == nil) return;
+		g.graphUpdated();
 	}
 
 	initializeEdge() {
@@ -60,6 +64,9 @@ class Edge: object
 		if(location.ofKind(Graph)) {
 			if(vertex0 == nil)
 				if((vertex0 = location.getVertex(_id0)) == nil)
+					return;
+			if(vertex1 == nil)
+				if((vertex1 = location.getVertex(_id1)) == nil)
 					return;
 		}
 		if(location.ofKind(Vertex)) {

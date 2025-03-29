@@ -1,6 +1,5 @@
 -D LANGUAGE=en_us
 -D MESSAGESTYLE=neu
--D GRAPH_CHEEGER
 -Fy obj -Fo obj
 -o games/rulebookTest.t3
 -lib system

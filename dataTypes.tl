@@ -1,8 +1,8 @@
 name: dataTypes Library
 source: dataTypes.t
+source: src/asciiCanvas/asciiCanvas.t
 source: src/bind/bind.t
 source: src/tuple/tuple.t
-source: src/xy/xy.t
 source: src/graph/graph.t
 source: src/graph/graphVertex.t
 source: src/graph/graphEdge.t
@@ -21,3 +21,4 @@ source: src/rulebook/rule.t
 source: src/rulebook/rulebook.t
 source: src/rulebook/rulebookInit.t
 source: src/trigger/trigger.t
+source: src/xy/xy.t

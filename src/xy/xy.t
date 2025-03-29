@@ -16,7 +16,7 @@
 
 #include "dataTypes.h"
 
-#include "intMath.h"
+#ifdef USE_XY
 
 class XY: object
 	x = nil
@@ -114,3 +114,5 @@ class XY: object
 
 	toStr() { return('(<<toString(x)>>, <<toString(y)>>)'); }
 ;
+
+#endif // USE_XY

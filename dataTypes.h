@@ -12,6 +12,10 @@
 #define isType(obj, cls) ((obj != nil) && (dataType(obj) == TypeObject) && obj.ofKind(cls))
 #endif
 
+#ifndef isIntrinsicType
+#define isIntrinsicType(obj, cls) ((obj != nil) && obj.ofKind(cls))
+#endif // isIntrinsicType
+
 // Defines to test for common adv3 object types
 #ifndef isThing
 #define isThing(obj) (isType(obj, Thing))
@@ -30,13 +34,13 @@
 #endif
 
 #ifndef isCollection
-#define isCollection(obj) (isType(obj, Collection))
+#define isCollection(obj) (isIntrinsicType(obj, Collection))
 #endif
 #ifndef isEvent
 #define isEvent(obj) (isType(obj, Event))
 #endif
 #ifndef isList
-#define isList(obj) (isType(obj, List))
+#define isList(obj) (isIntrinsicType(obj, List))
 #endif
 #ifndef isObject
 #define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
@@ -45,7 +49,7 @@
 #define isString(obj) ((obj != nil) && (dataType(obj) == TypeSString))
 #endif
 #ifndef isVector
-#define isVector(obj) (isType(obj, Vector))
+#define isVector(obj) (isIntrinsicType(obj, Vector))
 #endif
 
 #ifndef isInteger
@@ -192,6 +196,25 @@ Rule template 'ruleID';
 // Type tests
 #define isTrigger(obj) (isType(obj, Trigger))
 
+
+//
+// XY declarations
+//
+
+#ifdef USE_XY
+
+#include "intMath.h"
+#ifndef INT_MATH_H
+#error "The XY datatype of this module require the intMath module."
+#error "https://github.com/diegesisandmimesis/intMath"
+#error "It should be in the same parent directory as this module.  So if"
+#error "dataTypes is in /home/user/tads/dataTypes, then"
+#error "intMath should be in /home/user/tads/intMath ."
+#endif // INT_MATH_H
+
+// Type tests
 #define isXY(obj) (isType(obj, XY))
+
+#endif // USE_XY
 
 #define DATA_TYPES_H

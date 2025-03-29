@@ -49,22 +49,6 @@ gameMain: GameMainDef
 		g.addEdge('foo', 'baz');
 		g.addEdge('bar', 'baz');
 
-		// Create the graph
-		g = new DirectedGraph();
-
-		// Add vertices.
-		g.addVertex('foo');
-		g.addVertex('bar');
-		g.addVertex('baz');
-
-		// Add the edges.
-		g.addEdge('foo', 'bar');
-		g.addEdge('foo', 'baz');
-		g.addEdge('bar', 'foo');
-		g.addEdge('bar', 'baz');
-		g.addEdge('baz', 'foo');
-		g.addEdge('baz', 'bar');
-
 		_runTests(g);
 		g.removeEdge('foo', 'bar');
 
