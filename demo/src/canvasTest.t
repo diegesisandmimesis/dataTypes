@@ -57,5 +57,12 @@ gameMain: GameMainDef
 		"\n<.p>Horizontal line:\n ";
 		c.line(0, 4, 9, 4, '#');
 		c.log();
+		c.fill(nil);
+
+		"\nCircle:\n ";
+		c.circle(5, 5, 4, 'x');
+		c.log();
+		c.fill(nil);
+
 	}
 ;

@@ -142,6 +142,49 @@ class AsciiCanvas: object
 		}
 	}
 
+	// Implementation of the midpoint circle algorithm
+	circle(x0, y0, r, v?) {
+		local d, v0, x, y;
+
+		if(isXY(x0)) {
+			v0 = x0;
+			v = r;
+			r = y0;
+		} else {
+			v0 = new XY(x0, y0);
+		}
+
+		d = (5 - r * 4) / 4;
+		x = 0;
+		y = r;
+
+		while(x <= y) {
+			if((v0.x + x >= 0) && (v0.y + y >= 0))
+				setXY(v0.x + x, v0.y + y, v);
+			if((v0.x + x >= 0) && (v0.y - y >= 0))
+				setXY(v0.x + x, v0.y - y, v);
+			if((v0.x - x >= 0) && (v0.y + y >= 0))
+				setXY(v0.x - x, v0.y + y, v);
+			if((v0.x - x >= 0) && (v0.y - y >= 0))
+				setXY(v0.x - x, v0.y - y, v);
+			if((v0.x + y >= 0) && (v0.y + x >= 0))
+				setXY(v0.x + y, v0.y + x, v);
+			if((v0.x + y >= 0) && (v0.y - x >= 0))
+				setXY(v0.x + y, v0.y - x, v);
+			if((v0.x - y >= 0) && (v0.y + x >= 0))
+				setXY(v0.x - y, v0.y + x, v);
+			if((v0.x - y >= 0) && (v0.y - x >= 0))
+				setXY(v0.x - y, v0.y - x, v);
+			if(d < 0) {
+				d += (2 * x) + 1;
+			} else {
+				d += (2 * (x - y) + 1);
+				y--;
+			}
+			x++;
+		}
+	}
+
 	// Fill the canvas with the given value.
 	fill(v) { _canvas.fillValue(v, 1, _size.x * _size.y); }
 
