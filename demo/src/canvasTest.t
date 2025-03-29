@@ -30,38 +30,38 @@ gameMain: GameMainDef
 		c = new AsciiCanvas(10, 10);
 
 		"\nEmpty canvas:\n ";
-		c.log();
+		c.display();
 		c.fill(nil);
 
 		"\n<.p>A boy and his dog:\n ";
 		c.setXY(1, 1, '@');
 		c.setXY(2, 2, 'd');
-		c.log();
+		c.display();
 		c.fill(nil);
 
 		"\n<.p>Diagonal line:\n ";
-		c.line(9, 0, 0, 9, '#');
-		c.log();
+		c.line(10, -1, -1, 10, '#');
+		c.display();
 		c.fill(nil);
 
 		"\n<.p>Line with opposite slope:\n ";
 		c.line(0, 0, 9, 9, '#');
-		c.log();
+		c.display();
 		c.fill(nil);
 
 		"\n<.p>Vertical line:\n ";
 		c.line(4, 0, 4, 9, '#');
-		c.log();
+		c.display();
 		c.fill(nil);
 
 		"\n<.p>Horizontal line:\n ";
 		c.line(0, 4, 9, 4, '#');
-		c.log();
+		c.display();
 		c.fill(nil);
 
 		"\nCircle:\n ";
 		c.circle(5, 5, 4, 'x');
-		c.log();
+		c.display();
 		c.fill(nil);
 
 	}

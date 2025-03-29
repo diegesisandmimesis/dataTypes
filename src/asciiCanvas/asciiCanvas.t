@@ -189,7 +189,7 @@ class AsciiCanvas: object
 	fill(v) { _canvas.fillValue(v, 1, _size.x * _size.y); }
 
 	// Simple output method.
-	log() {
+	display() {
 		local buf, i, j, v;
 
 		if(_canvas == nil) return;
