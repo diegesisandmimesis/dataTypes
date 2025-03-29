@@ -64,5 +64,9 @@ gameMain: GameMainDef
 		c.display();
 		c.fill(nil);
 
+		"\nRectangle:\n ";
+		c.rect(2, 2, 7, 7, '#');
+		c.display();
+		c.fill(nil);
 	}
 ;

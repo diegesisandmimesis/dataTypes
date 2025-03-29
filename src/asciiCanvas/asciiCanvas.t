@@ -185,6 +185,24 @@ class AsciiCanvas: object
 		}
 	}
 
+	rectangle(x0, y0, x1, y1?, v?) {
+		local v0, v1;
+
+		if(isXY(x0) && isXY(y0)) {
+			v0 = x0;
+			v1 = y0;
+			v = x1;
+		} else {
+			v0 = new XY(x0, y0);
+			v1 = new XY(x1, y1);
+		}
+
+		line(v0.x, v0.y, v1.x, v0.y, v);
+		line(v0.x, v1.y, v1.x, v1.y, v);
+		line(v0.x, v0.y, v0.x, v1.y, v);
+		line(v1.x, v0.y, v1.x, v1.y, v);
+	}
+
 	// Fill the canvas with the given value.
 	fill(v) { _canvas.fillValue(v, 1, _size.x * _size.y); }
 
