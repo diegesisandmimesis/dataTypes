@@ -59,13 +59,21 @@ gameMain: GameMainDef
 		c.display();
 		c.fill(nil);
 
-		"\nCircle:\n ";
+		"\n<.p>Circle:\n ";
 		c.circle(5, 5, 4, 'x');
 		c.display();
 		c.fill(nil);
 
-		"\nRectangle:\n ";
-		c.rect(2, 2, 7, 7, '#');
+		"\n<.p>Rectangle:\n ";
+		c.rectangle(2, 2, 7, 7, '#');
+		c.display();
+		c.fill(nil);
+
+		"\n<.p>Multiple items, single canvas:\n ";
+		c = new AsciiCanvas(70, 20);
+		c.circle(20, 10, 7, 'x');
+		c.circle(60, 5, 10, 'x');
+		c.rectangle(2, 2, 10, 6, 'x');
 		c.display();
 		c.fill(nil);
 	}
