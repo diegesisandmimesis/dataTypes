@@ -98,3 +98,23 @@ modify TadsObject
 		});
 	}
 ;
+
+// Modify LookupTable to add a method that returns the first key for
+// which a given check function returns true for when given the corresponding
+// value.
+// Example:  given the table
+//		t = [ 'a' -> 1, 'b' -> 2, 'c' -> 3 ];
+// 	then
+//		t.keyWhich({ x: x == 2 });
+//	will return "b".
+modify LookupTable
+	keyWhich(cb) {
+		local i, l;
+
+		if(!isFunction(cb)) return(nil);
+		l = keysToList();
+		for(i = 1; i <= l.length(); i++)
+			if((cb)(self[l[i]])) return(l[i]);
+		return(nil);
+	}
+;

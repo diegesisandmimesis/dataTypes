@@ -215,6 +215,12 @@ Rule template 'ruleID';
 // Type tests
 #define isXY(obj) (isType(obj, XY))
 
+#ifdef USE_ASCII_CANVAS
+
+#define isAsciiCanvas(obj) (isType(obj, AsciiCanvas))
+
+#endif // USE_ASCII_CANVAS
+
 #endif // USE_XY
 
 #define DATA_TYPES_H

@@ -19,7 +19,11 @@ class AsciiCanvas: object
 
 	construct(w?, h?) {
 		// Store the size of the canvas.
-		_size = new XY(w ? w : 32, h ? h : 32);
+		if(isXY(w)) {
+			_size = w;
+		} else {
+			_size = new XY(w ? w : 32, h ? h : 32);
+		}
 
 		// Compute and save the center of the canvas.
 		_center = _size.divide(2);
@@ -35,6 +39,8 @@ class AsciiCanvas: object
 		_center = nil;
 	}
 
+	getCenter() { return(_center); }
+
 	// Convert coordinates to an index in the canvas array.
 	// Can be called with one argument (an XY instance) or
 	// two (two integer values).
@@ -42,10 +48,12 @@ class AsciiCanvas: object
 		local v0, v1;
 
 		if(_canvas == nil) return(nil);
-		if((x >= _size.x) || (x < 0)) return(nil);
-		if((y >= _size.y) || (y < 0)) return(nil);
+
 		if(isXY(x)) { v0 = x.x; v1 = x.y; }
 		else { v0 = x; v1 = y; }
+
+		if((v0 >= _size.x) || (v0 < 0)) return(nil);
+		if((v1 >= _size.y) || (v1 < 0)) return(nil);
 
 		return((v0 % _size.x) + ((v1 % _size.y) * _size.x) + 1);
 	}

@@ -17,6 +17,9 @@ class Vertex: object
 	// Table to hold our edges
 	_edgeTable = perInstance(new LookupTable)
 
+	// Temporary flag used when computing path lengths.
+	_dijkstraFlag = nil
+
 	construct(id) { vertexID = id; }
 
 	getGraph() { return(_graph); }

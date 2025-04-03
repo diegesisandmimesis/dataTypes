@@ -8,8 +8,9 @@
 #include "dataTypes.h"
 
 modify Graph
-	_dijkstraCache = nil
-	_dijkstraMaxPathLen = nil
+	_dijkstraCache = nil		// tmp cache for computing paths
+	_dijkstraMaxPathLen = nil	// cached value of longest path
+	_dijkstraLock = nil		// lock flag for computing longest path
 
 	graphUpdated() {
 		inherited();
@@ -19,11 +20,13 @@ modify Graph
 	clearDijkstraCache() {
 		_dijkstraCache = nil;
 		_dijkstraMaxPathLen = nil;
+		_dijkstraLock = nil;
 	}
 
 	initDijkstraCache() {
 		_dijkstraCache = new LookupTable();
 		_dijkstraMaxPathLen = nil;
+		_dijkstraLock = nil;
 	}
 
 	// Returns the path between vertices v0 and v1.
@@ -167,5 +170,62 @@ modify Graph
 
 		// Return.
 		return(prevHash);
+	}
+
+	getLongestPath(id?) {
+		// If we've already computed it, return the value.
+		if(_dijkstraMaxPathLen != nil)
+			return(_dijkstraMaxPathLen);
+
+		// Braindead mutex-like thing.
+		if(_dijkstraLock != nil) return(nil);
+		_dijkstraLock = true;
+
+		// Clear the flag on each vertex.
+		getVertices().forEach({ x: x._dijkstraFlag = nil });
+
+		_dijkstraMaxPathLen = _longestPath(id ? id
+			: getVertices()[1].vertexID);
+
+		// Clear our lock.
+		_dijkstraLock = nil;
+
+		return(_dijkstraMaxPathLen);
+	}
+
+	// Naive longest path algorithm.
+	// Should work for most IF maps, which should have more than a
+	// couple hundred vertices.
+	_longestPath(id) {
+		local d, max, v0, v1;
+
+		// Vertex isn't in graph, no path.
+		if((v0 = getVertex(id)) == nil) return(0);
+
+		// Longest path we know of is no path at all.
+		max = 0;
+
+		// Mark the first vertex as "visited".
+		v0._dijkstraFlag = true;
+
+		v0.getEdgeIDs().forEach(function(o) {
+			if((v1 = getVertex(o)) == nil) return;
+
+			// If we've "visited" this vertex, skip it.
+			if(v1._dijkstraFlag == true) return;
+
+			// Compute the length of then longest path involving
+			// this vertex by recursively computing the length
+			// of the longest path involving each of its unchecked
+			// neighbors and adding one to that.
+			d = 1 + _longestPath(o);
+			if(d > max) max = d;
+		});
+
+		// Clear the flag on this vertex, so other vertices can
+		// path through us.
+		v0._dijkstraFlag = nil;
+
+		return(max);
 	}
 ;
