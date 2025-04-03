@@ -48,6 +48,7 @@ module.
 * [Collection](#collection)
 * [TadsObject](#tads-object)
 * [Vector](#vector)
+* [LookupTable](#lookuptable)
 
 [Macros](#macros)
 * [Type Tests](#type-tests)
@@ -1073,6 +1074,20 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   Swaps elements *i* and *j*.
 
   Returns boolean ``true`` on success, ``nil`` on error.
+
+<a name="lookuptable"/></a>
+### LookupTable
+
+* ``keyWhich(fn)``
+
+  Returns the first value for which the check function ``fn`` returns
+  boolean ``true`` when called with the corresponding value.
+
+  For example, given
+  ```
+  t = [ 'a' -> 1, 'b' -> 2, 'c' -> 3 ];
+  ```
+  then ``t.keyWhich({ x: x == 2 })`` will return ``b``.
 
 <a name="macros"/></a>
 ## Macros
