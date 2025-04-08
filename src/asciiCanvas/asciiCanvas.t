@@ -15,6 +15,12 @@ class AsciiCanvas: object
 	_size = nil		// size of canvas (XY instance)
 	_center = nil		// center of canvas (XY instance)
 
+	_legend = nil		// legend (for converting canvas values
+				//	into labels)
+
+	_labels = nil		// For auto-generated labels
+	_labelIdx = 0
+
 	blankChr = '.'		// default value for "empty" square
 
 	construct(w?, h?) {
@@ -29,7 +35,7 @@ class AsciiCanvas: object
 		_center = _size.divide(2);
 
 		// Generate the Vector to hold the canvas.
-		_canvas = Vector.generate({ i: nil }, _size.x * _size.y);
+		_canvas = Vector.generate({ i: blankChr }, _size.x * _size.y);
 	}
 
 	clear() {
@@ -37,9 +43,67 @@ class AsciiCanvas: object
 		_canvas = nil;
 		_size = nil;
 		_center = nil;
+		_legend = nil;
+		_labels = nil;
+		_labelIdx = 0;
 	}
 
 	getCenter() { return(_center); }
+
+	// Associates a canvas value k with a label v.
+	addLegend(k, v) {
+		// Create the legend lookup table if it doesn't exist.
+		if(_legend == nil)
+			_legend = new LookupTable();
+
+		// If the value was nil, we pick one.
+		if(k == nil)
+			k = getLabel();
+
+		// Remember the association.
+		_legend[k] = v;
+
+		// Returns the key.  Useful mostly when called with k nil.
+		return(k);
+	}
+
+	//
+	getLabel() {
+		if(_labels == nil)
+			_initLabels();
+
+		// If we run out of labels, wrap.  Confusing but unlikely;
+		// left to individual instances to handle their own way
+		// if there are more than 72 things in the canvas.
+		_labelIdx = (_labelIdx % _labels.length) + 1;
+
+		return(_labels[_labelIdx]);
+	}
+
+	// Create an array of A-Z and a-z, to be assigned as labels for
+	// callers that don't want to do it "manually".
+	_initLabels() {
+		local i;
+
+		_labels = new Vector();
+		for(i = 0; i < 26; i++) _labels.append(makeString(65 + i));
+		for(i = 0; i < 26; i++) _labels.append(makeString(97 + i));
+
+		// Index for keeping track of which labels have been used.
+		_labelIdx = 0;
+	}
+
+	// Convert an index into an xy value.
+	indexToXY(idx) {
+		local x, y;
+
+		if(_canvas == nil) return(nil);
+		if((idx < 1) || (idx > _canvas.length)) return(nil);
+		idx -= 1;
+		y = idx / _size.x;
+		x = idx - (y * _size.x);
+		return(new XY(x, y));
+	}
 
 	// Convert coordinates to an index in the canvas array.
 	// Can be called with one argument (an XY instance) or
@@ -73,7 +137,6 @@ class AsciiCanvas: object
 		if((idx = xyToIndex(x, y)) == nil) return;
 		_canvas[idx] = v;
 	}
-
 
 	_lineLow(v0, v1, v) {
 		local delta, d, yi, x, y;
