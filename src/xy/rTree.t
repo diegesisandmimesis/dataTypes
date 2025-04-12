@@ -76,7 +76,7 @@ class RTree: object
 		if(isXY(v))
 			_boundingBox = new Rectangle(v, v);
 		else if(isRectangle(v))
-			_boundingBox = v;
+			_boundingBox = v.clone();
 		else
 			return(nil);
 
@@ -440,10 +440,98 @@ class RTree: object
 		prev.addNode(n1);
 	}
 
-	// Returns the records stored in the given location.
-	// Returns a list of the records on success, an empty list
-	// on failure.
-	query(x, y?) {
+	// Delete the node at (x, y) with data record d.
+	// Note that multiple nodes can occupy the same coordinate, so
+	// both a location and data record are needed.
+	delete(x, y, d?) {
+		local n, r, v;
+
+		if(isXY(x)) {
+			v = x;
+			d = y;
+		} else {
+			v = new XY(x, y);
+		}
+
+		if((r = _query(v)) == nil)
+			return(nil);
+
+		if((n = r.valWhich({ x: x.data == d })) == nil)
+			return(nil);
+
+		n._delete();
+
+		return(true);
+	}
+
+	// Internal method that actually deletes this node.
+	_delete() {
+		// Remove our reference to the data record.
+		if(data != nil)
+			data = nil;
+
+		// If we have branches, delete them as well.
+		if(next != nil)
+			next.forEach({ x: x._delete() });
+
+		// If we have a parent, ping them to remove us.
+		if(prev != nil)
+			prev.removeBranch(self);
+	}
+
+	removeBranch(n) {
+		local idx;
+
+		if(!isRTree(n)) return(nil);
+		if(next == nil) return(nil);
+		if((idx = next.indexOf(n)) == nil) return(nil);
+		next.removeElementAt(idx);
+
+		if(next.length < 1) {
+			_delete();
+		} else {
+			recomputeBoundingBox();
+		}
+
+		return(true);
+	}
+
+
+	recomputeBoundingBox() {
+		local i;
+
+		// We can't recompute the size of a leaf node's
+		// bounding box.
+		if(isLeafNode())
+			return(nil);
+
+		// Clear the existing bounding box.
+		_boundingBox = nil;
+
+		// If we're here, we're a branch node.  If we don't have
+		// any branches, we have nothing to compute.
+		if((next == nil) || (next.length < 1))
+			return(nil);
+
+		// Build our bounding box from our branches.
+		// First, just set it to be the first branch's bounding
+		// box.
+		setBoundingBox(next[1].getBoundingBox());
+
+		// Expand our bounding box to include all our branches'
+		// bounding boxen.
+		for(i = 2; i <= next.length; i++)
+			expand(next[i].getBoundingBox());
+
+		if(prev)
+			prev.recomputeBoundingBox();
+
+		return(true);
+	}
+
+	// Returns the nodes for the given location on success and an
+	// empty list if there are none.
+	_query(x, y?) {
 		local v, r;
 
 		if(isXY(x))
@@ -458,7 +546,7 @@ class RTree: object
 		if(isLeafNode()) {
 			// Make sure the query is a match.
 			if(contains(v))
-				return(data);
+				return(self);
 			return([]);
 		}
 
@@ -467,14 +555,26 @@ class RTree: object
 
 		// Traverse all branches, appending any query results they
 		// return to the results vector.
-		next.forEach({ x: r.appendUnique(x.query(v)) });
+		next.forEach({ x: r.appendUnique(x._query(v)) });
 
 		// Convert the results vector to a list and return it.
 		return(r.toList());
 	}
 
+	// Wrapper for the internal _query() method that returns a list
+	// of data records instead of a list of nodes.
+	query(x, y?) {
+		local l, r;
+
+		if((l = _query(x, y)) == nil) return(nil);
+		r = new Vector(l.length());
+		l.forEach({ x: r.appendUnique(x.data) });
+		return(r.toList());
+	}
+
 	// Stub for debugging.
 	rTreeDebug(d?) {}
+	rTreeDebugBoundingBox() {}
 ;
 
 
@@ -500,6 +600,22 @@ modify RTree
 		}
 		"with <<toString(next.length)>> branches:\n ";
 		next.forEach({ x: x.rTreeDebug(d + 1) });
+	}
+
+	rTreeDebugBoundingBox() {
+		local bb;
+
+		bb = getBoundingBox();
+		"\nbounding box: <<bb.corner0.toStr()>> ";
+		"<<bb.corner1.toStr()>>\n ";
+		if(next == nil) return;
+
+		next.forEach(function(o) {
+			local b2;
+
+			b2 = o.getBoundingBox();
+			"\n\t<<b2.corner0.toStr()>> <<b2.corner1.toStr()>>\n ";
+		});
 	}
 ;
 
