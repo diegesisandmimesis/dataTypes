@@ -218,6 +218,7 @@ class RTree: object
 	// This is a wrapper around another method to make it slightly
 	// easier to make subclasses with different split strategies.
 	split() { return(orderedSplit()); }
+	//split() { return(minAreaSplit()); }
 
 	// Simple splitting strategy based on picking the widest axis
 	// of the bounding box and splitting along it, ordering the
@@ -328,6 +329,82 @@ class RTree: object
 
 		// Add our sibling to our parent's branch list.
 		prev.addNode(lf);
+	}
+
+	minAreaSplit() {
+		local bb, b0, b1, l;
+
+		bb = getBoundingBox();
+
+		if(bb.width > bb.height) {
+			l = next.sort(true,
+				{ a, b: a.getBoundingBox().upperLeft.x
+					- b.getBoundingBox().upperLeft.x });
+		} else {
+			l = next.sort(true,
+				{ a, b: a.getBoundingBox().upperLeft.y
+					- b.getBoundingBox().upperLeft.y });
+		}
+
+		// Get the branches that are furthest apart.
+		b0 = l[1];
+		b1 = l[l.length];
+
+		if(isRootNode())
+			_minAreaSplitRootNode(l, b0, b1);
+		else
+			_minAreaSplitBranchNode(l, b0, b1);
+	}
+
+	_minAreaSplitRootNode(lst, b0, b1) {
+		local a0, a1, i, n0, n1;
+
+		n0 = new RTree();
+		n1 = new RTree();
+
+		n0.addNode(b0);
+		n1.addNode(b1);
+
+		next = nil;
+
+		for(i = 2; i <= (lst.length - 1); i++) {
+			a0 = n0.getBoundingBox().areaWith(lst[i].getBoundingBox());
+			a1 = n1.getBoundingBox().areaWith(lst[i].getBoundingBox());
+			if(a0 > a1) {
+				n1.addNode(lst[i]);
+			} else {
+				n0.addNode(lst[i]);
+			}
+		}
+
+		setBoundingBox(n0.getBoundingBox());
+
+		addNode(n0);
+		addNode(n1);
+	}
+
+	_minAreaSplitBranchNode(lst, b0, b1) {
+		local a0, a1, i, n1;
+
+		n1 = new RTree();
+
+		next = nil;
+		_boundingBox = nil;
+
+		addNode(b0);
+		n1.addNode(b1);
+
+		for(i = 2; i <= (lst.length - 1); i++) {
+			a0 = getBoundingBox().areaWith(lst[i].getBoundingBox());
+			a1 = n1.getBoundingBox().areaWith(lst[i].getBoundingBox());
+			if(a0 > a1) {
+				n1.addNode(lst[i]);
+			} else {
+				addNode(lst[i]);
+			}
+		}
+
+		prev.addNode(n1);
 	}
 
 	// Returns the records stored in the given location.

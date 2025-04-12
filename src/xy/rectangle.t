@@ -136,6 +136,40 @@ class Rectangle: object
 		return(d.x + d.y);
 	}
 
+	// Returns the area of the rectangle if expanded to include the
+	// given rectangle.  Does not actually expand the rectangle.
+	areaWith(x0, y0?, x1?,y1?) {
+		local v0, v1, lx0, ly0, lx1, ly1;
+
+		if(isRectangle(x0)) {
+			v0 = x0.corner0;
+			v1 = x0.corner1;
+		} else if(isXY(x0) && isXY(y0)) {
+			v0 = x0;
+			v1 = y0;
+		} else {
+			v0 = new XY(x0, y0);
+			v1 = new XY(x1, y1);
+		}
+
+		lx0 = corner0.x;
+		lx1 = corner1.x;
+		ly0 = corner0.y;
+		ly1 = corner1.y;
+
+		if(v0.x < lx0) lx0 = v0.x;
+		if(v0.y < ly0) ly0 = v0.y;
+		if(v0.x > lx1) lx1 = v0.x;
+		if(v0.y > ly1) ly1 = v0.y;
+
+		if(v1.x < lx0) lx0 = v1.x;
+		if(v1.y < ly0) ly0 = v1.y;
+		if(v1.x > lx1) lx1 = v1.x;
+		if(v1.y > ly1) ly1 = v1.y;
+
+		return((lx1 - lx0) * (ly1 - ly0));
+	}
+
 	// Height and width of the rectangle.
 	width = (corner1.x - corner0.x)
 	height = (corner1.y - corner0.y)
