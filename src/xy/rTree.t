@@ -331,11 +331,16 @@ class RTree: object
 		prev.addNode(lf);
 	}
 
+	// Node splitting logic based on minimizing the area of the
+	// bounding box at each insert.
 	minAreaSplit() {
 		local bb, b0, b1, l;
 
+		// Get the bounding box.
 		bb = getBoundingBox();
 
+		// Figure up which is the longest axis of the bounding
+		// box and order the branches along that axis.
 		if(bb.width > bb.height) {
 			l = next.sort(true,
 				{ a, b: a.getBoundingBox().upperLeft.x
@@ -346,10 +351,11 @@ class RTree: object
 					- b.getBoundingBox().upperLeft.y });
 		}
 
-		// Get the branches that are furthest apart.
+		// Pick the two branches at the far ends of the axis.
 		b0 = l[1];
 		b1 = l[l.length];
 
+		// Do the split.
 		if(isRootNode())
 			_minAreaSplitRootNode(l, b0, b1);
 		else
@@ -359,17 +365,29 @@ class RTree: object
 	_minAreaSplitRootNode(lst, b0, b1) {
 		local a0, a1, i, n0, n1;
 
+		// Create two new nodes.
 		n0 = new RTree();
 		n1 = new RTree();
 
+		// Add the seed branches to each.
 		n0.addNode(b0);
 		n1.addNode(b1);
 
+		// Clear our own branch list.
 		next = nil;
 
+		// Iterate over all branches except for the seed branches.
 		for(i = 2; i <= (lst.length - 1); i++) {
-			a0 = n0.getBoundingBox().areaWith(lst[i].getBoundingBox());
-			a1 = n1.getBoundingBox().areaWith(lst[i].getBoundingBox());
+			// Get the area each of the new nodes would
+			// have if the branch under consideration was added
+			// to it.
+			a0 = n0.getBoundingBox()
+				.areaWith(lst[i].getBoundingBox());
+			a1 = n1.getBoundingBox()
+				.areaWith(lst[i].getBoundingBox());
+
+			// Add the branch to the node that will grow the
+			// least when it's added.
 			if(a0 > a1) {
 				n1.addNode(lst[i]);
 			} else {
@@ -377,8 +395,10 @@ class RTree: object
 			}
 		}
 
+		// Not really needed.
 		setBoundingBox(n0.getBoundingBox());
 
+		// Add the new branches to ourselves.
 		addNode(n0);
 		addNode(n1);
 	}
@@ -386,17 +406,29 @@ class RTree: object
 	_minAreaSplitBranchNode(lst, b0, b1) {
 		local a0, a1, i, n1;
 
+		// The new sibling node.
 		n1 = new RTree();
 
+		// Clear our branch list and bounding box.
 		next = nil;
 		_boundingBox = nil;
 
+		// Add one seed node to ourselves.
 		addNode(b0);
+
+		// Add the other to the new node.
 		n1.addNode(b1);
 
+		// Iterate over all the branches except the seed branches.
 		for(i = 2; i <= (lst.length - 1); i++) {
+			// Get the area of the bounding box if the branch
+			// being considered was added to it.
 			a0 = getBoundingBox().areaWith(lst[i].getBoundingBox());
-			a1 = n1.getBoundingBox().areaWith(lst[i].getBoundingBox());
+			a1 = n1.getBoundingBox().areaWith(lst[i]
+				.getBoundingBox());
+
+			// Add the branch to the node that grows the least
+			// when it's added.
 			if(a0 > a1) {
 				n1.addNode(lst[i]);
 			} else {
@@ -404,6 +436,7 @@ class RTree: object
 			}
 		}
 
+		// Add our new sibling to our parent node.
 		prev.addNode(n1);
 	}
 
