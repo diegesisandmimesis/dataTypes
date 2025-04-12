@@ -215,6 +215,9 @@ Rule template 'ruleID';
 // Type tests
 #define isXY(obj) (isType(obj, XY))
 
+#define isRectangle(obj) (isType(obj, Rectangle))
+#define isRTree(obj) (isType(obj, RTree))
+
 #ifdef USE_ASCII_CANVAS
 
 #define isAsciiCanvas(obj) (isType(obj, AsciiCanvas))

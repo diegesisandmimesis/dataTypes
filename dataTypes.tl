@@ -22,3 +22,5 @@ source: src/rulebook/rulebook.t
 source: src/rulebook/rulebookInit.t
 source: src/trigger/trigger.t
 source: src/xy/xy.t
+source: src/xy/rectangle.t
+source: src/xy/rTree.t

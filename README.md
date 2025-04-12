@@ -43,6 +43,8 @@ module.
 * [Tuple](#tuple)
 * [Trigger](#trigger)
 * [XY](#xy)
+* [Rectangle](#rectangle)
+* [RTree](#rtree)
 
 [Changes To Stock Classes](#changes)
 * [Collection](#collection)
@@ -1016,6 +1018,99 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
 
   Returns the values as an ordered pair.  Example:  with ``x = 1`` and
   ``y = 2``, will return the string ``(1, 2)``.
+
+<a name="rectangle"></a>
+### Rectangle
+
+#### Rectangle
+
+##### Properties
+
+* ``height``
+  ``width``
+
+  The height and width of the rectangle.  Auto-computed;  should not be
+  manually set.
+
+* ``upperLeft``
+  ``upperRight``
+  ``lowerLeft``
+  ``lowerRight``
+
+  An ``XY`` instance giving the coordinates of the given corner of
+  the rectangle.  Auto-computed;  should not be manually set.
+
+##### Methods
+
+* ``clone()``
+
+  Returns a new ``Rectangle`` instance with the same values as the current one.
+
+* ``contains(x, y?)``
+
+  Returns boolean ``true`` if the given point is inside the rectangle.
+
+  Can be called with two integer arguments or a single ``XY`` instance
+  argument.
+
+* ``expand(x, y?)``
+
+  Expands the rectangle to include the given point.
+
+  Can be called with two integer arguments or a single ``XY`` instance
+  argument.
+
+* ``offset(x, y?)``
+
+  Returns the minimum offset between the rectangle and the given point.
+
+  Can be called with two integer arguments or a single ``XY`` instance
+  argument.
+
+* ``manhattanDistance(x, y?)``
+
+  Returns the minimum Manhattan/taxi distance between the rectangle
+  and the given point.
+
+  Can be called with two integer arguments or a single ``XY`` instance
+  argument.
+
+<a name="rtree"></a>
+### RTree
+
+The ``RTree`` class implements simple R-trees.
+
+R-trees are a data structure for efficient querying of data that is
+spatially indexed (that is, looking things up by x-y coordinates and so on).
+
+The current implementation only allows inserting and querying.
+
+#### RTree
+
+##### Properties
+
+* ``maxBranches = 10``
+
+  The maximum number of branches per node.  This is the main tuning
+  parameter.  A larger value will result in faster inserts but slower
+  queries, a smaller value will result in slower inserts and faster
+  queries.
+
+##### Methods
+
+* ``insert(x, y, d)``
+  ``insert(v, d)``
+
+  Inserts data record ``d`` into the tree at the location (*x*, *y*) (first
+  usage) or the location given by ``XY`` instance *v* (second usage).
+
+* ``query(x, y)``
+  ``query(v)``
+
+  Returns the data records stored at the given location.
+
+  The return value will be a list containing all matching records on
+  success, an empty list if no records match, or ``nil`` on error.
 
 <a name="changes"/></a>
 ## Changes To Stock Classes
