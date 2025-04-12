@@ -73,12 +73,16 @@ class Rectangle: object
 	// Returns boolean true if the given location is inside this
 	// rectangle.
 	contains(x, y?) {
-		local v;
-
 		if(isXY(x))
-			v = x;
+			return(_contains(x));
+		else if(isRectangle(x))
+			return(_contains(x.corner0) && _contains(x.corner1));
 		else
-			v = new XY(x, y);
+			return(_contains(new XY(x, y)));
+	}
+
+	_contains(v) {
+		if(!isXY(v)) return(nil);
 
 		return((v.x >= corner0.x) && (v.x <= corner1.x)
 			&& (v.y >= corner0.y) && (v.y <= corner1.y));

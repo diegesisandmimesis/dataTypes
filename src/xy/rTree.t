@@ -217,8 +217,8 @@ class RTree: object
 	// maxBranches.
 	// This is a wrapper around another method to make it slightly
 	// easier to make subclasses with different split strategies.
-	split() { return(orderedSplit()); }
-	//split() { return(minAreaSplit()); }
+	//split() { return(orderedSplit()); }
+	split() { return(minAreaSplit()); }
 
 	// Simple splitting strategy based on picking the widest axis
 	// of the bounding box and splitting along it, ordering the
