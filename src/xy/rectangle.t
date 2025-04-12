@@ -88,6 +88,23 @@ class Rectangle: object
 			&& (v.y >= corner0.y) && (v.y <= corner1.y));
 	}
 
+	// Returns boolean true if the point (or rectangle) given by the
+	// arg overlaps this rectangle.
+	overlaps(x, y?) {
+		// Check to see if the args look like a point.  If so,
+		// overlaps() is just contains().
+		if(isXY(x))
+			return(_contains(x));
+		else if(!isRectangle(x))
+			return(_contains(new XY(x, y)));
+
+		// If we're here, the first arg is a rectangle.
+		return(!((x.corner1.x < corner0.x)
+			|| (x.corner0.x > corner1.x)
+			|| (x.corner1.y < corner0.y)
+			|| (x.corner0.y > corner1.y)));
+	}
+
 	// Expand the rectangle to include the given point.
 	expand(x, y?) {
 		if(isXY(x)) {

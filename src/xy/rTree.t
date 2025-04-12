@@ -53,8 +53,9 @@ class RTree: object
 		if(prev) prev.expand(v);
 	}
 
-	// Convenience method wrapping a method on Rectangle.
+	// Convenience methods wrapping a method on Rectangle.
 	contains(v) { return(getBoundingBox().contains(v)); }
+	overlaps(v) { return(getBoundingBox().overlaps(v)); }
 
 	// Another wrapper for a Rectangle method
 	manhattanDistance(v) { return(getBoundingBox().manhattanDistance(v)); }
@@ -179,7 +180,8 @@ class RTree: object
 		// First, we see if any of our branches contain the point
 		// being queries.  If so, we use it.
 		for(i = 1; i <= next.length; i++) {
-			if(next[i].contains(v))
+			//if(next[i].contains(v))
+			if(next[i].overlaps(v))
 				return(next[i]);
 		}
 
@@ -536,16 +538,18 @@ class RTree: object
 
 		if(isXY(x))
 			v = x;
+		else if(isRectangle(x))
+			v = x;
 		else
 			v = new XY(x, y);
 
-		if((_boundingBox == nil) || !_boundingBox.contains(v))
+		if((_boundingBox == nil) || !_boundingBox.overlaps(v))
 			return([]);
 
 		// If we're a leaf node we return our data.
 		if(isLeafNode()) {
 			// Make sure the query is a match.
-			if(contains(v))
+			if(overlaps(v))
 				return(self);
 			return([]);
 		}
