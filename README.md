@@ -1057,6 +1057,13 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   Can be called with two integer arguments or a single ``XY`` instance
   argument.
 
+* ``overlaps(x, y?)``
+
+  ``overlaps(rect)``
+
+  Returns boolean ``true`` if the rectangle contains point (*x*, *y) (first
+  usage) or overlaps rectangle *rect* (second usage).
+
 * ``expand(x, y?)``
 
   Expands the rectangle to include the given point.
