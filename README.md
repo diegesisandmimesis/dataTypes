@@ -1027,14 +1027,18 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
 ##### Properties
 
 * ``height``
+
   ``width``
 
   The height and width of the rectangle.  Auto-computed;  should not be
   manually set.
 
 * ``upperLeft``
+
   ``upperRight``
+
   ``lowerLeft``
+
   ``lowerRight``
 
   An ``XY`` instance giving the coordinates of the given corner of
@@ -1083,8 +1087,6 @@ The ``RTree`` class implements simple R-trees.
 R-trees are a data structure for efficient querying of data that is
 spatially indexed (that is, looking things up by x-y coordinates and so on).
 
-The current implementation only allows inserting and querying.
-
 #### RTree
 
 ##### Properties
@@ -1099,18 +1101,29 @@ The current implementation only allows inserting and querying.
 ##### Methods
 
 * ``insert(x, y, d)``
+
   ``insert(v, d)``
 
   Inserts data record ``d`` into the tree at the location (*x*, *y*) (first
   usage) or the location given by ``XY`` instance *v* (second usage).
 
 * ``query(x, y)``
+
   ``query(v)``
 
   Returns the data records stored at the given location.
 
   The return value will be a list containing all matching records on
   success, an empty list if no records match, or ``nil`` on error.
+
+* ``delete(x, y, d)``
+
+  ``delete(v, d)``
+
+  Deletes the data record ``d`` from location (*x*, *y*).
+
+  Note that both a position and the data record itself are needed, as
+  a single location can contain multiple records.
 
 <a name="changes"/></a>
 ## Changes To Stock Classes
