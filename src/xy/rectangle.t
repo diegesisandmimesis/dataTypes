@@ -168,6 +168,9 @@ class Rectangle: object
 		} else if(isXY(x0) && isXY(y0)) {
 			v0 = x0;
 			v1 = y0;
+		} else if(isXY(x0)) {
+			v0 = x0;
+			v1 = x0;
 		} else {
 			v0 = new XY(x0, y0);
 			v1 = new XY(x1, y1);
@@ -194,6 +197,8 @@ class Rectangle: object
 	// Height and width of the rectangle.
 	width = (corner1.x - corner0.x)
 	height = (corner1.y - corner0.y)
+
+	area = (width * height)
 
 	// Returns the coordinates of the given corners.
 	upperLeft = (new XY(corner0.x, corner0.y))

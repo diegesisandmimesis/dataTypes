@@ -54,11 +54,13 @@ class RTree: object
 	}
 
 	// Convenience methods wrapping a method on Rectangle.
-	contains(v) { return(getBoundingBox().contains(v)); }
-	overlaps(v) { return(getBoundingBox().overlaps(v)); }
-
-	// Another wrapper for a Rectangle method
-	manhattanDistance(v) { return(getBoundingBox().manhattanDistance(v)); }
+	contains(x, y?) { return(getBoundingBox().contains(x, y)); }
+	overlaps(x, y?) { return(getBoundingBox().overlaps(x, y)); }
+	manhattanDistance(x, y?)
+		{ return(getBoundingBox().manhattanDistance(x, y)); }
+	areaWith(x0, y0?, x1?, y1?)
+		{ return(getBoundingBox().areaWith(x0, y0, x1, y1)); }
+	area() { return(getBoundingBox().area); }
 
 	// Returns our bounding box, creating one if we don't have one yet.
 	getBoundingBox() {
@@ -101,8 +103,8 @@ class RTree: object
 		// the new branch's bounding box.
 		expand(obj.getBoundingBox());
 
-		// If adding that branch put us at our limit, do a split.
-		if(next.length >= maxBranches)
+		// If adding that branch put us over our limit, do a split.
+		if(next.length > maxBranches)
 			split();
 
 		return(true);
@@ -200,10 +202,16 @@ class RTree: object
 
 			// ...making sure we can compute the Manhattan
 			// distance to the point...
-			if((d = o.manhattanDistance(v)) == nil) return;
+			//if((d = o.manhattanDistance(v)) == nil) return;
+
+			// ...computing the area of the branch expanded
+			// to include the new data point.
+			if((d = o.areaWith(v)) == nil) return;
+
+			d = d - o.area;
 
 			// ...and remembering this branch if it's the
-			// closest we've seen.
+			// smallest increase we've seen.
 			if((min == nil) || (min > d)) {
 				min = d;
 				pick = o;
@@ -481,14 +489,20 @@ class RTree: object
 			prev.removeBranch(self);
 	}
 
+	// Remove the given branch from this node.
 	removeBranch(n) {
 		local idx;
 
+		// Validate the argument.
 		if(!isRTree(n)) return(nil);
 		if(next == nil) return(nil);
 		if((idx = next.indexOf(n)) == nil) return(nil);
+
+		// Remove the branch.
 		next.removeElementAt(idx);
 
+		// If that was our last branch, delete ourselves as well.
+		// Otherwise we need to recompute our bounding box.
 		if(next.length < 1) {
 			_delete();
 		} else {
@@ -498,7 +512,8 @@ class RTree: object
 		return(true);
 	}
 
-
+	// Recompute the size of our bounding box from the bounding
+	// boxes of our branches.
 	recomputeBoundingBox() {
 		local i;
 
@@ -525,6 +540,7 @@ class RTree: object
 		for(i = 2; i <= next.length; i++)
 			expand(next[i].getBoundingBox());
 
+		// If we changed, our parent changed.
 		if(prev)
 			prev.recomputeBoundingBox();
 
