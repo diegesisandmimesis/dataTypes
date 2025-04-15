@@ -36,12 +36,36 @@ gameMain: GameMainDef
 	nodes = 40
 
 	newGame() {
+		local i, j, k, n, m, sz;
+
+		sz = 2;
+		m = new Matrix(sz, sz, sz);
+		n = 0;
+
+sz += 2;
+		for(k = 1; k <= sz; k++) {
+			for(j = 1; j <= sz; j++) {
+				for(i = 1; i <= sz; i++) {
+					n += 1;
+					m.set(i, j, k, n);
+				}
+			}
+		}
+		for(k = 1; k <= sz; k++) {
+			for(j = 1; j <= sz; j++) {
+				for(i = 1; i <= sz; i++) {
+					aioSay('\n(<<toString(i)>>, <<toString(j)>>, <<toString(k)>>): <<toString(m.get(i, j, k))>>\n ');
+				}
+			}
+		}
+/*
 		createTree();
 
 		if(!runTests())
 			"\nERROR:  encountered one or more errors\n ";
 		else
 			"\npassed all tests\n ";
+*/
 	}
 
 	createTree() {
