@@ -952,6 +952,10 @@ collisions are handled by storing them in a linear array.
 
   Stores the value ``value`` with the ID ``id``.
 
+* ``delete(id, value)``
+
+  Removes the given key-value pair.
+
 * ``query(id, callback?)``
 
   Returns the values associated with ID ``id`` as a list, or ``nil`` on

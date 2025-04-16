@@ -31,6 +31,19 @@ class HashTable: object
 		return(true);
 	}
 
+	// Remove the given key-value pair.
+	delete(id, v) {
+		local ar, idx;
+
+		if((ar = _getArray(id)) == nil)
+			return(nil);
+		if((idx = ar.indexOf(v)) == nil)
+			return(nil);
+		ar.removeElementAt(idx);
+
+		return(true);
+	}
+
 	// Return the value associated with key ID.  If the second
 	// argument is a callback function it will be used as a check
 	// function for each element of the return value, and only

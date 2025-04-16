@@ -24,11 +24,16 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		local l, t;
+		local l, t, v0, v1;
 
 		t = new HashTable();
-		t.insert('foo', new Foo('bar'));
-		t.insert('foo', new Foo('baz'));
+
+		v0 = new Foo('bar');
+		v1 = new Foo('baz');
+
+		t.insert('foo', v0);
+		t.insert('foo', v1);
+
 		if((l = t.query('foo')) == nil) {
 			"\nERROR:  query failed\n ";
 			return;
@@ -42,6 +47,23 @@ gameMain: GameMainDef
 			"\nERROR:  query returned bogus results\n ";
 			return;
 		}
+
+		t.delete('foo', v0);
+		if((l = t.query('foo')) == nil) {
+			"\nERROR:  query failed after delete\n ";
+			return;
+		}
+		if(l.length != 1) {
+			"\nERROR:  got wrong number of query results ";
+			"after delete\n ";
+			return;
+		}
+		if(l.subset({ x: (x.query() == 'baz') }).length != 1) {
+			"\nERROR:  query returned bogus results ";
+			"after delete\n ";
+			return;
+		}
+
 		"\npassed all tests\n ";
 	}
 ;
