@@ -1005,6 +1005,10 @@ will not generate an error.
   Returns the value for the given matrix element.  The number of arguments
   must be the same as the number of dimensions.
 
+* ``fill(value)``
+
+  Sets every element of the array to be ``value``.
+
 * ``load(array)``
 
   Loads the contents of ``array`` into the matrix.

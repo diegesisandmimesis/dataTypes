@@ -11,7 +11,7 @@
 #ifdef USE_ASCII_CANVAS
 
 class AsciiCanvas: object
-	_canvas = nil		// vector for the array
+	_matrix = nil		// vector for the array
 	_size = nil		// size of canvas (XY instance)
 	_center = nil		// center of canvas (XY instance)
 
@@ -35,12 +35,12 @@ class AsciiCanvas: object
 		_center = _size.divide(2);
 
 		// Generate the Vector to hold the canvas.
-		_canvas = Vector.generate({ i: blankChr }, _size.x * _size.y);
+		_matrix = new Matrix0(_size.x, _size.y);
 	}
 
 	clear() {
-		_canvas.setLength(0);
-		_canvas = nil;
+		_matrix.free();
+		_matrix = nil;
 		_size = nil;
 		_center = nil;
 		_legend = nil;
@@ -93,49 +93,18 @@ class AsciiCanvas: object
 		_labelIdx = 0;
 	}
 
-	// Convert an index into an xy value.
-	indexToXY(idx) {
-		local x, y;
-
-		if(_canvas == nil) return(nil);
-		if((idx < 1) || (idx > _canvas.length)) return(nil);
-		idx -= 1;
-		y = idx / _size.x;
-		x = idx - (y * _size.x);
-		return(new XY(x, y));
-	}
-
-	// Convert coordinates to an index in the canvas array.
-	// Can be called with one argument (an XY instance) or
-	// two (two integer values).
-	xyToIndex(x, y?) {
-		local v0, v1;
-
-		if(_canvas == nil) return(nil);
-
-		if(isXY(x)) { v0 = x.x; v1 = x.y; }
-		else { v0 = x; v1 = y; }
-
-		if((v0 >= _size.x) || (v0 < 0)) return(nil);
-		if((v1 >= _size.y) || (v1 < 0)) return(nil);
-
-		return((v0 % _size.x) + ((v1 % _size.y) * _size.x) + 1);
-	}
-
 	// Getter and setter for canvas array.
 	getXY(x, y?) {
-		local idx;
-
-		if((idx = xyToIndex(x, y)) == nil) return(nil);
-		return(_canvas ? _canvas[idx] : nil);
+		local v;
+		if(isXY(x)) v = x;
+		else v = new XY(x, y);
+		return(_matrix ? _matrix.get(v.x, v.y) : nil);
 	}
-	setXY(x, y, v?) {
-		local idx;
-
-		if(_canvas == nil) return;
-		if(isXY(x)) { v = y; y = nil; }
-		if((idx = xyToIndex(x, y)) == nil) return;
-		_canvas[idx] = v;
+	setXY(x, y, d?) {
+		local v;
+		if(isXY(x)) v = x;
+		else v = new XY(x, y);
+		return(_matrix ? _matrix.set(v.x, v.y, d) : nil);
 	}
 
 	_lineLow(v0, v1, v) {
@@ -275,13 +244,13 @@ class AsciiCanvas: object
 	}
 
 	// Fill the canvas with the given value.
-	fill(v) { _canvas.fillValue(v, 1, _size.x * _size.y); }
+	fill(v) { if(_matrix) _matrix.fill(v); }
 
 	// Simple output method.
 	display() {
 		local buf, i, j, v;
 
-		if(_canvas == nil) return;
+		if(_matrix == nil) return;
 
 		buf = new StringBuffer((_size.x * _size.y) + _size.y + 1);
 		for(j = 0; j < _size.y; j++) {

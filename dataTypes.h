@@ -198,6 +198,31 @@ Rule template 'ruleID';
 
 
 //
+// HashTable definitions
+//
+
+// Type tests
+#define isHashTable(obj) (isType(obj, HashTable))
+
+
+//
+// Matrix definitions
+//
+
+// Type tests
+#define isMatrix(obj) (isType(obj, Matrix))
+#define isIntegerMatrix(obj) (isType(obj, IntegerMatrix))
+
+
+//
+// TS definitions
+//
+
+// Type tests
+#define isTS(obj) (isType(obj, TS))
+
+
+//
 // XY declarations
 //
 

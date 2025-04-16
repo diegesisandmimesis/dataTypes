@@ -78,6 +78,21 @@ class Matrix: object
 		}
 	}
 
+	free() {
+		if(_base == nil) return;
+		_free(_base);
+		_base = nil;
+		dim = nil;
+		size = nil;
+	}
+
+	_free(ar) {
+		if(!isVector(ar) || (ar.length < 1))
+			return;
+		ar.forEach({ x: _free(x) });
+		ar.setLength(0);
+	}
+
 	// Loads the contents of the matrix from the given array,
 	// which must be a linearized 2-dimensional square matrix.
 	// That is, it must be a 2x2 matrix stored as a 4-element List,
@@ -168,7 +183,8 @@ class Matrix: object
 	// something at the given coordinates (by setting the
 	// second element of it, in this case).
 	_fetch(ar, lst, idx, depth?) {
-		if((idx < 1) || (idx > lst.length) || (lst[idx] > ar.length))
+		if((idx < 1) || (idx > lst.length)
+			|| (lst[idx] < 1) || (lst[idx] > ar.length))
 			return(nil);
 		if(idx == (depth ? depth : 1)) return(ar[lst[idx]]);
 		return(_fetch(ar[lst[idx]], lst, idx - 1, depth));
@@ -179,6 +195,23 @@ class Matrix: object
 		if(args == nil) return(nil);
 		if((_base == nil) || (dim == nil)) return(nil);
 		return(_fetch(_base, args, args.length));
+	}
+
+	fill(v) {
+		if(_base == nil)
+			return(nil);
+
+		_fill(_base, v, size.length);
+
+		return(true);
+	}
+
+	_fill(ar, v, idx) {
+		if(!isVector(ar)) return;
+		if(idx == 1)
+			ar.fillValue(v, 1, size[1]);
+		else
+			ar.forEach({ x: _fill(x, v, idx - 1) });
 	}
 
 	// Stub debugging method.
@@ -286,6 +319,31 @@ class IntegerMatrix: Matrix
 		}
 
 		return(m);
+	}
+;
+
+class Matrix0: Matrix
+	get([args]) {
+		local v;
+
+		if((args == nil) || !isCollection(args))
+			return(nil);
+		v = new Vector(args.length);
+		args.forEach({ x: v.append(x + 1) });
+
+		return(inherited(v...));
+	}
+
+	set([args]) {
+		local i, v;
+
+		if((args == nil) || !isCollection(args))
+			return(nil);
+		v = new Vector(args.length);
+		for(i = 1; i < args.length; i++)
+			v.append(args[i] + 1);
+		v.append(args[args.length]);
+		return(inherited(v...));
 	}
 ;
 
