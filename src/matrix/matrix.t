@@ -197,6 +197,7 @@ class Matrix: object
 		return(_fetch(_base, args, args.length));
 	}
 
+	// Sets every element of the array to be equal to v.
 	fill(v) {
 		if(_base == nil)
 			return(nil);
@@ -322,6 +323,9 @@ class IntegerMatrix: Matrix
 	}
 ;
 
+// Subclass of Matrix which indexes from zero instead of one.
+// That is, the first element is of a two-dimensional matrix is
+// retrieved by Matrix0.get(0, 0) instead of .get(1, 1).
 class Matrix0: Matrix
 	get([args]) {
 		local v;
