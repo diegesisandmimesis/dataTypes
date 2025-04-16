@@ -986,12 +986,12 @@ will not generate an error.
 
 * ``dim = nil``
 
-  The number of dimensions.
+  The number of dimensions.  Should not be modified by hand.
 
 * ``size = nil``
 
   An array containing the size of each dimension.  Example:  in a 2x3
-  matrix this will be ``[ 2, 3 ]``.
+  matrix this will be ``[ 2, 3 ]``.  Should not be modified by hand.
 
 ##### Methods
 
@@ -1004,6 +1004,20 @@ will not generate an error.
 
   Returns the value for the given matrix element.  The number of arguments
   must be the same as the number of dimensions.
+
+* ``load(array)``
+
+  Loads the contents of ``array`` into the matrix.
+
+  The value of ``array`` must be a linearized 2-dimensional square matrix.
+  That is, a 2x2 matrix stored as a 4-element list, a 3x3 matrix stored as
+  a 9-element list, and so on.  To load:
+
+  ```
+       a  b
+       c  d
+  ```
+  ...the array would be ``[ a, b, c, d ]``.
 
 #### IntegerMatrix
 
