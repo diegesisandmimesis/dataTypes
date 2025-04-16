@@ -42,6 +42,9 @@ module.
   * [Rulebook](#rulebook)
 * [Tuple](#tuple)
 * [Trigger](#trigger)
+* [HashTable](#hashTable)
+* [Matrix](#matrix)
+* [TS](#ts)
 * [XY](#xy)
 * [Rectangle](#rectangle)
 * [RTree](#rtree)
@@ -657,6 +660,7 @@ edited as it is set by the parent ``MarkovChain`` during initialization.
   be used directly, the corresponding methods on ``MarkovChain`` should
   probably be used instead.
 
+
 <a name="rulebook-section"/></a>
 ### Rules and Rulebooks
 
@@ -934,6 +938,96 @@ In this module a ``Trigger`` is a ``Rule`` that is also a ``Tuple``.
 
   Returns the corresponding property on the tuple computed by ``match()``
   (above).
+
+<a name="hashTable"></a>
+### HashTable
+
+The ``HashTable`` class implements associative arrays in which key
+collisions are handled by storing them in a linear array.
+
+#### HashTable
+##### Methods
+
+* ``insert(id, value)``
+
+  Stores the value ``value`` with the ID ``id``.
+
+* ``query(id, callback?)``
+
+  Returns the values associated with ID ``id`` as a list, or ``nil`` on
+  failure.
+
+  If the optional ``callback`` argument is given and is a function it will
+  be used to test each value.  Values for which ``callback([that value])``
+  returns boolean ``true`` will be included in the results list.
+
+<a name="matrix"></a>
+### Matrix
+
+The ``Matrix`` class implements multi-dimensional arrays.
+
+In general matrices must be dimensioned when constructed and cannot
+be resized.  Example:
+
+```
+	// Create a 7x5x3 matrix
+	local m = new Matrix(7, 5, 3);
+```
+
+Querying values outside the dimensioned bounds will return ``nil`` but
+will not generate an error.
+
+#### Matrix
+##### Properties
+
+* ``dim = nil``
+
+  The number of dimensions.
+
+* ``size = nil``
+
+  An array containing the size of each dimension.  Example:  in a 2x3
+  matrix this will be ``[ 2, 3 ]``.
+
+##### Methods
+
+* ``set(x, y[...], value)``
+
+  Sets the value for the given matrix element.  The number of arguments
+  must be the same as the number of dimensions plus one.
+
+* ``get(x, y[...])``
+
+  Returns the value for the given matrix element.  The number of arguments
+  must be the same as the number of dimensions.
+
+#### IntegerMatrix
+
+The ``IntegerMatrix`` class is a subclass of ``Matrix`` which only accepts
+integer values.
+
+##### Methods
+
+* ``determinant()``
+
+  Returns the determinant of the matrix, or ``nil`` on error.
+
+  Only works for 2-dimensional square matrices.
+
+<a name="ts"></a>
+### TS
+
+The ``TS`` class provides a very simple wall-clock timestamp service.
+
+When an instance is created the constructor records the time, and then
+the number of seconds since creation can be returned via ``getInterval()``.
+
+#### TS
+##### Methods
+
+* ``getInterval()``
+
+  Returns the number of seconds since this instance was created.
 
 <a name="xy"/></a>
 ### XY
