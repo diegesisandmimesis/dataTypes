@@ -14,10 +14,12 @@
 class QuadTreeData: object
 	position = nil		// XY instance
 	data = nil		// user data
+	parent = nil		// where we live
 
-	construct(v0, v1) {
+	construct(v0, v1, p) {
 		position = v0;
 		data = v1;
+		parent = p;
 	}
 ;
 
@@ -25,6 +27,10 @@ class QuadTreeData: object
 class QuadTree: object
 	// User data for leaf nodes.
 	data = nil
+
+	maxData = 10
+
+	prev = nil
 
 	// Node's bounding box.
 	_boundingBox = nil
@@ -34,7 +40,7 @@ class QuadTree: object
 
 	// Constructor, which accepts several syntaxes for declaring the
 	// bounding box.
-	construct(x0, y0?, x1?, y1?) {
+	construct(x0, y0?, x1?, y1?, p?) {
 		local v;
 
 		if(isRectangle(x0)) {
@@ -46,6 +52,9 @@ class QuadTree: object
 		}
 
 		setBoundingBox(v);
+
+		if(p != nil)
+			prev = p;
 	}
 
 	// Returns the bounding box, without fail.
@@ -66,7 +75,7 @@ class QuadTree: object
 	// Inserts a new value.  Args are the position, as an x-y, and the
 	// data.
 	insert(x, y, d?) {
-		local i, v;
+		local v;
 
 		if(isXY(x)) {
 			v = x;
@@ -80,25 +89,33 @@ class QuadTree: object
 		if(!getBoundingBox().contains(v))
 			return(nil);
 
-		// If we don't have any branches just add the data on
-		// ourselves.
-		if((data == nil) && (_branches == nil)) {
-			data = new QuadTreeData(v, d);
+		// If we have branches, pass the insert off to them.
+		if(_branches != nil)
+			return(_insertIntoBranch(v, d));
+
+		// No branches, we're a leaf node.  See if we already
+		// have data.
+		if(data == nil)
+			data = new Vector(maxData);
+
+		// If we can just add the data to ourselves, do so.
+		if(data.length < maxData) {
+			data.append(new QuadTreeData(v, d, self));
 			return(true);
 		}
 
-		// If we're here, then that means we do have data.  If
-		// we don't have branches yet, we need to construct some.
-		if(_branches == nil)
-			_subdivide();
+		// We've already got as much data as we can hold, so
+		// we do a split.
+		_split();
 
-		for(i = 1; i <= _branches.length; i++) {
-			if(_branches[i].insert(v, d) == true) {
-				return(true);
-			}
-		}
+		// Add the new data to a branch when we're done splitting.
+		return(_insertIntoBranch(v, d));
+	}
 
-		return(nil);
+	// Create new branches and divide existing data between them.
+	_split() {
+		_subdivide();
+		_distributeData();
 	}
 
 	// Construct our branches.  They will be four QuadTree instances
@@ -116,25 +133,42 @@ class QuadTree: object
 
 		// Create the branches.
 		_branches = [
-			new QuadTree(v0.x, v0.y, m.x, m.y),
-			new QuadTree(m.x + 1, v0.y, v1.x, m.y),
-			new QuadTree(v0.x, m.y + 1, m.x, v1.y),
-			new QuadTree(m.x + 1, m.y + 1, v1.x, v1.y)
+			new QuadTree(v0.x, v0.y, m.x, m.y, self),
+			new QuadTree(m.x + 1, v0.y, v1.x, m.y, self),
+			new QuadTree(v0.x, m.y + 1, m.x, v1.y, self),
+			new QuadTree(m.x + 1, m.y + 1, v1.x, v1.y, self)
 		];
+	}
 
-		// Since we're creating branches that means we already
-		// have data (and just got an insert for more) so we
-		// need to push that down onto one of our new branches.
-		_branches.forEach({ x: x.insert(data.position, data.data) });
+	// Divide existing data out between our branches.
+	_distributeData() {
+		if(data == nil)
+			return;
 
-		// Clear our data (it is now on a branch).
+		data.forEach({ x: _insertIntoBranch(x.position, x.data) });
 		data = nil;
+	}
+
+	// Try to insert data into one of our branches.
+	_insertIntoBranch(v, d) {
+		local i;
+
+		if(_branches == nil)
+			return(nil);
+
+		for(i = 1; i <= _branches.length; i++) {
+			if(_branches[i].insert(v, d))
+				return(true);
+		}
+
+		return(nil);
 	}
 
 	delete(x, y, d?) {
 	}
 
-	// Query.  Returns a list of matching QuadTreeData instances.
+	// Query.  Returns a list of matching QuadTreeData instances
+	// or an empty list if there are none.
 	_query(x0, y0?, x1?, y1?) {
 		local bb, r, v;
 
@@ -153,8 +187,13 @@ class QuadTree: object
 		if(!bb.overlaps(v))
 			return([]);
 
-		if((data != nil) && v.overlaps(data.position)) {
-			return([ data ]);
+		if(data != nil) {
+			r = new Vector();
+			data.forEach(function(d) {
+				if(v.contains(d.position))
+					r.append(d);
+			});
+			return(r);
 		}
 
 		if(_branches == nil)
