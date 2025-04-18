@@ -351,6 +351,34 @@ class Matrix0: Matrix
 	}
 ;
 
+#ifndef INT_MATH_H
+
+// If we're being compiled without the intMath module, define the
+// sqrtInt() function it provides as a method on IntegerMatrix.  That's
+// all Matrix needs from the module, and IntegerMatrix is the only thing
+// that needs it.
+modify IntegerMatrix
+	// Arcane.  For an explanation see the comments in the intMath
+	// module.
+	sqrtInt(v) {
+		local c, r, shift;
+
+		shift = 32;
+		shift += shift & 1;
+		r = 0;
+		while(shift > 0) {
+			shift -= 2;
+			r <<= 1;
+			c = r + 1;
+			if((c * c) <= (v >> shift))
+				r = c;
+		}
+		return(r);
+	}
+;
+
+#endif /// INT_MATH_H
+
 
 #ifdef __DEBUG
 
