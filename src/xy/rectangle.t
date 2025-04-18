@@ -205,7 +205,8 @@ class Rectangle: object
 	upperRight = (new XY(corner1.x, corner0.y))
 	lowerLeft = (new XY(corner0.x, corner1.y))
 	lowerRight = (new XY(corner1.x, corner1.y))
-	
+
+	center = (corner0.add(new XY(width / 2, height / 2)))
 ;
 
 #endif // USE_XY
