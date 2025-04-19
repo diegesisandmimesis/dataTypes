@@ -44,6 +44,21 @@ gameMain: GameMainDef
 			"\npassed all tests\n ";
 	}
 
+	deleteTree() {
+		local i;
+
+		for(i = 0; i < nodes; i++) {
+			_tree.delete(i, i,
+				'foo' + toString(i));
+		}
+
+		for(i = 0; i < nodes; i++) {
+			_tree.delete(i, i,
+				'bar' + toString(i));
+		}
+		
+	}
+
 	createTree() {
 		local i;
 

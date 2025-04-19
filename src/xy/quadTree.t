@@ -36,7 +36,7 @@ class QuadTree: object
 	_boundingBox = nil
 
 	// List of node's branches.
-	_branches = nil
+	next = nil
 
 	// Constructor, which accepts several syntaxes for declaring the
 	// bounding box.
@@ -56,6 +56,9 @@ class QuadTree: object
 		if(p != nil)
 			prev = p;
 	}
+
+	isLeafNode() { return(next == nil); }
+	isRootNode() { return(prev == nil); }
 
 	// Returns the bounding box, without fail.
 	getBoundingBox() {
@@ -90,7 +93,7 @@ class QuadTree: object
 			return(nil);
 
 		// If we have branches, pass the insert off to them.
-		if(_branches != nil)
+		if(next != nil)
 			return(_insertIntoBranch(v, d));
 
 		// No branches, we're a leaf node.  See if we already
@@ -132,7 +135,7 @@ class QuadTree: object
 		m = bb.center;		// dead center
 
 		// Create the branches.
-		_branches = [
+		next = [
 			new QuadTree(v0.x, v0.y, m.x, m.y, self),
 			new QuadTree(m.x + 1, v0.y, v1.x, m.y, self),
 			new QuadTree(v0.x, m.y + 1, m.x, v1.y, self),
@@ -153,18 +156,123 @@ class QuadTree: object
 	_insertIntoBranch(v, d) {
 		local i;
 
-		if(_branches == nil)
+		if(next == nil)
 			return(nil);
 
-		for(i = 1; i <= _branches.length; i++) {
-			if(_branches[i].insert(v, d))
+		for(i = 1; i <= next.length; i++) {
+			if(next[i].insert(v, d))
 				return(true);
 		}
 
 		return(nil);
 	}
 
+	// Delete a leaf node at the given location with the given data.
 	delete(x, y, d?) {
+		local n, r, v;
+
+		if(isXY(x)) {
+			v = x;
+			d = y;
+		} else {
+			v = new XY(x, y);
+		}
+
+		// Find the QuadTreeData instances the query location contains,
+		// if any.
+		if((r = _query(v)) == nil)
+			return(nil);
+
+		// Find the first QuadTreeData instance whose data matches
+		// the query.
+		if((n = r.valWhich({ x: x.data == d })) == nil)
+			return(nil);
+
+		// Remove the instance.
+		n.data = nil;
+		n.position = nil;
+		n.parent._deleteLeaf(n);
+
+
+		return(true);
+	}
+
+	// Delete a leaf from a branch node.
+	_deleteLeaf(obj) {
+		local idx;
+
+		if(!isQuadTreeData(obj))
+			return(nil);
+
+		// Make sure the leaf node is in our data.
+		if((data == nil) || ((idx = data.indexOf(obj)) == nil))
+			return(nil);
+
+		// Remove it.
+		data.removeElementAt(idx);
+
+		// Remove the object's reference to us.
+		obj.parent = nil;
+
+		// If that was our last leaf node, see if our
+		// branch needs pruning.
+		if((data.length == 0) && (next == nil) && (prev != nil))
+			prev._deleteBranch(self);
+
+		return(true);
+	}
+
+	// Delete a branch if its siblings are also empty.
+	_deleteBranch(obj) {
+		// Never prune the root node.
+		if(isRootNode())
+			return(nil);
+
+		// Make sure the arg is a QuadTree instance.
+		if(!isQuadTree(obj))
+			return(nil);
+
+		// If we're not empty, we don't prune.
+		// This relies on branches clearing their leaf nodes before
+		// calling us.
+		if(!isEmpty())
+			return(nil);
+
+		// Remove the branch vector.
+		next = nil;
+
+		// If we have a parent, see if we now need to be recursively
+		// pruned ourselves.
+		if(prev)
+			prev._deleteBranch(obj);
+
+		return(true);
+	}
+
+	// Returns boolean true if we (and our branches, recursively) contain no
+	// data.
+	isEmpty() {
+		local r;
+
+		// If we have data ourselves then we're not empty.
+		if((data != nil) && (data.length > 0))
+			return(nil);
+		
+		// If we have no branches and no data, we're empty.
+		if(next == nil)
+			return(true);
+
+		// Assume we're empty.
+		r = true;
+
+		// Recursively call our branches.  If any of them, or their
+		// children, are non-empty, we're non-empty.
+		next.forEach(function(o) {
+			if(!isQuadTree(o)) return;
+			if(!o.isEmpty()) r = nil;
+		});
+
+		return(r);
 	}
 
 	// Query.  Returns a list of matching QuadTreeData instances
@@ -196,11 +304,11 @@ class QuadTree: object
 			return(r);
 		}
 
-		if(_branches == nil)
+		if(next == nil)
 			return([]);
 
 		r = new Vector();
-		_branches.forEach({ x: r.appendUnique(x._query(v)) });
+		next.forEach({ x: r.appendUnique(x._query(v)) });
 
 		return(r);
 	}
@@ -215,6 +323,31 @@ class QuadTree: object
 		l.forEach({ x: r.append(x.data) });
 		return(r.toList());
 	}
+
+	quadTreeDebug(d?) {}
 ;
+
+#ifdef __DEBUG
+
+modify QuadTree
+	quadTreeDebug(d?) {
+		local indent;
+
+		if(d == nil) d = 0;
+
+		indent = new Vector(d).fillValue('\t', 1, d).join('');
+
+		"\n<<indent>><<(isLeafNode() ? 'leaf' : 'branch')>> node ";
+		if(isLeafNode()) {
+			"with <<toString(data ? data.length : 'no')>> ";
+				"data records\n ";
+			return;
+		}
+		"with <<toString(next.length)>> branches:\n ";
+		next.forEach({ x: x.quadTreeDebug(d + 1) });
+	}
+;
+
+#endif // __DEBUG
 
 #endif // USE_XY

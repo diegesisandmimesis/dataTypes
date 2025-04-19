@@ -242,6 +242,8 @@ Rule template 'ruleID';
 
 #define isRectangle(obj) (isType(obj, Rectangle))
 #define isRTree(obj) (isType(obj, RTree))
+#define isQuadTree(obj) (isType(obj, QuadTree))
+#define isQuadTreeData(obj) (isType(obj, QuadTreeData))
 
 #ifdef USE_ASCII_CANVAS
 
