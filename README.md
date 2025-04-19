@@ -1217,8 +1217,9 @@ A ``QuadTree`` instance must be declared by passing its bounding rectangle
 to the constructor:
 
 ```
-	// Bounding box is 5 units wide and 3 units tall, with the upper-
-	// left corner at the origin and lower-right corner at (5, 3).
+	// Bounding box is 5 units wide and 3 units tall, with
+	// the upper-left corner at the origin and lower-right
+	// corner at (5, 3).
 	local tree = new QuadTree(0, 0, 5, 3);
 ```
 
