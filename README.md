@@ -47,6 +47,7 @@ module.
 * [TS](#ts)
 * [XY](#xy)
 * [Rectangle](#rectangle)
+* [QuadTree](#quadtree)
 * [RTree](#rtree)
 
 [Changes To Stock Classes](#changes)
@@ -1202,6 +1203,61 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   Can be called with two integer arguments or a single ``XY`` instance
   argument.
 
+<a name="quadtree"></a>
+### QuadTree
+
+The ``QuadTree`` class implements simple quadtrees.
+
+Quadtrees are a data structure for querying data that is
+spatially indexed (that is, looking things up by x-y coordinates and so on).
+Internally they work by evenly partitioning the geometric region they cover,
+and so are most efficient when data is roughly evenly distributed.
+
+A ``QuadTree`` instance must be declared by passing its bounding rectangle
+to the constructor:
+
+```
+	// Bounding box is 5 units wide and 3 units tall, with the upper-
+	// left corner at the origin and lower-right corner at (5, 3).
+	local tree = new QuadTree(0, 0, 5, 3);
+```
+
+#### QuadTree
+
+##### Properties
+
+* ``maxData = 10``
+
+  The maximum number of data records per node.
+
+##### Methods
+
+* ``insert(x, y, d)``
+
+  ``insert(v, d)``
+
+  Inserts data record ``d`` into the tree at the location (*x*, *y*) (first
+  usage) or the location given by ``XY`` instance *v* (second usage).
+
+* ``query(x, y)``
+
+  ``query(v)``
+
+  Returns the data records stored at the given location.  Argument can
+  be a single point or a bounding rectangle.
+
+  The return value will be a list containing all matching records on
+  success, an empty list if no records match, or ``nil`` on error.
+
+* ``delete(x, y, d)``
+
+  ``delete(v, d)``
+
+  Deletes the data record ``d`` from location (*x*, *y*).
+
+  Note that both a position and the data record itself are needed, as
+  a single location can contain multiple records.
+
 <a name="rtree"></a>
 ### RTree
 
@@ -1209,6 +1265,12 @@ The ``RTree`` class implements simple R-trees.
 
 R-trees are a data structure for efficient querying of data that is
 spatially indexed (that is, looking things up by x-y coordinates and so on).
+
+Internally R-trees are self-balancing and ensure a constant query complexity
+across all data stored in them (that is, all queries take roughly the
+same amount of time).  They're most efficient when data is unevenly
+distributed, and when query performance is more important than
+insert performance.
 
 #### RTree
 
@@ -1234,7 +1296,8 @@ spatially indexed (that is, looking things up by x-y coordinates and so on).
 
   ``query(v)``
 
-  Returns the data records stored at the given location.
+  Returns the data records stored at the given location.  Argument can
+  be a single point or a bounding rectangle.
 
   The return value will be a list containing all matching records on
   success, an empty list if no records match, or ``nil`` on error.
