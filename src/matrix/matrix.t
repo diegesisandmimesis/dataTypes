@@ -155,6 +155,10 @@ class Matrix: object
 		return(true);
 	}
 
+	// Wrapper methods for a slightly more consistent API.
+	insert([args]) { return(set(args...)); }
+	query([args]) { return(get(args...)); }
+
 	// Recursively fetch.
 	// First arg is the current working array.  It will change
 	// for each level of recursion (for an x, y, z query it will
