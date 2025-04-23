@@ -149,6 +149,9 @@ class Matrix: object
 		if((ar = _fetch(_base, args, args.length - 1, 2)) == nil)
 			return(nil);
 
+		if(args[1] < 1)
+			return(nil);
+
 		// Set the value.
 		ar[args[1]] = args[args.length];
 

@@ -52,6 +52,13 @@
 #define isVector(obj) (isIntrinsicType(obj, Vector))
 #endif
 
+#ifndef isEmptyList
+#define isEmptyList(obj) (isList(obj) && (obj.length() < 1))
+#endif
+#ifndef isNilOrEmpty
+#define isNilOrEmpty(obj) (!isList(obj) || (obj.length() < 1))
+#endif
+
 #ifndef isInteger
 #define isInteger(obj) ((obj != nil) && (dataType(obj) == TypeInt))
 #endif

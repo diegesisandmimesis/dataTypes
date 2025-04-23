@@ -195,8 +195,8 @@ class Rectangle: object
 	}
 
 	// Height and width of the rectangle.
-	width = (corner1.x - corner0.x)
-	height = (corner1.y - corner0.y)
+	width = (corner1.x - corner0.x + 1)
+	height = (corner1.y - corner0.y + 1)
 
 	area = (width * height)
 
@@ -207,6 +207,9 @@ class Rectangle: object
 	lowerRight = (new XY(corner1.x, corner1.y))
 
 	center = (corner0.add(new XY(width / 2, height / 2)))
+
+	toStr() { return('<<corner0.toStr()>> <<corner1.toStr()>> '
+		+ '<<toString(width)>> x <<toString(height)>>'); }
 ;
 
 #endif // USE_XY

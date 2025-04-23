@@ -102,8 +102,12 @@ class AsciiCanvas: object
 	}
 	setXY(x, y, d?) {
 		local v;
-		if(isXY(x)) v = x;
-		else v = new XY(x, y);
+		if(isXY(x)) {
+			v = x;
+			d = y;
+		} else {
+			v = new XY(x, y);
+		}
 		return(_matrix ? _matrix.set(v.x, v.y, d) : nil);
 	}
 
