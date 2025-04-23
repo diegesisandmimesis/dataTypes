@@ -195,8 +195,8 @@ class Rectangle: object
 	}
 
 	// Height and width of the rectangle.
-	width = (corner1.x - corner0.x + 1)
-	height = (corner1.y - corner0.y + 1)
+	width = (corner1.x - corner0.x)
+	height = (corner1.y - corner0.y)
 
 	area = (width * height)
 
@@ -210,6 +210,25 @@ class Rectangle: object
 
 	toStr() { return('<<corner0.toStr()>> <<corner1.toStr()>> '
 		+ '<<toString(width)>> x <<toString(height)>>'); }
+
+	constructAdjacent(x, y?) {
+		local p, v;
+
+		if(isXY(x)) v = x;
+		else v = new XY(x, y);
+
+		v.x = (v.x ? abs(v.x) / v.x : 0);
+		v.y = (v.y ? abs(v.y) / v.y : 0);
+
+		p = new XY(corner0.x + (v.x * (width + 1)),
+			corner0.y + (v.y * (height + 1)));
+
+		return(new Rectangle(
+			p.x, p.y,
+			p.x + width,
+			p.y + height
+		));
+	}
 ;
 
 #endif // USE_XY

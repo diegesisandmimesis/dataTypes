@@ -44,7 +44,7 @@ class QuadTree: object
 		local v;
 
 		if(isRectangle(x0)) {
-			v = x0;
+			v = x0.clone();
 		} else if(isXY(x0) && isXY(y0)) {
 			v = new Rectangle(x0, y0);
 		} else {
@@ -89,8 +89,11 @@ class QuadTree: object
 
 		// If the location for the insert isn't in our bounding
 		// box we have nothing to do.
-		if(!getBoundingBox().contains(v))
+		if(!getBoundingBox().contains(v)) {
+			if(isRootNode())
+				return(_insertRootNode(v, d));
 			return(nil);
+		}
 
 		// If we have branches, pass the insert off to them.
 		if(next != nil)
@@ -150,6 +153,56 @@ class QuadTree: object
 
 		data.forEach({ x: _insertIntoBranch(x.position, x.data) });
 		data = nil;
+	}
+
+	_insertRootNode(v, d) {
+		local bb, i, i0, i1, j, j0, j1, off, nx;
+
+		bb = getBoundingBox();
+		off = bb.offset(v);
+
+		if(off.x < 1) {
+			i0 = -1;
+			i1 = 0;
+		} else {
+			i0 = 0;
+			i1 = 1;
+		}
+		if(off.y < 1) {
+			j0 = -1;
+			j1 = 0;
+		} else {
+			j0 = 0;
+			j1 = 1;
+		}
+
+		nx = new Vector(4);
+
+		for(j = j0; j <= j1; j++) {
+			for(i = i0; i <= i1; i++) {
+				nx.append(new QuadTree(
+					bb.constructAdjacent(i, j)));
+				if((i == 0) && (j == 0)) {
+					nx[nx.length].next = next;
+				}
+				nx[nx.length].prev = self;
+			}
+		}
+
+		next = nx.toList();
+
+		_distributeData();
+
+		bb = next[1].getBoundingBox().clone();
+		for(i = 2; i <= next.length; i++)
+			bb.expand(next[i].getBoundingBox());
+
+		setBoundingBox(bb);
+
+		//return(insert(v, d));
+		if(!insert(v, d))
+			return(nil);
+		return(true);
 	}
 
 	// Try to insert data into one of our branches.
