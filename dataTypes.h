@@ -87,17 +87,6 @@
 // Set obj to be v, but only if obj is currently nil
 #define noClobber(obj, v) (obj = (obj == nil) ? v : nil)
 
-// Define a PRNG test if we don't already have one.
-// This is a kludge-within-a-kludge:  we will ALWAYS return nil if isPRNG
-// wasn't already defined (because this module doesn't define a PRNG class).
-// So in theory we could use "#define isPRNG(obj) (nil)".  But then the
-// compiler would complaing about "if(isPRNG(obj)) { [something] }" because
-// the conditional stanza will always be unreachable.  So we do the below,
-// which will always return nil, but in a less straightforward way.
-#ifndef isPRNG
-#define isPRNG(obj) ((obj != nil) && nil)
-#endif // isPRNG
-
 // Get an object's outermost containing room
 #define gOutermostRoom(obj) (isThing(obj) ? obj.getOutermostRoom() : nil)
 

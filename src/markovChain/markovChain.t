@@ -126,11 +126,7 @@ class MarkovChain: StateMachine
 	}
 
 	getPRNG() { return(_prng); }
-	setPRNG(v) {
-		if(!isPRNG(v)) return(nil);
-		_prng = v;
-		return(true);
-	}
+	setPRNG(v) { return(nil); }
 
 	getWeight(v0, v1) {
 		local e;
@@ -164,4 +160,15 @@ class MarkovChain: StateMachine
 	}
 ;
 
+#ifdef HAVE_PRNG
+
+modify MarkovChain
+	setPRNG(v) {
+		if(!isPRNG(v)) return(nil);
+		_prng = v;
+		return(true);
+	}
+;
+
+#endif // HAVE_PRNG
 #endif // MARKOV_CHAINS
