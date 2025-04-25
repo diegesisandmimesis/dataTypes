@@ -249,4 +249,8 @@ Rule template 'ruleID';
 
 #endif // USE_XY
 
+#ifndef INT_MATH_H
+#define _PATCH_SQRT_INT
+#endif // INT_MATH_H
+
 #define DATA_TYPES_H

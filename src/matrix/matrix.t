@@ -358,7 +358,7 @@ class Matrix0: Matrix
 	}
 ;
 
-#ifndef INT_MATH_H
+#ifdef _PATCH_SQRT_INT
 
 // If we're being compiled without the intMath module, define the
 // sqrtInt() function it provides as a method on IntegerMatrix.  That's
@@ -384,7 +384,7 @@ modify IntegerMatrix
 	}
 ;
 
-#endif /// INT_MATH_H
+#endif /// _PATCH_SQRT_INT
 
 
 #ifdef __DEBUG
