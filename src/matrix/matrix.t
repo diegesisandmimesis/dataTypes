@@ -109,7 +109,7 @@ class Matrix: object
 		local i, j, s;
 
 		if(!isCollection(ar)) return(nil);
-		s = sqrtInt(ar.length);
+		s = _sqrtInt(ar.length);
 		if(ar.length != (s * s)) return(nil);
 
 		dim = 2;
@@ -367,7 +367,7 @@ class Matrix0: Matrix
 modify IntegerMatrix
 	// Arcane.  For an explanation see the comments in the intMath
 	// module.
-	sqrtInt(v) {
+	_sqrtInt(v) {
 		local c, r, shift;
 
 		shift = 32;
@@ -382,6 +382,12 @@ modify IntegerMatrix
 		}
 		return(r);
 	}
+;
+
+#else
+
+modify IntegerMatrix
+	_sqrtInt(v) { return(sqrtInt(v)); }
 ;
 
 #endif /// _PATCH_SQRT_INT
