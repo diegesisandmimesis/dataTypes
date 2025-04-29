@@ -5,7 +5,7 @@
 // Copyright 2022 Diegesis & Mimesis
 //
 // This is a very simple demonstration "game" for the finiteStateMachine
-// library.
+// class.
 //
 // It can be compiled via the included makefile with
 //

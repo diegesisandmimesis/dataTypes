@@ -4,8 +4,7 @@
 // Version 1.0
 // Copyright 2022 Diegesis & Mimesis
 //
-// This is a very simple demonstration "game" for the finiteStateMachine
-// library.
+// This is a very simple demonstration "game" for the permutations() method.
 //
 // It can be compiled via the included makefile with
 //
