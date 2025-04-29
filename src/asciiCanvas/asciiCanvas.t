@@ -229,6 +229,25 @@ class AsciiCanvas: object
 		}
 	}
 
+	rectangleFill(x0, y0, x1, y1?, v?) {
+		local i, j, v0, v1;
+
+		if(isXY(x0) && isXY(y0)) {
+			v0 = x0;
+			v1 = y0;
+			v = x1;
+		} else {
+			v0 = new XY(x0, y0);
+			v1 = new XY(x1, y1);
+		}
+
+		for(j = v0.y; j <= v1.y; j++) {
+			for(i = v0.x; i <= v1.x; i++) {
+				setXY(i, j, v);
+			}
+		}
+	}
+
 	rectangle(x0, y0, x1, y1?, v?) {
 		local v0, v1;
 

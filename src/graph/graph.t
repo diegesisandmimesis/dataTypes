@@ -102,7 +102,7 @@ class Graph: object
 
 	forEachVertex(cb) { getVertices().forEach({ x: cb(x) }); }
 
-	addEdge(id0, id1, obj?) {
+	addEdge(id0, id1, obj?, recip?) {
 		local v0, v1;
 
 		if((id0 == nil) || (id1 == nil)) return(nil);
@@ -113,7 +113,7 @@ class Graph: object
 			obj = edgeClass.createInstance(v0, v1);
 
 		v0.addEdge(v1, obj);
-		if(directed != true)
+		if((directed != true) || (recip == true))
 			v1.addEdge(v0, obj);
 
 		graphUpdated();
