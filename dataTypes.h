@@ -42,6 +42,9 @@
 #ifndef isList
 #define isList(obj) (isIntrinsicType(obj, List))
 #endif
+#ifndef isLookupTable
+#define isLookupTable(obj) (isType(obj, LookupTable))
+#endif
 #ifndef isObject
 #define isObject(obj) ((obj != nil) && (dataType(obj) == TypeObject))
 #endif
