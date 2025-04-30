@@ -29,6 +29,45 @@ modify Vector
 
 		return(true);
 	}
+
+	// Returns the union of this vector and the argument vector,
+	// modifying neither.
+	union(v) {
+		return(isVector(v) ? new Vector(self).appendUnique(v) : nil);
+	}
+
+	// Returns the intersection of this vector and the argument vector.
+	intersection(v) {
+		return(isVector(v) ? self.subset({ x: v.indexOf(x) != nil })
+			: nil);
+	}
+
+	// Returns the a vector containing the elements of this vector that
+	// are not in the argument vector.
+	complement(v) {
+		return(isVector(v) ? self.subset({ x: v.indexOf(x) == nil })
+			: nil);
+	}
+
+	// Returns boolean true if this vector and the argument vector
+	// contain the same elements.  If the second argument is boolean
+	// true the elements must be in the same order, if not they can
+	// be in any order.
+	equals(v, ord?) {
+		local i;
+
+		if(!isVector(v)) return(nil);
+		if(self.length() != v.length()) return(nil);
+		for(i = 1; i <= self.length(); i++) {
+			if(ord == true) {
+				if(self[i] != v[i]) return(nil);
+			} else {
+				if(v.indexOf(self[i]) == nil) return(nil);
+				if(self.indexOf(v[i]) == nil) return(nil);
+			}
+		}
+		return(true);
+	}
 ;
 
 modify Collection
