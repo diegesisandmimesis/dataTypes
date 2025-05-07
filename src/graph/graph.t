@@ -186,6 +186,43 @@ class Graph: object
 		});
 	}
 
+	// Output the structure of the graph by enumerating the edges
+	// with placeholder names.  Mostly useful if the vertices have
+	// IDs like "vertex23512" and "vertex67321" and so on, like
+	// happens with the procgen stuff.  This will just give
+	// you a bunch of "a => b, b => c" statements which is a little
+	// easier to read.
+	logStructure() {
+		local i, idx, lbl, swiz;
+
+		// If we've got more than 72 vertices we're probably not
+		// going to get anywhere scanning things visually anyway.
+		if(getVertices().length > 72) {
+			"\nToo many vertices to log this way.\n ";
+			return;
+		}
+
+		// First create a list of labels, A-Z, a-z.
+		lbl = new Vector;
+		for(i = 0; i < 26; i++)
+			lbl.append(makeString(65 + i));
+		for(i = 0; i < 26; i++)
+			lbl.append(makeString(97 + i));
+
+		// Temporary swizzle table for the labels.
+		swiz = new LookupTable();
+
+		// Map all the vertex IDs to labels.
+		idx = 1;
+		forEachVertex({ x: swiz[x.vertexID] = lbl[idx++] });
+
+		// Output all the edges using the short labels.
+		forEachEdge(function(e) {
+			"\n<<swiz[e.vertex0.vertexID]>>
+				=&gt; <<swiz[e.vertex1.vertexID]>>\n ";
+		});
+	}
+
 	graphUpdated() {
 		_edgeList = nil;
 	}
