@@ -285,6 +285,23 @@ class AsciiCanvas: object
 		}
 		"<<buf>>\n ";
 	}
+
+	write(x, y, txt?) {
+		local i, v;
+
+		if(!isString(txt)) return(nil);
+		if(isXY(x)) {
+			v = x;
+			txt = y;
+		} else {
+			v = new XY(x, y);
+		}
+
+		for(i = 1; i <= txt.length; i++)
+			setXY(v.x + i - 1, v.y, txt.substr(i, 1));
+
+		return(true);
+	}
 ;
 
 #endif // USE_ASCII_CANVAS
