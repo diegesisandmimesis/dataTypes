@@ -67,7 +67,12 @@
 #endif
 
 #ifndef isFunction
-#define isFunction(obj) ((dataType(obj) != TypeNil) && ((dataType(obj) == TypeProp) || (dataType(obj) == TypeCode) || (dataType(obj) == TypeFuncPtr)) || (dataType(obj) == TypeObject))
+//#define isFunction(obj) ((dataType(obj) != TypeNil) && ((dataType(obj) == TypeProp) || (dataType(obj) == TypeCode) || (dataType(obj) == TypeFuncPtr)) || (dataType(obj) == TypeObject))
+#define isFunction(obj) ((dataType(obj) != TypeNil) && ( \
+	((dataType(obj) == TypeProp) && ((propType(obj) == TypeFuncPtr) \
+		|| (propType(obj) == TypeCode))) \
+	|| (dataTypeXlat(obj) == TypeFuncPtr) \
+))
 #endif
 
 #ifndef isDirection
