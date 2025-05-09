@@ -197,20 +197,23 @@ gameMain: GameMainDef
 		local m, n;
 
 		m = new Matrix(2, 3);
+
+/*
 		m.set(1, 1, 1);
 		m.set(2, 1, 2);
 		m.set(1, 2, 3);
 		m.set(2, 2, 4);
 		m.set(1, 3, 5);
 		m.set(2, 3, 6);
-/*
+*/
 		m.load([
 			1, 2,
 			3, 4,
 			5, 6
 		]);
-*/
+		//m.debugMatrix();
 		n = m.transpose();
+		//n.debugMatrix();
 		if(n) {}
 		return(true);
 	}

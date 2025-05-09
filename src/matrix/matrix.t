@@ -109,21 +109,24 @@ class Matrix: object
 		local i, j, s;
 
 		if(!isCollection(ar)) return(nil);
-		s = _sqrtInt(ar.length);
-		if(ar.length != (s * s)) return(nil);
+		if(dim == nil) {
+			s = _sqrtInt(ar.length);
 
-		dim = 2;
-		size = [ s, s ];
+			if(ar.length != (s * s)) return(nil);
 
-		_base = new Vector(s);
-		_addDimension(_base, size, dim);
+			dim = 2;
+			size = [ s, s ];
+
+			_base = new Vector(s);
+			_addDimension(_base, size, dim);
+		}
 
 		i = 1;
 		j = 1;
 		ar.forEach(function(v) {
 			set(i, j, v);
 			i += 1;
-			if(i > s) {
+			if(i > size[1]) {
 				i = 1;
 				j += 1;
 			}
@@ -342,6 +345,7 @@ class IntegerMatrix: Matrix
 	}
 ;
 
+
 // Subclass of Matrix which indexes from zero instead of one.
 // That is, the first element is of a two-dimensional matrix is
 // retrieved by Matrix0.get(0, 0) instead of .get(1, 1).
@@ -368,15 +372,16 @@ class Matrix0: Matrix
 		v.append(args[args.length]);
 		return(inherited(v...));
 	}
+
 ;
 
-#ifdef _PATCH_SQRT_INT
 
 // If we're being compiled without the intMath module, define the
 // sqrtInt() function it provides as a method on IntegerMatrix.  That's
 // all Matrix needs from the module, and IntegerMatrix is the only thing
 // that needs it.
-modify IntegerMatrix
+#ifdef _PATCH_SQRT_INT
+modify Matrix
 	// Arcane.  For an explanation see the comments in the intMath
 	// module.
 	_sqrtInt(v) {
@@ -395,14 +400,13 @@ modify IntegerMatrix
 		return(r);
 	}
 ;
-
 #else
-
-modify IntegerMatrix
+modify Matrix
 	_sqrtInt(v) { return(sqrtInt(v)); }
 ;
-
 #endif /// _PATCH_SQRT_INT
+;
+
 
 
 #ifdef __DEBUG
