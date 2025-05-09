@@ -225,6 +225,21 @@ class Matrix: object
 			ar.forEach({ x: _fill(x, v, idx - 1) });
 	}
 
+	// Returns boolean true if the argument matrix is element-for-element
+	// equal to the calling matrix.
+	equals(m) {
+		local b, i;
+		if(!isMatrix(m)) return(nil);
+		if(dim != m.dim) return(nil);
+		for(i = 1; i <= size.length; i++)
+			if(size[i] != m.size[i]) return(nil);
+		b = true;
+		traverse(function(x, y, v) {
+			if(v != m.get(x, y)) b = nil;
+		});
+		return(b);
+	}
+
 	// Returns this matrix's transpose.
 	transpose() {
 		local i, j, r;
@@ -235,6 +250,30 @@ class Matrix: object
 			for(i = 1; i <= size[1]; i++)
 				r.set(j, i, get(i, j));
 		return(r);
+	}
+
+	traverse(cb, pos?, depth?) {
+		local ar, i;
+
+		if(!isFunction(cb)) return;
+		if(pos == nil) {
+			pos = new Vector(dim);
+			for(i = 1; i <= dim; i++) pos.append(1);
+			depth = 1;
+		}
+		if(depth > dim)
+			return;
+
+		for(i = 1; i <= size[depth]; i++) {
+			pos[depth] = i;
+			if(depth == dim) {
+				ar = new Vector(pos);
+				ar.append(get(pos...));
+				(cb)(ar...);
+			} else {
+				traverse(cb, pos, depth + 1);
+			}
+		}
 	}
 
 	// Stub debugging method.

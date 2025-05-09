@@ -194,27 +194,37 @@ gameMain: GameMainDef
 	}
 
 	testTranspose() {
-		local m, n;
+		local m, n, t;
 
 		m = new Matrix(2, 3);
 
-/*
-		m.set(1, 1, 1);
-		m.set(2, 1, 2);
-		m.set(1, 2, 3);
-		m.set(2, 2, 4);
-		m.set(1, 3, 5);
-		m.set(2, 3, 6);
-*/
 		m.load([
 			1, 2,
 			3, 4,
 			5, 6
 		]);
-		//m.debugMatrix();
 		n = m.transpose();
-		//n.debugMatrix();
-		if(n) {}
+
+		t = new Matrix(3, 2);
+		t.load([
+			1, 3, 5,
+			2, 4, 6
+		]);
+
+		if(!n.equals(t)) {
+			"\nERROR: transpose test failed\n ";
+			return(nil);
+		}
+		if(!n.transpose().equals(m)) {
+			"\nERROR: double transpose test failed\n ";
+			return(nil);
+		}
+		n.set(1, 1, 10);
+		if(n.equals(t)) {
+			"\nERROR: equals() returned true on non-equal matrices\n ";
+			return(nil);
+		}
+
 		return(true);
 	}
 ;
