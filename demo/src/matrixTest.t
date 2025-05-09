@@ -29,10 +29,6 @@ gameMain: GameMainDef
 	matrixSize = 3
 
 	newGame() {
-local m = new Matrix(2, 3);
-m.load([ 'a', 'b', 'c', 'd', 'e', 'f']);
-local n = m.transpose();
-n.debugMatrix();
 		if(test2D && test3D() && testAsymmetric() && testOOB()
 			&& testTranspose()) {
 			"\npassed all tests\n ";

@@ -223,6 +223,28 @@ class Graph: object
 		});
 	}
 
+	adjacencyMatrix() {
+		local l, m, r, v, x, y;
+
+		l = getVertexIDs().sort();
+		m = new IntegerMatrix(l.length, l.length);
+		m.fill(0);
+		l.forEach(function(id) {
+			if((y = l.indexOf(id)) == nil) return;
+			if((v = getVertex(id)) == nil) return;
+			v.getEdgeIDs().forEach(function(eid) {
+				local e;
+				if((x = l.indexOf(eid)) == nil) return;
+				if((e = getEdge(id, eid)) == nil) return;
+				m.set(x, y, e.getLength);
+			});
+		});
+
+		r = new AdjacencyMatrix(l, m);
+
+		return(r);
+	}
+
 	graphUpdated() {
 		_edgeList = nil;
 	}

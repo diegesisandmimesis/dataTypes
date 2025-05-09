@@ -28,6 +28,7 @@ module.
   * [Graph](#graph)
   * [Vertex](#vertex)
   * [Edge](#edge)
+  * [AdjacencyMatrix](#adjacency-matrix)
 * [Finite State Machines](#fsm-section)
   * [FSM](#fsm)
   * [FSMState](#fsm-state)
@@ -230,6 +231,12 @@ objects.
      indicating whether or not the edge is directed.  Both take their
      default values from the ``edgeClass`` defined on the graph.
 
+* **General Methods**
+
+  * ``adjacencyMatrix()``
+
+    Returns an ``AdjacencyMatrix`` instance for this graph.
+
 ##### Subclasses
 
 * ``Graph``
@@ -390,6 +397,41 @@ the edge from "foo" to "baz" is 1.  Next row, "bar" to "foo" is 1, "bar" to
 
   Class for directed edges.
 
+<a name="adjacency-matrix"/></a>
+#### Adjacency Matrix
+
+A utility class used to hold an adjacency matrix representation of a graph.
+This includes the vertex list (in a canonical ordering) and a matrix
+describing the edges connecting them.
+
+Example:
+
+Given a three-vertex graph consisting of vertices foo, bar, and baz each
+connected to both of the others, the ``AdjacencyMatrix`` would consist
+of a list of the vertex IDs in ASCIIbetical order:
+```
+     [ 'bar', 'baz', 'foo' ]
+```
+...and a matrix...
+```
+     0     1     1
+     1     0     1
+     1     1     0
+```
+...where the coordinates left to right and top to bottom are 'bar', 'baz',
+and 'foo' (in that order) and the intersection is the answer to "what is
+the length of the edge between" the two vertices, with zero indicating
+no edge.
+
+##### Methods
+
+* ``getVertices()``
+
+  Returns the vertex list.
+
+* ``getMatrix()``
+
+  Returns the matrix.
 
 <a name="fsm-section"/></a>
 ### Finite State Machines
@@ -1066,6 +1108,11 @@ columns and two rows (as if the arguments were x and y).
 
   Returns boolean ``true`` if the argument matrix is identical to this
   matrix.
+
+* ``linearize()``
+
+  Returns the contents of the matrix as a linearized array in row-first
+  order.  That is, the same format expected by ``Matrix.load()`` above.
 
 #### IntegerMatrix
 

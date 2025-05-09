@@ -259,6 +259,30 @@ class Matrix: object
 		if(pos == nil) {
 			pos = new Vector(dim);
 			for(i = 1; i <= dim; i++) pos.append(1);
+			depth = dim;
+		}
+		if(depth < 1)
+			return;
+
+		for(i = 1; i <= size[depth]; i++) {
+			pos[depth] = i;
+			if(depth == 1) {
+				ar = new Vector(pos);
+				ar.append(get(pos...));
+				(cb)(ar...);
+			} else {
+				traverse(cb, pos, depth - 1);
+			}
+		}
+	}
+/*
+	traverse(cb, pos?, depth?) {
+		local ar, i;
+
+		if(!isFunction(cb)) return;
+		if(pos == nil) {
+			pos = new Vector(dim);
+			for(i = 1; i <= dim; i++) pos.append(1);
 			depth = 1;
 		}
 		if(depth > dim)
@@ -275,9 +299,27 @@ class Matrix: object
 			}
 		}
 	}
+*/
+
+	// Returns the matrix as a linearized array, in row-first syntax.
+	// That is, the same format expected by load().
+	linearize() {
+		local l, r;
+
+		if(size == nil)
+			return(nil);
+		l = 1;
+		size.forEach({ x: l *= x });
+		r = new Vector(l);
+		traverse(function([args]) {
+			r.append(args[args.length]);
+		});
+		return(r);
+	}
 
 	// Stub debugging method.
 	debugMatrix() {}
+	log() { debugMatrix(); }
 ;
 
 class IntegerMatrix: Matrix
