@@ -982,6 +982,11 @@ be resized.  Example:
 Querying values outside the dimensioned bounds will return ``nil`` but
 will not generate an error.
 
+**Note**: the semantics of all methods on ``Matrix`` use coordinates
+in the form of column x row, rather than row x column (as is more common
+in mathematics).  So ``new Matrix(3, 2)`` produces a matrix with three
+columns and two rows (as if the arguments were x and y).
+
 #### Matrix
 ##### Properties
 
@@ -1014,15 +1019,53 @@ will not generate an error.
 
   Loads the contents of ``array`` into the matrix.
 
-  The value of ``array`` must be a linearized 2-dimensional square matrix.
-  That is, a 2x2 matrix stored as a 4-element list, a 3x3 matrix stored as
-  a 9-element list, and so on.  To load:
+  If the matrix was initialized "blank" the value of ``array`` must be a
+  linearized 2-dimensional square matrix.  That is, a 2x2 matrix stored
+  as a 4-element list, a 3x3 matrix stored as a 9-element list, and so on.
+
+  Example: to make the matrix:
 
   ```
        a  b
        c  d
   ```
-  ...the array would be ``[ a, b, c, d ]``.
+  ...the syntax would be...
+  ```
+       local m = new Matrix();
+       m.load([ 'a', 'b', 'c', 'd' ]);
+  ```
+  A non-square matrix can be loaded by declaring a dimensioned matrix.
+
+  Example: to make the matrix:
+  ```
+       a b
+       c d
+       e f
+  ```
+  ...use...
+  ```
+       local m = new Matrix(2, 3);
+       m.load([ 'a', 'b', 'c', 'd', 'e', 'f' ]);
+  ```
+
+* ``transpose()``
+
+  Returns the transpose of the matrix.  That is, given a matrix
+  ```
+       a b
+       c d
+       e f
+  ```
+  the transpose is
+  ```
+       a c e
+       b d f
+  ```
+
+* ``equals(m)``
+
+  Returns boolean ``true`` if the argument matrix is identical to this
+  matrix.
 
 #### IntegerMatrix
 
@@ -1369,6 +1412,57 @@ insert performance.
   Swaps elements *i* and *j*.
 
   Returns boolean ``true`` on success, ``nil`` on error.
+
+* ``union(v)``
+
+  Returns the union of this vector and the argument vector, modifying neither.
+  This is equivalent to ``Vector.appendUnique()`` without modifying the
+  original.
+
+* ``intersection(v)``
+
+  Returns the intersection of this vector and the argument vector.  That is,
+  it returns the elements that are present in both vectors.
+
+* ``complement(v)``
+
+  Returns the complement of this vector with the argument vector.  That is,
+  the elements of this vector that are not in the argument vector.  Or
+  in set theoretic terms, if this vector is A and the argument vector is
+  B, A \ B.
+
+* ``equals(v, ord?)``
+
+  Returns boolean ``true`` if this vector and the argument vector contain
+  the same elements.  If the second argument is boolean ``true`` the
+  elements must be in the same order, if not they can be in any order.
+
+* ``rotate(n?)``
+
+  Rotates the vector by *n* steps, defaulting to 1 if no argument is given.
+  Number of steps can be positive or negative, indicating right or left
+  rotation respectively.  See also ``rotateRight()`` and ``rotateLeft()``
+  below.
+
+* ``rotateRight(n?)``
+
+  Rotate the vector right by *n* steps, defaulting to 1.  Right rotation
+  moves all elements "up", wrapping elements at the end back to the
+  start.
+
+  Example:  ``[ 1, 2, 3, 4 ]`` rotated right one step becomes
+  ``[ 4, 1, 2, 3]``.  The same vector rotated right two steps becomes
+  ``[ 3, 4, 1, 2]``.
+
+* ``rotateLeft(n?)``
+
+  Rotate the vector left by *n* steps, defaulting to 1.  Left rotation
+  moves all elements "down", wrapping elements at the start onto the
+  end.
+
+  Example:  ``[ 1, 2, 3, 4 ]`` rotated left one step becomes
+  ``[ 2, 3, 4, 1 ]``.  The same vector rotated left two steps becomes
+  ``[ 3, 4, 1, 2 ]``.
 
 <a name="lookuptable"/></a>
 ### LookupTable
