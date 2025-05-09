@@ -222,6 +222,18 @@ class Matrix: object
 			ar.forEach({ x: _fill(x, v, idx - 1) });
 	}
 
+	// Returns this matrix's transpose.
+	transpose() {
+		local i, j, r;
+
+		if(dim != 2) return(nil);
+		r = createInstance(size[2], size[1]);
+		for(j = 1; j <= size[2]; j++)
+			for(i = 1; i <= size[1]; i++)
+				r.set(j, i, get(i, j));
+		return(r);
+	}
+
 	// Stub debugging method.
 	debugMatrix() {}
 ;

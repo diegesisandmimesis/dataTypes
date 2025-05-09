@@ -29,7 +29,8 @@ gameMain: GameMainDef
 	matrixSize = 3
 
 	newGame() {
-		if(test2D && test3D() && testAsymmetric() && testOOB())
+		if(test2D && test3D() && testAsymmetric() && testOOB()
+			&& testTranspose())
 			"\npassed all tests\n ";
 	}
 
@@ -187,5 +188,18 @@ gameMain: GameMainDef
 		}
 
 		return(true);
+	}
+
+	testTranspose() {
+		local m, n;
+
+		m = new Matrix(2, 3);
+		m.load([
+			1, 2,
+			3, 4,
+			5, 6
+		]);
+		n = m.transpose();
+		if(n) {}
 	}
 ;
