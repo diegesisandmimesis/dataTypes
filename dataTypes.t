@@ -68,6 +68,49 @@ modify Vector
 		}
 		return(true);
 	}
+
+	rotate(n?) {
+		n = (n ? n : 1);
+		if(!isInteger(n)) return;
+		if(n < 1) rotateLeft(abs(n));
+		else rotateRight(n);
+	}
+
+	rotateRight(n) {
+		local i, tmp;
+
+		n = (n ? n : 1);
+		if(!isInteger(n)) return;
+		n = abs(n);
+		n = n % length;
+		if(n == 0) return;
+
+		i = 1;
+		while(i <= n) {
+			tmp = self[length];
+			self.removeElementAt(length);
+			self.prepend(tmp);
+			i += 1;
+		}
+	}
+
+	rotateLeft(n) {
+		local i, tmp;
+
+		n = (n ? n : 1);
+		if(!isInteger(n)) return;
+		n = abs(n);
+		n = n % length;
+		if(n == 0) return;
+
+		i = 1;
+		while(i <= n) {
+			tmp = self[1];
+			self.removeElementAt(1);
+			self.append(tmp);
+			i += 1;
+		}
+	}
 ;
 
 modify Collection
