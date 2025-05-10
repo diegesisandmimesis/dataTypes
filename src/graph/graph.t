@@ -84,6 +84,7 @@ class Graph: object
 	removeVertices() {
 		getVertices().forEach({ x: x._edgeTable = nil });
 		_vertexTable = new LookupTable();
+		graphUpdated();
 	}
 
 	// Given a vertex object or a valid vertex ID, return the matching
@@ -245,8 +246,16 @@ class Graph: object
 		return(r);
 	}
 
+	// Clear anything we've cached.
 	graphUpdated() {
 		_edgeList = nil;
+	}
+
+	// Removed all vertices and edges without cleaning anything
+	// up.  Intended to be used after a destructive join.
+	hardReset() {
+		_vertexTable = new LookupTable();
+		graphUpdated();
 	}
 
 	// Handle "short form" graph declarations.  This is when
@@ -295,6 +304,73 @@ class Graph: object
 	createEdge(v0, v1, len?, d?) {
 		return(edgeClass.createInstance(canonicalizeVertex(v0),
 			canonicalizeVertex(v1), len, d));
+	}
+
+	// Adds all the edges and vertices from graph g to this graph,
+	// connecting them at v0 (on our side) and v1 (on g's side).
+	// If recip is true, then we also connect v1 to v0 (assuming
+	// we're directed; if we're undirected that happens automagically).
+	// The destruct flag indicates whether we should create new
+	// vertices (creating a copy of g and adding it to ourselves)
+	// or if we plunder g's edge and vertex instances and use them
+	// directly, removing them from g in the process.
+	join(g, v0, v1, recip?, destruct?) {
+		local i, l;
+
+		// Validate the arguments.
+		if(!isGraph(g)) return(nil);
+		if((v0 = canonicalizeVertex(v0)) == nil) return(nil);
+		if((v1 = g.canonicalizeVertex(v1)) == nil) return(nil);
+
+		// Make sure we don't have any duplicate IDs in the
+		// graph we're merging with.  If we do, just fail.
+		l = g.getVertices();
+		for(i = 1; i <= l.length; i++) {
+			if(getVertex(l[i].vertexID) != nil)
+				return(nil);
+		}
+
+		// See if we're doing a destructive join.
+		if(destruct == true) {
+			// First, move all the vertices over.
+			l.forEach({ x: addVertex(x.vertexID, x) });
+
+			// Now move the edges over.
+			l.forEach(function(v) {
+				v.getEdgeIDs().forEach(function(eid) {
+					local e;
+					if((e = g.getEdge(v.vertexID, eid))
+						== nil)
+						return;
+					addEdge(v.vertexID, eid, e);
+				});
+			});
+
+			// Purge the old graph.
+			g.hardReset();
+		} else {
+			// Create the new vertices.
+			l.forEach({ x: addVertex(x.vertexID) });
+
+			// Add the edges.
+			l.forEach(function(v) {
+				v.getEdgeIDs().forEach(function(eid) {
+					addEdge(v.vertexID, eid);
+				});
+			});
+		}
+
+		// Add the connection between the existing graph and
+		// the new subgraph.
+		addEdge(v0.vertexID, v1.vertexID);
+
+		// If we're a directed graph and we've been asked to
+		// make the connection reciprocal, do so.
+		if((recip == true) && (directed == true))
+			addEdge(v1.vertexID, v0.vertexID);
+
+		// Done.
+		return(true);
 	}
 
 	// Handle "long form" graph declarations.  This is when you have

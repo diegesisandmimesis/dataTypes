@@ -237,6 +237,24 @@ objects.
 
     Returns an ``AdjacencyMatrix`` instance for this graph.
 
+  * ``join(g, v0, v1, recip?, destruct?)``
+
+    Adds the vertices and edges in the argument graph ``g`` to the
+    calling graph.  Vertex ``v0`` in the calling graph will be
+    connected to vertex ``v1`` in the argument graph.  If the graphs
+    are directed and the ``recip`` argument is boolean ``true`` an
+    edge from ``v1`` to ``v0`` will also be added.
+
+    This will always modify the calling graph.  If the ``destruct``
+    argument is boolean ``true`` the vertices and edges from the
+    argument graph will be moved from the argument graph into
+    the calling graph, modifying the argument graph.  If the
+    ``destruct`` argument is **not** boolean ``true`` new edges
+    and vertices will be created and the argument graph will
+    not be modified.  The former case is intended for cases where
+    edges and vertices might have bespoke data on them that needs
+    to be preserved in the new graph.
+
 ##### Subclasses
 
 * ``Graph``
