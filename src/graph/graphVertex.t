@@ -38,11 +38,23 @@ class Vertex: object
 		if(!isVertex(v)) return(nil);
 		if((e = _edgeTable.removeElement(v.vertexID)) == nil)
 			return(nil);
+		if(getGraph().directed != true)
+			v.removeEdge(self);
 		e.clear();
 		return(true);
 	}
 
 	removeEdges() {
+		local g, v;
+
+		if((g = getGraph()) == nil) return(nil);
+		_edgeTable.keysToList().forEach(function(id) {
+			if((v = g.canonicalizeVertex(id)) == nil)
+				return;
+			removeEdge(v);
+		});
+		return(true);
+/*
 		local e, l;
 
 		l = _edgeTable.keysToList();
@@ -51,6 +63,7 @@ class Vertex: object
 			_edgeTable.removeElement(id);
 			e.clear();
 		});
+*/
 	}
 
 	getEdge(v) {

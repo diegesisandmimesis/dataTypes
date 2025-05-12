@@ -373,6 +373,19 @@ class Graph: object
 		return(true);
 	}
 
+	// Merge vertex v1 onto v0.
+	mergeVertices(v0, v1) {
+		if((v0 = canonicalizeVertex(v0)) == nil) return(nil);
+		if((v1 = canonicalizeVertex(v1)) == nil) return(nil);
+		v1.getEdgeIDs().forEach(function(eid) {
+			if(eid == v0.vertexID) return;
+			addEdge(v0, eid);
+			v1.removeEdge(canonicalizeVertex(eid));
+		});
+		removeVertex(v1);
+		return(true);
+	}
+
 	// Handle "long form" graph declarations.  This is when you have
 	// a Graph declaration followed by +Vertex and/or +Edge
 	// declarations.

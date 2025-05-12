@@ -255,6 +255,15 @@ objects.
     edges and vertices might have bespoke data on them that needs
     to be preserved in the new graph.
 
+  * ``mergeVertices(v0, v1)``
+
+    Merges vertex ``v1`` into ``v0``, removing ``v1`` in the process.
+
+    In this module this means removing all edges from ``v0`` and
+    connecting them to ``v1`` instead.  Subclasses are responsible
+    for overriding the method to handle any subclass-specific data
+    on the vertices or edges that needs to be transferred.
+
 ##### Subclasses
 
 * ``Graph``
