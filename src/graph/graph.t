@@ -72,6 +72,8 @@ class Graph: object
 		// Have it remove all its edges.  This will ping any
 		// vertices this vertex is connected to.
 		v.removeEdges();
+
+		forEachVertex({ x: x.removeEdge(v) });
 		graphUpdated();
 
 		return(true);
@@ -381,6 +383,14 @@ class Graph: object
 			if(eid == v0.vertexID) return;
 			addEdge(v0, eid);
 			v1.removeEdge(canonicalizeVertex(eid));
+		});
+		forEachVertex(function(v) {
+			if(v == v0) return;
+			v.getEdgeIDs().forEach(function(eid) {
+				if(eid != v1.vertexID) return;
+				addEdge(v, v0);
+			});
+			v.removeEdge(v1);
 		});
 		removeVertex(v1);
 		return(true);
