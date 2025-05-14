@@ -129,22 +129,20 @@ class Rectangle: object
 	// Returns the minimum offset between our bounding box and
 	// the given point.
 	offset(x, y?) {
-		local v;
+		local v0, v1;
 
 		if(isXY(x))
-			v = x;
+			v0 = x;
 		else
-			v = new XY(x, y);
+			v0 = new XY(x, y);
 
-		x = 0;
-		y = 0;
+		v1 = new XY(0, 0);
+		if(v0.x < corner0.x) v1.x = corner0.x;
+		if(v0.x > corner1.x) v1.x = corner1.x;
+		if(v0.y < corner0.y) v1.y = corner0.y;
+		if(v0.y > corner1.y) v1.y = corner1.y;
 
-		if(v.x < corner0.x) x = corner0.x - v.x;
-		if(v.x > corner1.x) x = v.x - corner1.x;
-		if(v.y < corner0.y) y = corner0.y - v.y;
-		if(v.y > corner1.y) y = v.y - corner1.y;
-
-		return(new XY(x, y));
+		return(v0.subtract(v1));
 	}
 
 	// Returns the minimum Manhattan/taxi distance between our
