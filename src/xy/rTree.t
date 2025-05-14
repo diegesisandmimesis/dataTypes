@@ -99,6 +99,9 @@ class RTree: object
 		// Add the branch to our list.
 		next.append(obj);
 
+		if(_boundingBox == nil)
+			setBoundingBox(obj.getBoundingBox());
+
 		// Expand our bounding box, if necessary, to include
 		// the new branch's bounding box.
 		expand(obj.getBoundingBox());
@@ -182,7 +185,6 @@ class RTree: object
 		// First, we see if any of our branches contain the point
 		// being queries.  If so, we use it.
 		for(i = 1; i <= next.length; i++) {
-			//if(next[i].contains(v))
 			if(next[i].overlaps(v))
 				return(next[i]);
 		}
@@ -199,10 +201,6 @@ class RTree: object
 		// Traverse the list of branches...
 		next.forEach(function(o) {
 			local d;
-
-			// ...making sure we can compute the Manhattan
-			// distance to the point...
-			//if((d = o.manhattanDistance(v)) == nil) return;
 
 			// ...computing the area of the branch expanded
 			// to include the new data point.
@@ -619,6 +617,7 @@ modify RTree
 			return;
 		}
 		"with <<toString(next.length)>> branches:\n ";
+		"\n<<indent>><<_boundingBox.toStr()>>\n ";
 		next.forEach({ x: x.rTreeDebug(d + 1) });
 	}
 
