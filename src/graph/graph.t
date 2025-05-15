@@ -105,6 +105,14 @@ class Graph: object
 
 	forEachVertex(cb) { getVertices().forEach({ x: cb(x) }); }
 
+	// Returns boolean true if the given callback fn returns true
+	// for each vertex.
+	testVertices(cb) {
+		local l;
+		l = getVertices();
+		return(l.subset({ x: ((cb)(x) == true) }).length == l.length);
+	}
+
 	addEdge(id0, id1, obj?, recip?) {
 		local v0, v1;
 
