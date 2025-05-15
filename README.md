@@ -194,6 +194,11 @@ objects.
 
     Returns a ``Vector`` of the graph's vertex IDs.
 
+  * ``testVertices(fn)``
+
+    Returns boolean ``true`` if test function ``fn`` returns boolean ``true``
+    for each vertex.
+
 * **Edge Methods**
 
   * ``addEdge(vertex0, vertex1, edgeInstance?)``
