@@ -108,6 +108,14 @@ class XY: object
 		return(true);
 	}
 
+	isAdjacentToAll(lst) {
+		local i;
+		if(!isCollection(lst)) return(nil);
+		for(i = 1; i <= lst.length; i++)
+			if(!isAdjacent(lst[i])) return(nil);
+		return(true);
+	}
+
 	dot(v) {
 		if(!isXY(v)) return(nil);
 		return((x * v.x) + (y * v.y));
