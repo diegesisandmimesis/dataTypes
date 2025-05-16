@@ -40,7 +40,21 @@ class LineSegment: object
 		return((r > 0) ? _ePositive : _eNegative);
 	}
 
-	intersects(v) {
+	equals(v) {
+		if(!isLineSegment(v)) return(nil);
+		return((_v0.equals(v._v0) && _v1.equals(v._v1))
+			&& (_v1.equals(v._v0) && _v0.equals(v._v1)));
+	}
+
+	coincident(v) {
+		if(!isLineSegment(v)) return(nil);
+
+		return((_v0.equals(v._v0) || _v1.equals(v._v0)
+			|| _v0.equals(v._v1) || _v1.equals(v._v1))
+			&& !equals(v));
+	}
+
+	intersects(v, ignoreEndpoints?) {
 		local ar;
 
 		if(!isLineSegment(v)) return(nil);
@@ -54,6 +68,10 @@ class LineSegment: object
 
 		if((ar[1] != ar[2]) && (ar[3] != ar[4]))
 			return(true);
+
+		if(ignoreEndpoints == true)
+			return(nil);
+
 		if((ar[1] == _eZero) && contains(v._v0))
 			return(true);
 		if((ar[2] == _eZero) && contains(v._v1))
@@ -65,6 +83,7 @@ class LineSegment: object
 
 		return(nil);
 	}
+	toStr() { return('<<_v0.toStr()>> <<_v1.toStr()>>'); }
 ;
 
 #endif // USE_XY
