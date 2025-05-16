@@ -102,6 +102,7 @@ class XY: object
 
 	isAdjacent(v) {
 		if(!isXY(v)) return(nil);
+		if(equals(v)) return(nil);
 		if(abs(x - v.x) > 1) return(nil);
 		if(abs(y - v.y) > 1) return(nil);
 		return(true);

@@ -74,6 +74,20 @@ class Vertex: object
 	getEdges() { return(_edgeTable.valsToList()); }
 	getEdgeIDs() { return(_edgeTable.keysToList()); }
 
+	getAdjacentVertices() {
+		local g, r;
+
+		if((g = getGraph()) == nil) return([]);
+		r = new Vector();
+		getEdgeIDs.forEach(function(eid) {
+			local v;
+			if((v = g.canonicalizeVertex(eid)) == nil) return;
+			r.appendUnique(v);
+		});
+
+		return(r.toList());
+	}
+
 	getDegree() { return(_edgeTable.keysToList().length); }
 	isAdjacent(id) { return(_edgeTable[id] != nil); }
 
