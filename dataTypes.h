@@ -245,6 +245,7 @@ Rule template 'ruleID';
 #define isXY(obj) (isType(obj, XY))
 
 #define isRectangle(obj) (isType(obj, Rectangle))
+#define isLineSegment(obj) (isType(obj, LineSegment))
 #define isRTree(obj) (isType(obj, RTree))
 #define isQuadTree(obj) (isType(obj, QuadTree))
 #define isQuadTreeData(obj) (isType(obj, QuadTreeData))
