@@ -105,6 +105,8 @@ class Graph: object
 
 	forEachVertex(cb) { getVertices().forEach({ x: cb(x) }); }
 
+	getOrder() { return(getVertices().length()); }
+
 	// Returns boolean true if the given callback fn returns true
 	// for each vertex.
 	testVertices(cb) {
