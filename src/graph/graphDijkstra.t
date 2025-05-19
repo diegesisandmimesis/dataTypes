@@ -12,6 +12,8 @@ modify Graph
 	_dijkstraMaxPathLen = nil	// cached value of longest path
 	_dijkstraLock = nil		// lock flag for computing longest path
 
+	_dijkstraMax = 65535
+
 	graphUpdated() {
 		inherited();
 		clearDijkstraCache();
@@ -120,7 +122,7 @@ modify Graph
 		// still have to check.
 		l = getVertices();
 		for(i = 1; i <= l.length; i++) {
-			dHash[l[i].vertexID] = 65535;
+			dHash[l[i].vertexID] = _dijkstraMax;
 			prevHash[l[i].vertexID] = nil;
 			r.append(l[i].vertexID);
 		}
@@ -170,6 +172,55 @@ modify Graph
 
 		// Return.
 		return(prevHash);
+	}
+
+	getDijkstraDistances(id0) {
+		local alt, dHash, e, i, id, idx, l, r, v;
+
+		if((v = canonicalizeVertex(id0)) == nil)
+			return(nil);
+		id0 = v.vertexID;
+
+		dHash = new LookupTable();
+		//prevHash = new LookupTable();
+		r = new Vector();
+
+		l = getVertices();
+		for(i = 1; i <= l.length; i++) {
+			dHash[l[i].vertexID] = _dijkstraMax;
+			//prevHash[l[i].vertexID] = nil;
+			r.append(l[i].vertexID);
+		}
+
+		dHash[id0] = 0;
+
+		while(r.length > 0) {
+			id = computeDijkstraMin(r, dHash);
+
+			if((v = canonicalizeVertex(id)) == nil)
+				return(nil);
+
+			if((idx = r.indexOf(id)) != nil)
+				r.removeElementAt(idx);
+
+			l = v.getEdgeIDs();
+			for(i = 1; i <= l.length(); i++) {
+				e = v._edgeTable[l[i]];
+				alt = toInteger(dHash[id]) + e.getLength();
+				if(alt < toInteger(dHash[l[i]])) {
+					dHash[l[i]] = alt;
+					//prevHash[l[i]] = id;
+				}
+			}
+		}
+
+		l = dHash.keysToList();
+		l.forEach(function(x) {
+			if(dHash[x] == _dijkstraMax)
+				dHash.removeElement(x);
+		});
+
+		return(dHash);
 	}
 
 	getLongestPath(id?) {
