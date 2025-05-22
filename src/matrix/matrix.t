@@ -424,6 +424,27 @@ class IntegerMatrix: Matrix
 
 		return(m);
 	}
+
+	// Multiply this matrix by the argument matrix, returning
+	// a new matrix.
+	multiply(m) {
+		local i, j, i0, r, t;
+
+		if(!isMatrix(m)) return(nil);
+		if((dim != 2) || (m.dim != 2)) return(nil);
+		if(size[1] != m.size[2]) return(nil);
+		r = self.createInstance(m.size[1], size[2]);
+		for(j = 1; j <= size[2]; j++) {
+			for(i = 1; i <= m.size[1]; i++) {
+				t = 0;
+				for(i0 = 1; i0 <= size[1]; i0++)
+					t += get(i0, j) * m.get(i, i0);
+				r.set(i, j, t);
+			}
+		}
+
+		return(r);
+	}
 ;
 
 

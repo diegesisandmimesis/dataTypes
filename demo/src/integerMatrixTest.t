@@ -32,6 +32,10 @@ class DetTest3x3: DetTest;
 // Test template.
 DetTest template +det? [ matrix ]?;
 
+// Datatype to hold matrix multiplication tests.
+class MultTest: object d0 = nil m0 = nil d1 = nil m1 = nil dr = nil mr = nil;
+MultTest template [ d0 ] [ m0 ] [ d1 ] [ m1 ] [ dr ] [ mr ];
+
 // The 2x2 matrix tests.
 DetTest2x2 +5 [
 	3, 2,
@@ -54,10 +58,24 @@ DetTest3x3 +(-11) [
 	2, 0, 1
 ];
 
+// Multiplication tests
+MultTest
+	[ 3, 2 ] [ 1, 2, 3, 4, 5, 6 ]
+	[ 2, 3 ] [ 7, 8, 9, 10, 11, 12 ]
+	[ 2, 2 ] [ 58, 64, 139, 154 ]
+;
+MultTest
+	[ 3, 1 ] [ 3, 4, 2 ]
+	[ 4, 3 ] [ 13, 9, 7, 15, 8, 7, 4, 6, 6, 4, 0, 3 ]
+	[ 4, 1 ] [ 83, 63, 37, 75 ]
+;
+
+
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		if(determinantTest2x2() && determinantTest3x3())
+		if(determinantTest2x2() && determinantTest3x3()
+			&& multiplicationTest())
 			"\npassed all tests\n ";
 	}
 
@@ -97,5 +115,30 @@ gameMain: GameMainDef
 
 	determinantTest3x3() {
 		return(_runTest('3x3 determinant test', DetTest3x3));
+	}
+
+	multiplicationTest() {
+		local err;
+
+		err = 0;
+
+		forEachInstance(MultTest, function(cfg) {
+			local m0, m1, mr, r;
+
+			m0 = new IntegerMatrix(cfg.d0[1], cfg.d0[2]);
+			m1 = new IntegerMatrix(cfg.d1[1], cfg.d1[2]);
+			m0.load(cfg.m0);
+			m1.load(cfg.m1);
+
+			r = m0.multiply(m1);
+
+			mr = new IntegerMatrix(cfg.dr[1], cfg.dr[2]);
+			mr.load(cfg.mr);
+
+			if(!r.equals(mr))
+				err += 1;
+		});
+
+		return(err == 0);
 	}
 ;

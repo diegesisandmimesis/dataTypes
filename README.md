@@ -1159,6 +1159,12 @@ integer values.
 
   Only works for 2-dimensional square matrices.
 
+* ``multiply(m)``
+
+  Returns the product of the calling matrix and the argument matrix.
+
+  Only works for 2-dimensional matrices.
+
 <a name="ts"></a>
 ### TS
 
