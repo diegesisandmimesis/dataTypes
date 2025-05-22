@@ -48,6 +48,7 @@ module.
 * [TS](#ts)
 * [XY](#xy)
 * [Rectangle](#rectangle)
+* [LineSegment)(#linesegment)
 * [QuadTree](#quadtree)
 * [RTree](#rtree)
 
@@ -1338,6 +1339,39 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   Can be called with two integer arguments or a single ``XY`` instance
   argument.
 
+<a name="linesegment"/></a>
+### LineSegment
+
+The ``LineSegment`` class implements line segments.
+
+An instance is defined by its two endpoints, ``XY`` instances, which are
+the arguments for the class constructor.
+
+#### LineSegment
+
+##### Methods
+
+* ``contains(xy)``
+
+  Returns boolean ``true`` if the argument ``XY`` instance lies on the
+  line segment.
+
+* ``equals(ls)``
+
+  Returns boolean ``true`` if the argument line segment has the same
+  endpoints as the calling line segment.
+
+* ``coincident(ls)``
+
+  Returns boolean ``true`` if the argument line segment shares exactly
+  one endpoint with the calling line segment.
+
+* ``intersects(ls, ignoreEndpoints?)``
+
+  Returns boolean ``true`` if the argument line segment intersects the
+  calling endpoint.  If the optional second argument is boolean ``true``
+  intersection only at one of the endpoints will be ignored.
+
 <a name="quadtree"></a>
 ### QuadTree
 
@@ -1446,6 +1480,7 @@ insert performance.
 
   Note that both a position and the data record itself are needed, as
   a single location can contain multiple records.
+
 
 <a name="changes"/></a>
 ## Changes To Stock Classes
