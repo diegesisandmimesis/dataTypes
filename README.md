@@ -1262,6 +1262,11 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   in the Moore neighborhood (checkerboard adjacent, including diagonals),
   ``nil`` otherwise.
 
+* ``isAdjacentToAll(lst)``
+
+  Returns boolean ``true`` if the argument is a list of ``XY`` instances
+  and all of them are adjacent to the calling instance.
+
 * ``dot(v)``
 
   Treats the current ``XY`` instance as a vector and computes the dot
