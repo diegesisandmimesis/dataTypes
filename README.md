@@ -238,9 +238,12 @@ objects.
 
 * **General Methods**
 
-  * ``adjacencyMatrix()``
+  * ``adjacencyMatrix(vertexList?)``
 
-    Returns an ``AdjacencyMatrix`` instance for this graph.
+    Returns an ``AdjacencyMatrix`` instance for this graph.  Optional
+    argument is a list of vertex IDs to use for the ordering of the
+    matrix.  If no argument is given the vertex IDs are sorted in
+    ASCIIbetical order.
 
   * ``join(g, v0, v1, recip?, destruct?)``
 
@@ -1145,6 +1148,10 @@ columns and two rows (as if the arguments were x and y).
 
   Returns the contents of the matrix as a linearized array in row-first
   order.  That is, the same format expected by ``Matrix.load()`` above.
+
+* ``clone()``
+
+  Returns a copy of the calling matrix.
 
 #### IntegerMatrix
 
