@@ -48,7 +48,7 @@ module.
 * [TS](#ts)
 * [XY](#xy)
 * [Rectangle](#rectangle)
-* [LineSegment)(#linesegment)
+* [LineSegment](#linesegment)
 * [QuadTree](#quadtree)
 * [RTree](#rtree)
 
