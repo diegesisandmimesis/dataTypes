@@ -317,6 +317,14 @@ class Matrix: object
 		return(r);
 	}
 
+	clone() {
+		local m;
+
+		m = createInstance(size[1], size[2]);
+		m.load(linearize());
+		return(m);
+	}
+
 	// Stub debugging method.
 	debugMatrix() {}
 	log() { debugMatrix(); }

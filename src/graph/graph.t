@@ -236,10 +236,13 @@ class Graph: object
 		});
 	}
 
-	adjacencyMatrix() {
+	adjacencyMatrix(lst?) {
 		local l, m, r, v, x, y;
 
 		l = getVertexIDs().sort();
+		if(isCollection(lst) && (lst.length == l.length))
+			l = lst;
+
 		m = new IntegerMatrix(l.length, l.length);
 		m.fill(0);
 		l.forEach(function(id) {
