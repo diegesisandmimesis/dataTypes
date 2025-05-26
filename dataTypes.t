@@ -111,6 +111,15 @@ modify Vector
 			i += 1;
 		}
 	}
+
+	push(v) { append(v); }
+	pop() {
+		local r;
+		if(self.length == 0) return(nil);
+		r = self[self.length];
+		removeElementAt(-1);
+		return(r);
+	}
 ;
 
 modify Collection
