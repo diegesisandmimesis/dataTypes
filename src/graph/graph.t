@@ -25,6 +25,8 @@ class Graph: object
 	_vertexList = nil
 	_edgeMatrix = nil
 
+	_vertexLabels = nil
+
 	// Add a vertex to the graph.
 	//	addVertex(foo);		If foo is a Vertex instance, add it
 	//	addVertex('foo', foo);	Add Vertex instance foo with ID 'foo'
@@ -415,4 +417,24 @@ class Graph: object
 	// Right now we don't do anything--it's all handled by the Vertex
 	// and Edge declarations (but might not be for subclasses of Graph).
 	initializeGraph() {}
+
+	vertexLabel(v) {
+		local i, idx;
+
+		if(!isVertex(v)) return(nil);
+		if((idx = getVertices().indexOf(v)) == nil) return(nil);
+		if(_vertexLabels == nil) {
+			_vertexLabels = new Vector();
+			for(i = 0; i < 26; i++)
+				_vertexLabels.append(makeString(65 + i));
+			for(i = 0; i < 26; i++)
+				_vertexLabels.append(makeString(97 + i));
+			_vertexLabels = _vertexLabels.toList();
+		}
+
+		while(idx > _vertexLabels.length)
+			idx -= _vertexLabels.length;
+
+		return(_vertexLabels[idx]);
+	}
 ;

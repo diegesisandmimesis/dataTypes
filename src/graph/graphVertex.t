@@ -17,6 +17,8 @@ class Vertex: object
 	// Table to hold our edges
 	_edgeTable = perInstance(new LookupTable)
 
+	_labels = nil
+
 	// Temporary flag used when computing path lengths.
 	_dijkstraFlag = nil
 
@@ -94,5 +96,14 @@ class Vertex: object
 	initializeVertex() {
 		if(!isGraph(location)) return;
 		location.addVertex(self);
+	}
+
+	label() {
+		local g;
+
+		if((g = getGraph()) == nil)
+			return(nil);
+
+		return(g.vertexLabel(self));
 	}
 ;
