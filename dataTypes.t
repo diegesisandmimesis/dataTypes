@@ -112,6 +112,21 @@ modify Vector
 		}
 	}
 
+	invert() {
+		local i, l;
+
+		l = new Vector(self.length);
+		for(i = self.length; i > 0; i--)
+			l.append(self[i]);
+		return(l);
+	}
+
+	prependUnique(v) {
+		if(indexOf(v) != nil) return(nil);
+		prepend(v);
+		return(true);
+	}
+
 	push(v) { append(v); }
 	pop() {
 		local r;
