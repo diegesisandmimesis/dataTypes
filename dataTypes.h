@@ -56,10 +56,10 @@
 #endif
 
 #ifndef isEmptyList
-#define isEmptyList(obj) (isList(obj) && (obj.length() < 1))
+#define isEmptyList(obj) (isCollection(obj) && (obj.length() < 1))
 #endif
 #ifndef isNilOrEmpty
-#define isNilOrEmpty(obj) (!isList(obj) || (obj.length() < 1))
+#define isNilOrEmpty(obj) (!isCollection(obj) || (obj.length() < 1))
 #endif
 
 #ifndef isInteger
