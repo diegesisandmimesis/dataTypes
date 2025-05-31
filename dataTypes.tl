@@ -28,5 +28,6 @@ source: src/xy/lineSegment.t
 source: src/xy/quadTree.t
 source: src/xy/rTree.t
 source: src/ts/ts.t
+source: src/ts/tsProf.t
 source: src/hashTable/hashTable.t
 source: src/matrix/matrix.t
