@@ -31,3 +31,6 @@ source: src/ts/ts.t
 source: src/ts/tsProf.t
 source: src/hashTable/hashTable.t
 source: src/matrix/matrix.t
+source: src/bt/btStack.t
+source: src/bt/btFrame.t
+source: src/bt/bt.t

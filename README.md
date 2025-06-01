@@ -46,6 +46,11 @@ module.
 * [HashTable](#hashTable)
 * [Matrix](#matrix)
 * [TS](#ts)
+* [TSProf](#tsProf)
+* [Recursive Backtracker](#bt-section)
+  * [BT](#bt)
+  * [BTStack](#btStack)
+  * [BTFrame](#btFrame)
 * [XY](#xy)
 * [Rectangle](#rectangle)
 * [LineSegment](#linesegment)
@@ -1187,6 +1192,146 @@ the number of seconds since creation can be returned via ``getInterval()``.
 * ``getInterval()``
 
   Returns the number of seconds since this instance was created.
+
+<a name="tsProf"></a>
+### TSProf
+
+The ``TSProf`` class implements a simple performance profiler using the ``TS`` class.
+
+#### Properties
+
+* ``label = 'tsProf'``
+
+  Label for output.  Only used by the ``report()`` method.
+
+#### Methods
+
+* ``start(id)``
+
+  Starts a timer associated with the ID ``id``.
+
+* ``stop(id)``
+
+  Stops the timer associated with the ID ``id``, if one exists.
+
+* ``total(id)``
+
+  Returns the cumulative time elapsed, in seconds, for the timer ``id``.
+
+* ``report()``
+
+  Prints a list of all the timer IDs and their elapsed times.
+
+
+<a name="bt-section"></a>
+### Recursive Backtracker
+
+The ``BT`` class and its support classes implement a simple recursive backtracker, intended to provide a method replacing tail recursion with a resumable, iterative solution finder.
+
+<a name="bt"></a>
+#### BT
+
+The ``BT`` class implements a mostly generic recursive backtracking solver
+
+
+##### Methods
+
+* ``pop()``
+
+  Pops the top frame off the stack and returns it.
+
+* ``push(f)``
+
+  Pushes the frame ``f`` onto the top of the stack.
+
+* ``reject(f)``
+
+  Rejection method.  This should return boolean ``true`` if the frame ``f`` and any frames derived from it should be rejected.
+  
+  Subclasses will want to implement their own logic here.  The stock method only fails on invalid frames.
+
+  Returning ``true`` from this method means "stop trying this solution, it will never work".  It does **NOT** just mean "this frame is invalid" (although an invalid frame is *one of* the possible failure modes)
+
+* ``accept(f)``
+
+  Acceptance method.  This should return boolean ``true`` if the frame ``f`` is a valid solution to the problem being solved.
+  
+  Subclasses will want to implement their own logic.  The stock method just checks to see if a value is assigned to each variable being solved for.
+  
+  Returning ``true`` from this method means "stop processing, you've found the answer".
+
+* ``next(f)``
+
+  Returns the next frame following frame ``f``.
+  
+  By default this will just be the next permutation of the variable/value assignments.
+
+* ``step(f)``
+
+  Advances processing a single step starting from frame ``f``.
+  
+  Returns boolean ``true`` if the next step yielded a solution, placing the solution itself at the top of the stack; boolean ``nil`` if the next step was rejected (that is, resulted in a permanent failure for the branch being explored); and the next frame if the step resulted in neither a solution nor a failure.
+
+* ``run(f)``
+
+  Step through frames starting with frame ``f``, continuing until either a frame is accepted (that is, a solution is found) or rejected (that is, no further solutions are available from the starting frame).
+
+<a name="btStack"></a>
+#### BTStack
+
+Stack for the recursive backtracker.  This generally won't need to be interacted with directly unless you're wrting a subclass of ``BT`` with a bunch of problem-specific logic.
+
+##### Methods
+
+* ``clear()``
+
+  Clears the stack.
+
+* ``push(f)``
+
+  Pushes the frame ``f`` onto the top of the stack
+
+* ``pop()``
+
+
+  Pops the top frame off the stack and returns it.
+
+* ``validateFrame(f)``
+
+  Returns boolean ``true`` if ``f`` is a valid frame for this stack.
+
+<a name="btFrame"></a>
+#### BTFrame
+
+Stack frame type for the recursive backtracker.
+
+##### Properties
+
+* ``vList = nil``
+
+  List of variables we're trying to assign values to.
+
+* ``pList = nil``
+
+  List of possible values to assign to the variables.
+
+* ``result = nil``
+
+  List of assignments so far.
+  
+  **NOTE**: The *indices* in ``result`` correspond to indicies in ``vList``.  That is, the *i*th value of ``result`` is a possible assignment for the *i*th variable in ``vList``.  The *values*in ``result`` correspond to indices in ``pList``.  That is, they aren't the values being assigned they're the index of a value in ``pList``.
+  
+  Example:  If ``vList = [ 'Alice', 'Bob', 'Carol' ]`` and ``pList = [ 'asparagus', 'broccoli', 'carrots', 'daikon' ]``, then ``result[2] = 3`` means "Bob is assigned carrots".
+
+##### Methods
+
+* ``clone()``
+
+  Returns a copy of this frame.
+
+* ``next()``
+
+  Returns the frame that follows this one.  The stock class proceeds by simple permutation.
 
 <a name="xy"/></a>
 ### XY

@@ -225,6 +225,14 @@ Rule template 'ruleID';
 // Type tests
 #define isTS(obj) (isType(obj, TS))
 
+//
+// BT definitions
+
+// Type tests
+#define isBTStack(obj) (isType(obj, BTStack))
+#define isBTFrame(obj) (isType(obj, BTFrame))
+#define isBT(obj) (isType(obj, BT))
+
 
 //
 // XY declarations
