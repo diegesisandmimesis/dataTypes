@@ -175,6 +175,10 @@ modify Collection
 				lst.swap(i, n);
 		}
 	}
+
+	validIndex(idx) {
+		return(isInteger(idx) && (idx > 0) && (idx <= self.length()));
+	}
 ;
 
 modify TadsObject
