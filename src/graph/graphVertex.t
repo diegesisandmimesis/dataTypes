@@ -95,7 +95,7 @@ class Vertex: object
 
 	initializeVertex() {
 		if(!isGraph(location)) return;
-		location.addVertex(self);
+		location.addVertex(vertexID, self);
 	}
 
 	label() {

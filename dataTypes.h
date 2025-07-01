@@ -29,6 +29,9 @@
 #ifndef isRoom
 #define isRoom(obj) (isType(obj, Room))
 #endif
+#ifndef isTravelConnector
+#define isTravelConnector(obj) (isType(obj, TravelConnector))
+#endif
 #ifndef isActor
 #define isActor(obj) (isType(obj, Actor))
 #endif
@@ -129,7 +132,7 @@ Graph template [ _vertexList ] [ _edgeMatrix ];
 
 // Templates
 FiniteStateMachine template @_vertexList @_edgeMatrix?;
-FiniteStateMachineState template 'stateID';
+FiniteStateMachineState template 'vertexID';
 Transition template '_id0' '_id1';
 
 // Declaration macros
