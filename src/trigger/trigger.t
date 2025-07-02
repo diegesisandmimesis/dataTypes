@@ -42,3 +42,13 @@ class Trigger: Rule, Tuple
 	getTriggerRoom()
 		{ return(_triggerTuple ? _triggerTuple.room : nil); }
 ;
+
+class ExtendedTrigger: Trigger
+	match(data?) {
+		if(inherited(data) != true) return(nil);
+		return(checkTrigger(data));
+	}
+	checkTrigger(data?) { return(true); }
+;
+
+class ExTrigger: ExtendedTrigger;
