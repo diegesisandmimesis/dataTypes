@@ -34,4 +34,10 @@ class AdjacencyMatrix: object
 			_matrix.debugMatrix();
 		}
 	}
+
+	equals(m) {
+		if(!isAdjacencyMatrix(m))
+			return(nil);
+		return(getMatrix().equals(m.getMatrix()));
+	}
 ;

@@ -124,6 +124,12 @@ class Tuple: object
 
 		return(true);
 	}
+
+	_checkTupleProp(prop, fn) {
+		if(!isFunction(fn)) return(nil);
+		if(propType(prop) == TypeNil) return(nil);
+		return(fn(self.(prop)));
+	}
 ;
 
 // Function that returns a Tuple instance configured to reflect the

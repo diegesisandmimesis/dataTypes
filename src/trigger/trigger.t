@@ -41,6 +41,13 @@ class Trigger: Rule, Tuple
 		{ return(_triggerTuple ? _triggerTuple.action : nil); }
 	getTriggerRoom()
 		{ return(_triggerTuple ? _triggerTuple.room : nil); }
+
+	_checkTupleProp(prop, fn) {
+		return(_triggerTuple ? _triggerTuple._checkTupleProp(prop, fn)
+			: nil);
+	}
+
+	checkDstObject(fn) { return(_checkTupleProp(&dstObject, fn)); }
 ;
 
 class ExtendedTrigger: Trigger

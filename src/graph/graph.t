@@ -36,6 +36,9 @@ class Graph: object
 		if(id == nil)
 			return(nil);
 
+		if(isString(id) && (getVertex(id) != nil))
+			return(nil);
+
 		if(isVertex(id))
 			obj = id;
 
@@ -123,6 +126,9 @@ class Graph: object
 		if((id0 == nil) || (id1 == nil)) return(nil);
 		if((v0 = canonicalizeVertex(id0)) == nil) return(nil);
 		if((v1 = canonicalizeVertex(id1)) == nil) return(nil);
+
+		if(getEdge(v0.vertexID, v1.vertexID) != nil)
+			return(nil);
 
 		if(!isEdge(obj))
 			obj = edgeClass.createInstance(v0, v1);
@@ -436,5 +442,87 @@ class Graph: object
 			idx -= _vertexLabels.length;
 
 		return(_vertexLabels[idx]);
+	}
+
+	// Returns a shallow copy of this graph.
+	clone() {
+		local r;
+
+		r = new Graph();
+
+		forEachVertex({ v: r.addVertex(v.vertexID) });
+		forEachEdge({
+			e: r.addEdge(e.vertex0.vertexID, e.vertex1.vertexID)
+		});
+
+		return(r);
+	}
+
+	// Returns a new Graph instance containing the union of this
+	// graph and the argument graph.
+	union(g) {
+		local r;
+
+		if(!isGraph(g))
+			return(nil);
+
+		r = clone();
+
+		g.forEachVertex({ v: r.addVertex(v.vertexID) });
+		g.forEachEdge({
+			e: r.addEdge(e.vertex0.vertexID, e.vertex1.vertexID)
+		});
+
+		return(r);
+	}
+
+	// Returns a new Graph instance containing the difference of this
+	// graph and the argument graph.
+	difference(g) {
+		local r;
+
+		if(!isGraph(g))
+			return(nil);
+
+		r = clone();
+
+		g.forEachVertex({ v: r.removeVertex(v.vertexID) });
+		g.forEachEdge({
+			e: r.removeEdge(e.vertex0.vertexID, e.vertex1.vertexID)
+		});
+
+		return(r);
+	}
+
+	// Returns a new Graph instance containing the intersection of this
+	// graph and the argument graph.
+	intersection(g) {
+		local r;
+
+		if(!isGraph(g))
+			return(nil);
+
+		r = clone();
+		forEachVertex(function(v) {
+			if(g.getVertex(v.vertexID))
+				return;
+			r.removeVertex(v.vertexID);
+		});
+		forEachEdge(function(e) {
+			if(g.getEdge(e.vertex0.vertexID, e.vertex1.vertexID))
+				return;
+			r.removeEdge(e.vertex0.vertexID, e.vertex1.vertexID);
+		});
+
+		return(r);
+	}
+
+	// Returns boolean true if the argument graph is the same as this
+	// graph.
+	equals(g) {
+		if(!isGraph(g))
+			return(nil);
+
+		return(adjacencyMatrix().equals(g.adjacencyMatrix()));
 	}
 ;

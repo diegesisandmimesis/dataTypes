@@ -110,6 +110,8 @@
 #define isVertex(obj) (isType(obj, Vertex))
 #define isEdge(obj) (isType(obj, Edge))
 
+#define isAdjacencyMatrix(obj) isType(obj, AdjacencyMatrix)
+
 // Templates
 Vertex template 'vertexID';
 Edge template ->vertex1;

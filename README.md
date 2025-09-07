@@ -251,6 +251,24 @@ objects.
     matrix.  If no argument is given the vertex IDs are sorted in
     ASCIIbetical order.
 
+  * ``clone()``
+
+    Returns a shallow copy of the graph.
+
+    This creates a dupilcate ``Graph`` instance containing the same vertex
+    IDs and edges as the calling graph.  It **does not** copy any data
+    defined on the vertices or edges.
+
+  * ``difference(g)``
+
+    Returns a new ``Graph`` instance containing the difference of the
+    calling graph and the argument graph.
+
+  * ``equals(g)``
+
+    Returns boolean ``true`` if the argument, which must be a ``Graph``
+    instance, has the same vertices and edges as the calling graph.
+
   * ``join(g, v0, v1, recip?, destruct?)``
 
     Adds the vertices and edges in the argument graph ``g`` to the
@@ -269,6 +287,11 @@ objects.
     edges and vertices might have bespoke data on them that needs
     to be preserved in the new graph.
 
+  * ``intersection(g)``
+
+    Returns a new ``Graph`` instance containing the intersection of the
+    calling graph and the argument graph.
+
   * ``mergeVertices(v0, v1)``
 
     Merges vertex ``v1`` into ``v0``, removing ``v1`` in the process.
@@ -277,6 +300,11 @@ objects.
     connecting them to ``v1`` instead.  Subclasses are responsible
     for overriding the method to handle any subclass-specific data
     on the vertices or edges that needs to be transferred.
+
+  * ``union(g)``
+
+    Returns a new ``Graph`` instance consisting of the union of the calling
+    graph and the argument graph.
 
 ##### Subclasses
 
