@@ -525,4 +525,31 @@ class Graph: object
 
 		return(adjacencyMatrix().equals(g.adjacencyMatrix()));
 	}
+
+	disjoint(g) {
+		local r;
+
+		if((r = intersection(g)) == nil) return(nil);
+		return(r.getOrder() == 0);
+	}
+
+	isSubgraphOf(g) {
+		local i, l;
+
+		if(!isGraph(g))
+			return(nil);
+
+		l = getVertexIDs();
+		for(i = 1; i <= l.length; i++)
+			if(g.getVertex(l[i]) == nil) return(nil);
+
+		l = getEdges();
+		for(i = 1; i <= l.length; i++)
+			if(g.getEdge(l[i].vertex0.vertexID,
+				l[i].vertex1.vertexID) == nil)
+					return(nil);
+
+		return(true);
+
+	}
 ;

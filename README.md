@@ -292,6 +292,11 @@ objects.
     Returns a new ``Graph`` instance containing the intersection of the
     calling graph and the argument graph.
 
+  * ``isSubgraphOf(g)``
+
+    Returns boolean ``true`` if the calling graph is a subgraph of the
+    argument graph.
+
   * ``mergeVertices(v0, v1)``
 
     Merges vertex ``v1`` into ``v0``, removing ``v1`` in the process.

@@ -53,6 +53,29 @@ gameMain: GameMainDef
 			err += 1;
 		}
 
+		t += 1;
+		if(!gSub.isSubgraphOf(g0)) {
+			"ERROR: subgraph test 1 failed\n ";
+			err += 1;
+		}
+
+		t+= 1;
+		if(g0.isSubgraphOf(gSub)) {
+			"ERROR: subgraph test 2 failed\n ";
+			err += 1;
+		}
+
+		t += 1;
+		if(!gDiff.disjoint(gInt)) {
+			"ERROR: disjoint test 1 failed\n ";
+			err += 1;
+		}
+
+		if(gDiff.disjoint(g0)) {
+			"ERROR: disjoint test 2 failed\n ";
+			err += 1;
+		}
+
 		if(err == 0) {
 			"\npassed all tests (<<toString(t)>>)\n ";
 		} else {
@@ -109,5 +132,15 @@ gInt: Graph
 		0,	0,	1,
 		0,	0,	0,
 		1,	0,	0
+	]
+;
+
+gSub: Graph
+	[ '2', '3', '4', '5' ]
+	[
+		0, 	1,	1,	0,
+		1,	0,	0,	1,
+		1,	0,	0,	1,
+		0,	1,	1,	0
 	]
 ;
