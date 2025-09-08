@@ -577,7 +577,7 @@ kind of ``Edge``.
 
 * ``active = true``
 
-  Boolean flag indicating whether or not the state is currentl active.  Note
+  Boolean flag indicating whether or not the state is currently active.  Note
   that this is not the same thing as being the FSM's current state.  The
   active flag indicates whether or not the state is *eligible* to become
   the current state.
