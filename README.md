@@ -1451,6 +1451,27 @@ for working with ``DisjointSet` instances
 
   Returns the ``DisjointSet`` instance with the given ID.
 
+* ``graphToForest(g)``
+
+  Uses the argument ``Graph`` instance to configure the forest, adding
+  nodes for each ``Vertex`` in the graph and doing a ``union()`` for
+  each edge.
+
+  NOTE:  This does not clear the forest beforehand.  So if the the contents
+  of the graph are all you want in the forest you'll have to make sure
+  the forest is empty yourself.
+
+* ``kruskal(g, fn?)``
+
+  Returns a new ``Graph`` instance containing a minimum spanning tree of
+  the argument ``g`` (which must be a ``Graph`` instance) computed using
+  Kruskal's algorithm.
+
+  The optional second argument is an edge sorting function.  If given,
+  the function must accept two ``Edge`` instances as arguments and
+  return an integer as per normal TADS3 ``sort()`` semantics.  If no function
+  is given the edge lengths will be used to sort edges.
+
 * ``makeSet(id)``
 
   Creates a new ``DisjointSet`` using the argument ID and adds it to the
