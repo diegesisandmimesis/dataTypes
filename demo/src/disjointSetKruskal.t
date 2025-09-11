@@ -24,7 +24,7 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		local f, g, i;
+		local f, g, i, p;
 
 		f = DisjointSetForest.createInstance();
 		for(i = 0; i <= 8; i++)
@@ -38,17 +38,31 @@ gameMain: GameMainDef
 		f.union('2', '7');
 		f.union('2', '0');
 
-		"\n===forest 1===\n ";
-		f.log();
-		"\n===forest 1===\n ";
-
 		g = g0.union(g1).union(g2);
 		f = DisjointSetForest.createInstance();
-		f.kruskal(g);
 
-		"\n===forest 2===\n ";
-		g.log();
-		"\n===forest 2===\n ";
+		g.addEdge('6', '8');
+		g.addEdge('0', '6');
+
+		g = f.kruskal(g, function(a, b) {
+			local v0, v1;
+			v0 = toInteger(a.vertex0.vertexID)
+				+ toInteger(a.vertex1.vertexID);
+			v1 = toInteger(b.vertex0.vertexID)
+				+ toInteger(b.vertex1.vertexID);
+			return(v0 - v1);
+		});
+
+		if(!isGraph(g)) {
+			"\nERROR: Kruskal algorithm failed\n ";
+			return;
+		}
+		if((p = g.getDijkstraPath('1', '6')) == nil) {
+			"\nERROR: pathfinding failed\n ";
+			return;
+		}
+
+		"\npath = <<toString(p)>>\n ";
 	}
 ;
 

@@ -8,10 +8,9 @@
 #include "dataTypes.h"
 
 class DisjointSet: object
-	id = nil
-	parent = nil
-	rank = 0
-	forest = nil
+	id = nil		// unique-ish ID
+	parent = nil		// parent node
+	rank = 0		// our rank
 
 	construct(v) {
 		id = v;
