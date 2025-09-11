@@ -51,6 +51,9 @@ module.
   * [BT](#bt)
   * [BTStack](#btStack)
   * [BTFrame](#btFrame)
+* [Disjoint-Set Data Structure](#disjoint-set-section)
+  * [DisjointSetForest](#disjointSetForest)
+  * [DisjointSet)[#disjointSet)
 * [XY](#xy)
 * [Rectangle](#rectangle)
 * [LineSegment](#linesegment)
@@ -259,6 +262,12 @@ objects.
     IDs and edges as the calling graph.  It **does not** copy any data
     defined on the vertices or edges.
 
+  * ``complement()``
+
+    Returns a new ``Graph`` instance containing the complement of the
+    calling graph.  That is, a graph with the same vertices and all
+    edges not in the original graph.
+
   * ``difference(g)``
 
     Returns a new ``Graph`` instance containing the difference of the
@@ -292,10 +301,19 @@ objects.
     Returns a new ``Graph`` instance containing the intersection of the
     calling graph and the argument graph.
 
+  * ``isRegular()``
+
+    Returns boolean ``true`` if all vertices in the graph have the same
+    degree.
+
   * ``isSubgraphOf(g)``
 
     Returns boolean ``true`` if the calling graph is a subgraph of the
     argument graph.
+
+  * ``maximumDegree()``
+
+    Returns the degree of the vertex with the largest number of edges.
 
   * ``mergeVertices(v0, v1)``
 
@@ -305,6 +323,10 @@ objects.
     connecting them to ``v1`` instead.  Subclasses are responsible
     for overriding the method to handle any subclass-specific data
     on the vertices or edges that needs to be transferred.
+
+  * ``minimumDegree()``
+
+    Returns the degree of the vertex with the smallest number of edges.
 
   * ``union(g)``
 
@@ -1365,6 +1387,102 @@ Stack frame type for the recursive backtracker.
 * ``next()``
 
   Returns the frame that follows this one.  The stock class proceeds by simple permutation.
+
+<a name="disjoint-set-section"></a>
+### Disjoint-Set Data Structure
+
+The module provides two classes which implement disjoint-set/union-find forest
+operations.
+
+<a name="disjointSetForest"></a>
+#### DisjointSetForest
+
+The ``DisjointSetForest`` is an optional object for holding a forest containing
+one or more ``DisjointSet`` instances.  This is mostly for convienience, and
+everything provided by the class can be done "manually" without it.
+
+##### Methods
+
+* ``add(v)``
+
+  Adds a ``DisjointSet`` instance to the forest.
+
+* ``forEachSet(fn)``
+
+  Iterates over each ``DisjointSet`` instance in the forest, calling the
+  argument function ``fn`` for each.
+
+<a name="disjointSet"></a>
+#### DisjointSet
+
+An abstract disjoint-set data structure.
+
+Expected usage is that each data object to be included will be
+initialized as a ``DisjointSet`` and its rank and parent will be automagically
+computed by the class when it is used in ``find()`` and ``union()`` operations.
+
+Example usage:
+
+```
+     // Create a forest to hold the disjoint sets
+     local f = new DisjointSetForest();
+
+     // Add elements "foo", "bar", and "baz" to the forest
+     makeDisjointSet('foo', f);
+     makeDisjointSet('bar', f);
+     makeDisjointSet('baz', f);
+     makeDisjointSet('quux', f);
+
+     // Join "foo" and "bar"
+     disjointSetUnion('foo', 'bar');
+     // Join "foo" and "baz"
+     disjointSetUnion('foo', 'baz');
+     // Join "baz" and "quux"
+     disjointSetUnion('baz', 'quux');
+
+     // Sets p to be the top-level parent of "quux", which will be
+     // the DisjointSet instance "bar".
+     local p = disjointSetFind('quux');
+```
+
+##### Properties
+
+* ``id = nil``
+
+  Arbitrary ID for the element.  Should only be set by the constructor.
+
+* ``parent = nil``
+
+  Parent of the element.  Should not be set directly.
+
+* ``rank = 0``
+
+  Rank of the element.  Should not be set directly.
+
+##### Methods
+
+* ``add(v)``
+
+  Initialize the ``DisjointSet`` instance, setting its parent to be itself
+  and its rank to be zero.
+
+  This is called automagically by the constructor, and generally shouldn't
+  be manually invoked.
+
+* ``find(v)``
+
+  Returns the ``DisjointSet`` instance that is the top-level parent of
+  the argument, which can be either a ``DisjointSet`` instance or
+  the ID of a declared ``DisjointSet`` instance.
+
+* ``getDisjointSet(id)``
+
+  Returns the ``DisjointSet`` instance with the given ID.
+
+* ``union(v0, v1)``
+
+  Joins the two argument disjoint sets.  The arguments can be either
+  ``DisjointSet`` instances or IDs.
 
 <a name="xy"/></a>
 ### XY

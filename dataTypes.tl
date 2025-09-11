@@ -11,6 +11,7 @@ source: src/graph/graphSubgraph.t
 source: src/graph/graphDijkstra.t
 source: src/graph/adjacencyMatrix.t
 source: src/graph/graphInit.t
+source: src/graph/graphTheory.t
 source: src/finiteStateMachine/finiteStateMachine.t
 source: src/finiteStateMachine/finiteStateMachineSorted.t
 source: src/finiteStateMachine/finiteStateMachineInit.t
@@ -34,3 +35,4 @@ source: src/matrix/matrix.t
 source: src/bt/btStack.t
 source: src/bt/btFrame.t
 source: src/bt/bt.t
+source: src/disjointSet/disjointSet.t

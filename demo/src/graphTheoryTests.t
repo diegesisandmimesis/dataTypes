@@ -24,7 +24,7 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		local err, t;
+		local err, g, t;
 
 		err = 0;
 		t = 0;
@@ -71,8 +71,47 @@ gameMain: GameMainDef
 			err += 1;
 		}
 
+		t += 1;
 		if(gDiff.disjoint(g0)) {
 			"ERROR: disjoint test 2 failed\n ";
+			err += 1;
+		}
+
+		g = g2.complement();
+		t += 1;
+		if(g.equals(gComp) != true) {
+			"ERROR: complement test 1 failed\n ";
+			err += 1;
+		}
+
+		g = g.complement();
+		t += 1;
+		if(g.equals(g2) != true) {
+			"ERROR: complement test 2 failed\n ";
+			err += 1;
+		}
+
+		t += 1;
+		if(g3.isRegular() != true) {
+			"ERROR: isRegular() test 1 failed\n ";
+			err += 1;
+		}
+
+		t += 1;
+		if(g4.isRegular() == true) {
+			"ERROR: isRegular() test 2 failed\n ";
+			err += 1;
+		}
+
+		t += 1;
+		if(g4.minimumDegree() != 1) {
+			"ERROR: minimumDegree() test failed\n ";
+			err += 1;
+		}
+
+		t += 1;
+		if(g4.maximumDegree() != 3) {
+			"ERROR: maximumDegree() test failed\n ";
 			err += 1;
 		}
 
@@ -103,6 +142,47 @@ g1: Graph
 		1,	0,	0,	1,
 		1,	0,	0,	1,
 		0,	1,	1,	0
+	]
+;
+
+g2: Graph
+	[ '1', '2', '3', '4', '5' ]
+	[
+		0,	1,	0,	0,	1,
+		1,	0,	1,	0,	0,
+		0,	1,	0,	1,	0,
+		0,	0,	1,	0,	1,
+		1,	0,	0,	1,	0
+	]
+;
+
+g3: Graph
+	[ '1', '2', '3' ]
+	[
+		0,	1,	1,
+		1,	0,	1,
+		1,	1,	0
+	]
+;
+
+g4: Graph
+	[ '1', '2', '3', '4' ]
+	[
+		0,	1,	1,	0,
+		1,	0,	1,	0,
+		1,	1,	0,	1,
+		0,	0,	1,	0
+	]
+;
+
+gComp: Graph
+	[ '1', '2', '3', '4', '5' ]
+	[
+		0,	0,	1,	1,	0,
+		0,	0,	0,	1,	1,
+		1,	0,	0,	0,	1,
+		1,	1,	0,	0,	0,
+		0,	1,	1,	0,	0
 	]
 ;
 
@@ -144,3 +224,4 @@ gSub: Graph
 		0,	1,	1,	0
 	]
 ;
+
