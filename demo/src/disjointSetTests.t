@@ -28,15 +28,15 @@ gameMain: GameMainDef
 
 		f = DisjointSetForest.createInstance();
 		for(i = 0; i <= 8; i++)
-			makeDisjointSet(toString(i), f);
+			f.makeSet(toString(i));
 
-		disjointSetUnion('1', '4');
-		disjointSetUnion('1', '5');
-		disjointSetUnion('4', '8');
-		disjointSetUnion('5', '8');
-		disjointSetUnion('3', '2');
-		disjointSetUnion('2', '7');
-		disjointSetUnion('2', '0');
+		f.union('1', '4');
+		f.union('1', '5');
+		f.union('4', '8');
+		f.union('5', '8');
+		f.union('3', '2');
+		f.union('2', '7');
+		f.union('2', '0');
 
 		"\n===forest 1===\n ";
 		f.log();

@@ -1394,32 +1394,11 @@ Stack frame type for the recursive backtracker.
 The module provides two classes which implement disjoint-set/union-find forest
 operations.
 
-<a name="disjointSetForest"></a>
-#### DisjointSetForest
-
-The ``DisjointSetForest`` is an optional object for holding a forest containing
-one or more ``DisjointSet`` instances.  This is mostly for convienience, and
-everything provided by the class can be done "manually" without it.
-
-##### Methods
-
-* ``add(v)``
-
-  Adds a ``DisjointSet`` instance to the forest.
-
-* ``forEachSet(fn)``
-
-  Iterates over each ``DisjointSet`` instance in the forest, calling the
-  argument function ``fn`` for each.
-
-<a name="disjointSet"></a>
-#### DisjointSet
-
-An abstract disjoint-set data structure.
-
-Expected usage is that each data object to be included will be
-initialized as a ``DisjointSet`` and its rank and parent will be automagically
-computed by the class when it is used in ``find()`` and ``union()`` operations.
+Expected usage is that a forest will be created and then each data object
+to be included will be created as a ``DisjointSet`` instance by calling
+``makeSet()`` on the forest instance.  The ``DisjointSet``'s properties
+will be automagically computed by the forest when it is used in
+``find()`` and ``union()`` operations.
 
 Example usage:
 
@@ -1428,22 +1407,65 @@ Example usage:
      local f = new DisjointSetForest();
 
      // Add elements "foo", "bar", and "baz" to the forest
-     makeDisjointSet('foo', f);
-     makeDisjointSet('bar', f);
-     makeDisjointSet('baz', f);
-     makeDisjointSet('quux', f);
+     f.makeSet('foo');
+     f.makeSet('bar');
+     f.makeSet('baz');
+     f.makeSet('quux');
 
      // Join "foo" and "bar"
-     disjointSetUnion('foo', 'bar');
+     f.union('foo', 'bar');
      // Join "foo" and "baz"
-     disjointSetUnion('foo', 'baz');
+     f.union('foo', 'baz');
      // Join "baz" and "quux"
-     disjointSetUnion('baz', 'quux');
+     f.union('baz', 'quux');
 
      // Sets p to be the top-level parent of "quux", which will be
-     // the DisjointSet instance "bar".
-     local p = disjointSetFind('quux');
+     // a DisjointSet instance.
+     local p = f.find('quux');
 ```
+<a name="disjointSetForest"></a>
+#### DisjointSetForest
+
+The ``DisjointSetForest`` is an object for holding a forest containing
+one or more ``DisjointSet`` instances.  It also provides most of the methods
+for working with ``DisjointSet` instances
+
+##### Methods
+
+* ``add(v)``
+
+  Adds a ``DisjointSet`` instance to the forest.
+
+* ``find(v)``
+
+  Returns the ``DisjointSet`` instance that is the top-level parent of
+  the argument, which can be either a ``DisjointSet`` instance or
+  the ID of a declared ``DisjointSet`` instance.
+
+* ``forEachSet(fn)``
+
+  Iterates over each ``DisjointSet`` instance in the forest, calling the
+  argument function ``fn`` for each.
+
+* ``getDisjointSet(id)``
+
+  Returns the ``DisjointSet`` instance with the given ID.
+
+* ``makeSet(id)``
+
+  Creates a new ``DisjointSet`` using the argument ID and adds it to the
+  forest.
+
+* ``union(v0, v1)``
+
+  Joins the two argument disjoint sets.  The arguments can be either
+  ``DisjointSet`` instances or IDs.
+
+<a name="disjointSet"></a>
+#### DisjointSet
+
+An abstract disjoint-set data structure.
+
 
 ##### Properties
 
@@ -1461,28 +1483,13 @@ Example usage:
 
 ##### Methods
 
-* ``add(v)``
+* ``init()``
 
-  Initialize the ``DisjointSet`` instance, setting its parent to be itself
+  Initialize this ``DisjointSet`` instance, setting its parent to be itself
   and its rank to be zero.
 
   This is called automagically by the constructor, and generally shouldn't
   be manually invoked.
-
-* ``find(v)``
-
-  Returns the ``DisjointSet`` instance that is the top-level parent of
-  the argument, which can be either a ``DisjointSet`` instance or
-  the ID of a declared ``DisjointSet`` instance.
-
-* ``getDisjointSet(id)``
-
-  Returns the ``DisjointSet`` instance with the given ID.
-
-* ``union(v0, v1)``
-
-  Joins the two argument disjoint sets.  The arguments can be either
-  ``DisjointSet`` instances or IDs.
 
 <a name="xy"/></a>
 ### XY

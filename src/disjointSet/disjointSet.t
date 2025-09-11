@@ -10,59 +10,15 @@
 class DisjointSetForest: object
 	_forest = nil
 
+	makeSet(v) {
+		return(add(DisjointSet.createInstance(v)));
+	}
+
 	add(v) {
 		if(!isDisjointSet(v)) return(nil);
 		if(_forest == nil) _forest = new Vector();
 		_forest.append(v);
-		return(true);
-	}
-
-	forEachSet(fn) {
-		if(!isFunction(fn) || (_forest == nil)) return(nil);
-		_forest.forEach({ x: fn(x) });
-		return(true);
-	}
-
-	log() {
-#ifdef __DEBUG
-		forEachSet({ x:
-			"\n<<toString(x.id)>>:
-				<<toString(disjointSetFind(x.id).id)>>\n "
-		});
-#endif // __DEBUG
-	}
-;
-
-class DisjointSet: object
-	id = nil
-	parent = nil
-	rank = 0
-
-	construct(v, f?) {
-		id = v;
-		add(self);
-		if(isDisjointSetForest(f)) f.add(self);
-	}
-
-	getDisjointSet(id) {
-		local r;
-
-		r = nil;
-		forEachInstance(DisjointSet, function(x) {
-			if(r != nil) return;
-			if(x.id == id)
-				r = x;
-		});
-
-		return(r);
-	}
-
-	add(v) {
-		if(!isDisjointSet(v))
-			return(nil);
-		v.parent = v;
-		v.rank = 0;
-
+		v.forest = self;
 		return(true);
 	}
 
@@ -75,6 +31,20 @@ class DisjointSet: object
 			return(v);
 		v.parent = find(v.parent);
 		return(v.parent);
+	}
+
+	getDisjointSet(id) {
+		local i;
+
+		if(_forest == nil)
+			return(nil);
+
+		for(i = 1; i <= _forest.length; i++) {
+			if(_forest[i].id == id)
+				return(_forest[i]);
+		}
+
+		return(nil);
 	}
 
 	_link(v0, v1) {
@@ -96,5 +66,39 @@ class DisjointSet: object
 	union(v0, v1) {
 		return(_link(find(v0), find(v1)));
 	}
+
+	forEachSet(fn) {
+		if(!isFunction(fn) || (_forest == nil)) return(nil);
+		_forest.forEach({ x: fn(x) });
+		return(true);
+	}
+
+	log() {
+#ifdef __DEBUG
+		forEachSet({ x:
+			"\n<<toString(x.id)>>: <<toString(find(x.id).id)>>\n "
+		});
+#endif // __DEBUG
+	}
+;
+
+class DisjointSet: object
+	id = nil
+	parent = nil
+	rank = 0
+	forest = nil
+
+	construct(v) {
+		id = v;
+		init();
+	}
+
+	init() {
+		parent = self;
+		rank = 0;
+
+		return(true);
+	}
+
 
 ;

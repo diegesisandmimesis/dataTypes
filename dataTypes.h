@@ -247,9 +247,11 @@ Rule template 'ruleID';
 #define isDisjointSet(obj) isType(obj, DisjointSet)
 #define isDisjointSetForest(obj) isType(obj, DisjointSetForest)
 
+/*
 #define makeDisjointSet(v, f) DisjointSet.createInstance(v, f)
-#define disjointSetUnion(v0, v1) DisjointSet.union(v0, v1)
+#define disjointSetUnion(v0, v1) DisjointForest.union(v0, v1)
 #define disjointSetFind(v) DisjointSet.find(v)
+*/
 
 
 //
