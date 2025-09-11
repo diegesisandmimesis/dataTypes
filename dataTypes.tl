@@ -36,3 +36,5 @@ source: src/bt/btStack.t
 source: src/bt/btFrame.t
 source: src/bt/bt.t
 source: src/disjointSet/disjointSet.t
+source: src/disjointSet/disjointSetForest.t
+source: src/disjointSet/disjointSetGraph.t
