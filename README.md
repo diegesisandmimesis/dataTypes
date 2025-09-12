@@ -1472,6 +1472,13 @@ for working with ``DisjointSet` instances
   return an integer as per normal TADS3 ``sort()`` semantics.  If no function
   is given the edge lengths will be used to sort edges.
 
+  NOTE:  This method modifies the forest.  New nodes will be added for
+  each vertex in the graph, and ``union()``s will be performed for each
+  edge.  This also means that any disjoint-sets already in the forest when
+  kruskal() is invoked will be part of the computed spanning tree.  If these
+  things are not desired, a new ``DisjointSetForest`` instance should be
+  created before calling this method.
+
 * ``makeSet(id)``
 
   Creates a new ``DisjointSet`` using the argument ID and adds it to the
