@@ -1233,6 +1233,9 @@ integer values.
 
   Only works for 2-dimensional matrices.
 
+  Can be accessed with the ``*`` operator; ``m0 * m1`` is equivalent to
+  ``m0.multiply(m1)``.
+
 <a name="ts"></a>
 ### TS
 
@@ -1544,6 +1547,9 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
 
   Does not modify the either of the original instances.
 
+  Can be accessed with the ``+`` and ``-`` operators;  ``v0 + v1`` is
+  equivalent to ``v0.add(v1)``.
+
 * ``multiply(n)``
   ``divide(n)``
 
@@ -1551,6 +1557,9 @@ The ``XY`` class is a simple data structure for handling 2D coordinates.
   down by a factor of ``n``, which must be an integer.
 
   Does not modify the original instance.
+
+  Can be accessed with the ``*`` and ``/`` operators;  ``v0 * n`` is
+  equivalent to ``v0.multiply(n)``.
 
 * ``distance(v)``
 
@@ -1863,6 +1872,17 @@ insert performance.
 <a name="vector"/></a>
 ### Vector
 
+New methods on ``Vector`` that need to test elements for equality now check
+for a ``equals()`` method on the elements being compared and if one is
+present it will be called (via ``someElement.equals(otherElement)``) and the
+elements will be considered equal if this returns ``true``.
+
+If no ``equals`` method is defined on the checked instance the basic
+test for equality (``someElement == otherElement``) will be used instead.
+
+Methods that check for ``equals`` include ``union()``, ``intersection()``,
+``complement()``, ``isSubsetOf()``, and ``Vector.equals()``.
+
 * ``swap(i, j)``
 
   Swaps elements *i* and *j*.
@@ -1882,7 +1902,7 @@ insert performance.
 
 * ``complement(v)``
 
-  Returns the complement of this vector with the argument vector.  That is,
+  Returns the complement of this vecZZtor with the argument vector.  That is,
   the elements of this vector that are not in the argument vector.  Or
   in set theoretic terms, if this vector is A and the argument vector is
   B, A \ B.
@@ -1892,6 +1912,11 @@ insert performance.
   Returns boolean ``true`` if this vector and the argument vector contain
   the same elements.  If the second argument is boolean ``true`` the
   elements must be in the same order, if not they can be in any order.
+
+* ``isSubsetOf(v)``
+
+  Returns boolean true if the argument vector ``v`` contains all the elements
+  of the calling vector.
 
 * ``rotate(n?)``
 
@@ -1910,6 +1935,9 @@ insert performance.
   ``[ 4, 1, 2, 3]``.  The same vector rotated right two steps becomes
   ``[ 3, 4, 1, 2]``.
 
+  Can be accessed by the ``>>`` operator;  ``v >> 2`` is equivalent to
+  ``v.rotateRight(2)``.
+
 * ``rotateLeft(n?)``
 
   Rotate the vector left by *n* steps, defaulting to 1.  Left rotation
@@ -1919,6 +1947,14 @@ insert performance.
   Example:  ``[ 1, 2, 3, 4 ]`` rotated left one step becomes
   ``[ 2, 3, 4, 1 ]``.  The same vector rotated left two steps becomes
   ``[ 3, 4, 1, 2 ]``.
+
+  Can be accessed by the ``<<`` operator;  ``v << 2`` is equivalent to
+  ``v.rotateLeft(2)``.
+
+* ``symmetricDifference(v)``
+
+  Returns a vector containing all the elements that are in exactly one of
+  the two vectors (the argument vector and the calling vector).
 
 <a name="lookuptable"/></a>
 ### LookupTable

@@ -290,4 +290,6 @@ Rule template 'ruleID';
 #define _PATCH_SQRT_INT
 #endif // INT_MATH_H
 
+#define hasEquals(obj) (isObject(obj) && obj.propDefined(&equals) && (obj.propType(&equals) != TypeNil))
+
 #define DATA_TYPES_H

@@ -275,31 +275,6 @@ class Matrix: object
 			}
 		}
 	}
-/*
-	traverse(cb, pos?, depth?) {
-		local ar, i;
-
-		if(!isFunction(cb)) return;
-		if(pos == nil) {
-			pos = new Vector(dim);
-			for(i = 1; i <= dim; i++) pos.append(1);
-			depth = 1;
-		}
-		if(depth > dim)
-			return;
-
-		for(i = 1; i <= size[depth]; i++) {
-			pos[depth] = i;
-			if(depth == dim) {
-				ar = new Vector(pos);
-				ar.append(get(pos...));
-				(cb)(ar...);
-			} else {
-				traverse(cb, pos, depth + 1);
-			}
-		}
-	}
-*/
 
 	// Returns the matrix as a linearized array, in row-first syntax.
 	// That is, the same format expected by load().
@@ -366,22 +341,6 @@ class IntegerMatrix: Matrix
 		return((get(1, 1) * get(2, 2)) - (get(2, 1) * get(1, 2)));
 	}
 
-/*
-	_determinant3x3() {
-		return(
-			(get(1, 1) *
-				((get(2, 2) * get(3, 3))
-					- (get(3, 2) * get(2, 3))))
-			- (get(2, 1) *
-				((get(1, 2) * get(3, 3))
-					- (get(1, 3) * get(3, 1))))
-			+ (get(3, 1) *
-				((get(1, 2) * get(2, 3))
-					- (get(2, 2) * get(1, 3))))
-		);
-	}
-*/
-
 	// Compute the determinant recursively.
 	_determinant() {
 		local i, m, n, r;
@@ -432,6 +391,8 @@ class IntegerMatrix: Matrix
 
 		return(m);
 	}
+
+	operator *(x) { return(multiply(x)); }
 
 	// Multiply this matrix by the argument matrix, returning
 	// a new matrix.

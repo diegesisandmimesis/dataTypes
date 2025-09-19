@@ -9,6 +9,8 @@
 
 // A Trigger is a Rule that is also a Tuple.
 class Trigger: Rule, Tuple
+	order = 1			// numeric priority
+
 	_triggerTuple = nil		// remember the tuple we matched
 
 	match(data?) {
