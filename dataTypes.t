@@ -33,19 +33,63 @@ modify Vector
 	// Returns the union of this vector and the argument vector,
 	// modifying neither.
 	union(v) {
-		return(isVector(v) ? new Vector(self).appendUnique(v) : nil);
+		local r;
+
+		if(!isVector(v))
+			return(nil);
+
+		r = new Vector(self);
+		v.forEach(function(x) {
+			if(hasEquals(x)) {
+				if(r.subset({ y: x.equals(y) }).length == 0)
+					r.append(x);
+			} else {
+				r.appendUnique(x);
+			}
+		});
+
+		return(r);
 	}
 
 	// Returns the intersection of this vector and the argument vector.
 	intersection(v) {
-		return(isVector(v) ? self.subset({ x: v.indexOf(x) != nil })
-			: nil);
+		if(!isVector(v))
+			return(nil);
+		return(self.subset(function(x) {
+			if(hasEquals(x))
+				return(v.subset({ y: x.equals(y) })
+					.length != 0);
+			else
+				return(v.indexOf(x) != nil);
+		}));
+	}
+
+	// Returns boolean true if this vector and the argument vector
+	// share no elements.
+	isDisjoint(v) {
+		return(isVector(v) ? (intersection(v).length == 0) : nil);
 	}
 
 	// Returns the a vector containing the elements of this vector that
 	// are not in the argument vector.
 	complement(v) {
-		return(isVector(v) ? self.subset({ x: v.indexOf(x) == nil })
+		if(!isVector(v))
+			return(nil);
+
+		return(self.subset(function(x) {
+			if(hasEquals(x))
+				return(v.subset({ y: x.equals(y) })
+					.length == 0);
+			else
+				return(v.indexOf(x) == nil);
+		}));
+	}
+
+	// Returns a vector containing all the elements that are in exactly
+	// one of the two vectors.  Computed as the complement of the union
+	// and the intersection.
+	symmetricDifference(v) {
+		return(isVector(v) ? union(v).complement(intersection(v))
 			: nil);
 	}
 
@@ -53,17 +97,63 @@ modify Vector
 	// contain the same elements.  If the second argument is boolean
 	// true the elements must be in the same order, if not they can
 	// be in any order.
+	// Optional third argument is a test function.  If given, it will
+	// be passed two arguments (elements from the vectors being
+	// compared) and should return boolean true if they should be
+	// considered equal.
 	equals(v, ord?) {
-		local i;
+		local i, s;
 
 		if(!isVector(v)) return(nil);
 		if(self.length() != v.length()) return(nil);
 		for(i = 1; i <= self.length(); i++) {
 			if(ord == true) {
-				if(self[i] != v[i]) return(nil);
+				if(hasEquals(self[i])) {
+					if(self[i].equals(v[i]) != true)
+						return(nil);
+				} else {
+					if(self[i] != v[i])
+						return(nil);
+				}
+			} else {
+				if(hasEquals(self[i])) {
+					s = v.subset({ x: self[i].equals(x) });
+					if(s.length < 1)
+						return(nil);
+				} else {
+					if(v.indexOf(self[i]) == nil)
+						return(nil);
+				}
+				if(hasEquals(v[1])) {
+					s = self.subset({ x: v[i].equals(x) });
+					if(s.length < 1)
+						return(nil);
+				} else {
+					if(self.indexOf(v[i]) == nil)
+						return(nil);
+				}
+			}
+		}
+		return(true);
+	}
+
+	// Returns boolean true if the argument vector contains all the
+	// elements of the calling vector.
+	// Optional second argument is a test function.  If defined,
+	// it will be called with two arguments (elements of the arrays
+	// being tested) and should return boolean true if they should
+	// be considered equal.
+	isSubsetOf(v) {
+		local i, s;
+
+		if(!isVector(v)) return(nil);
+		if(v.length < self.length) return(nil);
+		for(i = 1; i <= self.length(); i++) {
+			if(hasEquals(self[i])) {
+				s = v.subset({ x: self[i].equals(x) });
+				if(s.length < 1) return(nil);
 			} else {
 				if(v.indexOf(self[i]) == nil) return(nil);
-				if(self.indexOf(v[i]) == nil) return(nil);
 			}
 		}
 		return(true);
@@ -75,6 +165,8 @@ modify Vector
 		if(n < 1) rotateLeft(abs(n));
 		else rotateRight(n);
 	}
+
+	operator >>(x) { rotateRight(x); return(self); }
 
 	rotateRight(n) {
 		local i, tmp;
@@ -93,6 +185,8 @@ modify Vector
 			i += 1;
 		}
 	}
+
+	operator <<(x) { rotateLeft(x); return(self); }
 
 	rotateLeft(n) {
 		local i, tmp;

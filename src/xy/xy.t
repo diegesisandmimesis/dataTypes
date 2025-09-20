@@ -41,11 +41,15 @@ class XY: object
 		return(sqrtInt((x * x) + (y * y)));
 	}
 
+	operator +(x) { return(add(x)); }
+
 	// Returns the sum of ourselves and the passed XY instance.
 	add(v) {
 		if(!isXY(v)) return(nil);
 		return(new XY(x + v.x, y + v.y));
 	}
+
+	operator -(x) { return(subtract(x)); }
 
 	// Returns the difference of ourselves and the passed XY instance.
 	subtract(v) {
@@ -53,11 +57,15 @@ class XY: object
 		return(new XY(x - v.x, y - v.y));
 	}
 
+	operator *(x) { return(multiply(x)); }
+
 	// Scale by the given factor.
 	multiply(n) {
 		if(!isInteger(n)) return(nil);
 		return(new XY(x * n, y * n));
 	}
+
+	operator /(x) { return(divide(x)); }
 
 	// Shrink by the given factor.
 	divide(n) {
