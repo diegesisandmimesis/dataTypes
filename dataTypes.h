@@ -6,6 +6,8 @@
 // General definitions
 //
 
+#include "isType.h"
+/*
 // Utility define for testing an object to see if it is an instance of some
 // class
 #ifndef isType
@@ -85,6 +87,7 @@
 #ifndef isDirProp
 #define isDirProp(v) ((dataType(v) != TypeNil) && (Direction.allDirections.indexWhich({ x: x.dirProp == v }) != nil))
 #endif
+*/
 
 #ifndef inRange
 #define inRange(v, r0, r1) \
