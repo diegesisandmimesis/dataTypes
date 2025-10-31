@@ -59,11 +59,8 @@ module.
 * [LineSegment](#linesegment)
 * [QuadTree](#quadtree)
 * [RTree](#rtree)
-* [AC-3](#ac3-section)
-  * [AC3](#ac3)
-  * [AC3Variable](#ac3-variable)
-  * [AC3Constraint](#ac3-constraint)
-  * [AC3Solver](#ac3-solver)
+* [AC3](#ac3-section)
+
 [Changes To Stock Classes](#changes)
 * [Collection](#collection)
 * [TadsObject](#tads-object)
@@ -1825,9 +1822,9 @@ insert performance.
 
 
 <a name="ac3-section"/></a>
-### AC-3
+### AC3
 
-The AC-3 classes provide an implementation of the Arc Consistency Algorithm #3,
+The ``AC3`` class provide an implementation of the Arc Consistency Algorithm #3,
 an algorithm for solving constraint satisfaction problems.
 
 #### Basic Usage
@@ -1881,78 +1878,83 @@ the variables and their ``domain`` property will contain their domain in
 the solution space.  That is, the values taken by that variable in
 all possible solutions to the satifiability problem.
 
-This by itself may not be useful, so the ``AC3Solver``, a subclass of ``AC3``
-and the recursive backtracker class ``BT``,
-is available if you want to enumerate the solutions in addition to learning
-if one exists.
-
-To use it, instead of creating an instance of the ``AC3`` class, use:
-```
-    // Use the solver class.
-    g = new AC3Solver();
-```
-Declaring variables and constraints works exactly the same.  Then you can
-use ``getSolutions()`` to return an array of valid solutions.  Each element
-of the array will itself be an array, the inner array containing one
-set of assignments for the variables.  Using the example above:
+If you want to obtain the actual solutions, use ``getSolutions()``.  It
+returns an array of all the valid solutions. Each element
+of the array will itself be a ``LookupTable`` with key/value pairs
+repesenting a valid solution.  So continuing our example:
 ```
     local l = g.getSolutions();
 ```
 ...would return ``l`` containing:
 ```
     [
-        [ [ 'x', 0 ], [ 'y', 4 ] ],
-        [ [ 'x', 2 ], [ 'y', 2 ] ],
-        [ [ 'x', 4 ], [ 'y', 0 ] ]
+        [ 'x' -> 0, 'y' -> 4 ],
+        [ 'x' -> 2, 'y' -> 2 ],
+        [ 'x' -> 4, 'y' -> 0 ]
     ]
 ```
 That is, the solutions *{ x = 0, y = 4 }*, *{ x = 2, y = 2 }*,
 and *{ x = 4, y = 0 }*.
 
-#### Classes
+#### Methods
 
-<a name="ac3"/></a>
-##### AC3
+* ``addConstraint(variableID, func)``
+* ``addConstraint(variableID1, variableID2, func)``
 
-###### Properties
+   Declare a constraint.  This consists of one or two variable IDs and a
+   test function.
 
-* ``vertexClass = AC3Variable``
-* ``edgeClass = AC3Constraint``
+   The test function will be called with potential values for the given
+   variables and should return boolean ``true`` if the value or values are
+   valid, ``nil`` otherwise.
 
-###### Methods
+   Example:  to implement a constraint on variables *x* and *y* such that 
+   *(x + y) = 4*, use something like:
+   ```
+   addConstraint('x', 'y', { x, y: ((x + y) == 4) });
+   ```
 
-* ``addConstraint([args])``
+   Note that here the variable IDs (first and second args) happen to
+   be the same as the variable names in the function (third arg) but
+   this is just to make the example easier to read.  This would be
+   equivalent:
+   ```
+   addConstraint('x', 'y', { a, b: ((a + b) == 4) });
+   ```
+
 * ``addVariable(id, domain)``
+
+   Declare a variable and its range.
+
+   Example:
+   ```
+   addVariable('x', [ 0, 1, 2, 3, 4, 5 ]);
+   ```
+   This declares a variable *x* whose allowed values are *{ 0, 1, 2, 3, 4, 5 }*.
+
+   Note that the variable is just an ID used internally by the AC-3 logic.  No
+   TADS3 variable ``x`` is created.
+
 * ``forEachVariable(fn)``
+
+   Iterates over all declared variables, calling the function ``fn`` with
+   each as its argument.
+
+* ``getSolutions()``
+
+   Attempts to solve the constraint satisfaction problem and returns an array
+   of ``LookupTable``s.  Each ``LookupTable`` will contain key-value pairs
+   for each variable assignment in the solution.
+
 * ``getVariable(id)``
+
+   Returns the ``AC3Variable`` instance for the given variable ID.
+
 * ``solve()``
 
-<a name="ac3-variable"/></a>
-##### AC3Variable
+   Attempts to solve the constraint satisfaction problem, returning boolean
+   ``true`` on success, ``nil`` otherwise.
 
-###### Properties
-* ``domain = nil``
-
-###### Methods
-* ``addUnaryConstraint(fn)``
-* ``checkUnaryConstraints()``
-* ``getDomain()``
-* ``setDomain(v)``
-
-<a name="ac3-constraint"/></a>
-##### AC3Constraint
-
-###### Properties
-* ``callback = nil``
-###### Methods
-* ``checkConstraint()``
-* ``setConstraint(fn)``
-
-<a name="ac3-solver"/></a>
-##### AC3Solver
-
-###### Methods
-* ``getSolutions()``
 
 <a name="changes"/></a>
 ## Changes To Stock Classes

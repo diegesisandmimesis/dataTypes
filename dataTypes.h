@@ -250,6 +250,10 @@ Rule template 'ruleID';
 #define isDisjointSet(obj) isType(obj, DisjointSet)
 #define isDisjointSetForest(obj) isType(obj, DisjointSetForest)
 
+//
+// AC3 definitions
+//
+
 /*
 #define makeDisjointSet(v, f) DisjointSet.createInstance(v, f)
 #define disjointSetUnion(v0, v1) DisjointForest.union(v0, v1)

@@ -144,7 +144,7 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 // The AC-3 solver is a graph in which each variable being solved for
 // is a vertex and each binary constraint is an edge between variables.
 // Unary constraints are handled as lists on the vertices.
-class AC3: DirectedGraph
+class AC3: DirectedGraph, BT
 	// Vertex and Edge subclasses for our special graph class.
 	vertexClass = AC3Variable
 	edgeClass = AC3BinaryConstraint
@@ -276,7 +276,7 @@ class AC3: DirectedGraph
 ;
 
 
-class AC3Solver: BT, AC3
+modify AC3
 	accept(frm) {
 		local e, i, l, t, v0, v1;
 
@@ -323,11 +323,11 @@ class AC3Solver: BT, AC3
 		idList = getVertexIDs();
 		domainList = new Vector(idList.length);
 		forEachVertex({ x: domainList.append(new Vector(x.domain)) });
-		f = new AC3BTFrame(idList, domainList, nil);
+		f = new BTFrame(idList, domainList, nil);
 		while(f != nil) {
 			if(run(f) != nil) {
 				f = self.pop();
-				r.append(saveFrame(f));
+				r.append(saveAC3Frame(f));
 				f = self.next(f);
 			} else {
 				f = nil;
@@ -337,15 +337,29 @@ class AC3Solver: BT, AC3
 		return(r);
 	}
 
-	saveFrame(f) {
-		local ar, i;
+	// Returns a lookup table containing the key/value pairs from
+	// the given stack frame.
+	saveAC3Frame(f) {
+		local r, i;
 
-		ar = new Vector(f.result.length);
+		// Table to hold the results.
+		t = new LookupTable();
+
+		// f.result is an array.  Its length is the same as
+		// the number of variables, and each value in it is
+		// an index in that variable's domain.
+		// Here f.vList[i] is the ith variable's ID and
+		// f.pList[i] is the same variable's domain.
+		// f.result[i] picks an assignment for that variable, in the
+		// form of an index in the variable's domain.
+		// So if f.result[1] is 2, that means the result is
+		// assigning the value of the first variable to be the 2nd
+		// element of that variable's domain.
+		// If the domain is [ 3, 5, 7, 11 ], then
+		// f.pList[i][f.result[i]] would be 5, the 2nd element of
+		// the domain array.
 		for(i = 1; i <= f.result.length; i++)
-			ar.append([f.vList[i], f.pList[i][f.result[i]]]);
-		return(ar.toList());
+			t[f.vList[i]] = f.pList[i][f.result[i]];
+		return(t);
 	}
 ;
-
-
-class AC3BTFrame: BTFrame;
