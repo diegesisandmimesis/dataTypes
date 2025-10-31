@@ -53,12 +53,13 @@ module.
   * [BTFrame](#btFrame)
 * [Disjoint-Set Data Structure](#disjoint-set-section)
   * [DisjointSetForest](#disjointSetForest)
-  * [DisjointSet)[#disjointSet)
+  * [DisjointSet](#disjointSet)
 * [XY](#xy)
 * [Rectangle](#rectangle)
 * [LineSegment](#linesegment)
 * [QuadTree](#quadtree)
 * [RTree](#rtree)
+* [AC3](#ac3-section)
 
 [Changes To Stock Classes](#changes)
 * [Collection](#collection)
@@ -1825,6 +1826,141 @@ insert performance.
 
   Note that both a position and the data record itself are needed, as
   a single location can contain multiple records.
+
+
+<a name="ac3-section"/></a>
+### AC3
+
+The ``AC3`` class provide an implementation of the Arc Consistency Algorithm #3,
+an algorithm for solving constraint satisfaction problems.
+
+#### Basic Usage
+
+First, create an instance of the ``AC3`` class:
+
+```
+    // Create an instance of the AC3 class.
+    local g = new AC3();
+```
+
+Next declare the variables to be solved for using ``AC3.addVariable()``.
+The first arg is the variable name and the second is the variable's
+domain in the form of a list of allowed values:
+
+```
+    // Define the variables and their domains
+    g.addVariable('x', [ 0, 1, 2, 3, 4, 5 ]);
+    g.addVariable('y', [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]);
+```
+Note that variable IDs are arbitrary strings used by the AC3 logic
+to track variables.  There is no corresponding TADS3 variable;
+``g.addVariable('x', [ 0, 1, 2, 3, 4, 5 ])`` will **not** create a TADS3
+variable ``x``.
+
+Now define the constraints on the variables using ``AC3.addConstraint()``.
+Constraints can be either unary (single variable) or binary (two variables):
+```
+    // Define the constraints.
+    // 'x' must be even
+    g.addConstraint('x', { x: !(x % 2) });
+    // x and y must satisfy x + y = 4
+    g.addConstraint('x', 'y', { x, y: ((x + y) == 4) });
+```
+Note that in these examples the inline functions use variable names that
+are the same as the variable IDs, but this is just to make the examples
+less confusing.  The above constraints could be rewritten as...
+```
+    g.addConstraint('x', { foo: !(foo % 2) });
+    g.addConstraint('x', 'y', { v0, v1: ((v0 + v1) == 4) });
+```
+...and it would work exactly the same.
+
+Each ``addConstraint()`` invocation will use either two or three arguments,
+depending on whether the constraint is unary or binary.
+
+Having defined the variables and constraints you can now solve for them
+by calling ``solve()`` on the ``AC3`` instance.  This will return ``true``
+if a solution was found, ``nil`` otherwise.  You can then iterate over
+the variables and their ``domain`` property will contain their domain in
+the solution space.  That is, the values taken by that variable in
+all possible solutions to the satifiability problem.
+
+If you want to obtain the actual solutions, use ``getSolutions()``.  It
+returns an array of all the valid solutions. Each element
+of the array will itself be a ``LookupTable`` with key/value pairs
+repesenting a valid solution.  So continuing our example:
+```
+    local l = g.getSolutions();
+```
+...would return ``l`` containing:
+```
+    [
+        [ 'x' -> 0, 'y' -> 4 ],
+        [ 'x' -> 2, 'y' -> 2 ],
+        [ 'x' -> 4, 'y' -> 0 ]
+    ]
+```
+That is, the solutions *{ x = 0, y = 4 }*, *{ x = 2, y = 2 }*,
+and *{ x = 4, y = 0 }*.
+
+#### Methods
+
+* ``addConstraint(variableID, func)``
+* ``addConstraint(variableID1, variableID2, func)``
+
+   Declare a constraint.  This consists of one or two variable IDs and a
+   test function.
+
+   The test function will be called with potential values for the given
+   variables and should return boolean ``true`` if the value or values are
+   valid, ``nil`` otherwise.
+
+   Example:  to implement a constraint on variables *x* and *y* such that 
+   *(x + y) = 4*, use something like:
+   ```
+   addConstraint('x', 'y', { x, y: ((x + y) == 4) });
+   ```
+
+   Note that here the variable IDs (first and second args) happen to
+   be the same as the variable names in the function (third arg) but
+   this is just to make the example easier to read.  This would be
+   equivalent:
+   ```
+   addConstraint('x', 'y', { a, b: ((a + b) == 4) });
+   ```
+
+* ``addVariable(id, domain)``
+
+   Declare a variable and its range.
+
+   Example:
+   ```
+   addVariable('x', [ 0, 1, 2, 3, 4, 5 ]);
+   ```
+   This declares a variable *x* whose allowed values are *{ 0, 1, 2, 3, 4, 5 }*.
+
+   Note that the variable is just an ID used internally by the AC-3 logic.  No
+   TADS3 variable ``x`` is created.
+
+* ``forEachVariable(fn)``
+
+   Iterates over all declared variables, calling the function ``fn`` with
+   each as its argument.
+
+* ``getSolutions()``
+
+   Attempts to solve the constraint satisfaction problem and returns an array
+   of ``LookupTable``s.  Each ``LookupTable`` will contain key-value pairs
+   for each variable assignment in the solution.
+
+* ``getVariable(id)``
+
+   Returns the ``AC3Variable`` instance for the given variable ID.
+
+* ``solve()``
+
+   Attempts to solve the constraint satisfaction problem, returning boolean
+   ``true`` on success, ``nil`` otherwise.
 
 
 <a name="changes"/></a>
