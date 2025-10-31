@@ -149,6 +149,8 @@ class AC3: DirectedGraph
 	vertexClass = AC3Variable
 	edgeClass = AC3BinaryConstraint
 
+	forEachVariable(fn) { return(forEachVertex(fn)); }
+
 	// Add a variable.  First arg is the variable name, second is a
 	// list containing its allowed values.
 	addVariable(id, domain) {
