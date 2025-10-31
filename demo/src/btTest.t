@@ -76,6 +76,8 @@ gameMain: GameMainDef
 				// Pick the next frame in the sequence
 				// and continue.
 				f = demoBacktracker.next(f);
+			} else {
+				f = nil;
 			}
 		}
 	}

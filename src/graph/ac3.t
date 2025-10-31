@@ -137,6 +137,8 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 		// Nope, no way to satisfy our constraint with the argument.
 		return(nil);
 	}
+
+	check(v0, v1) { return((callback)(v0, v1)); }
 ;
 
 // The AC-3 solver is a graph in which each variable being solved for
@@ -257,20 +259,6 @@ class AC3: DirectedGraph
 		return(v.addUnaryConstraint(fn));
 	}
 
-	/*
-	_addBinaryConstraint([args]) {
-		local e;
-
-		e = addEdge(args[1], args[2]);
-		e.setConstraint(args[3]);
-
-		e = addEdge(args[2], args[1]);
-		e.setConstraint(args[3]);
-		e.ac3ReverseArgs = true;
-
-		return(true);
-	}
-	*/
 	_addBinaryConstraint(id0, id1, fn) {
 		local e;
 
@@ -288,37 +276,74 @@ class AC3: DirectedGraph
 
 class AC3Solver: BT, AC3
 	accept(frm) {
+		local e, i, l, t, v0, v1;
+
 		if(!inherited(frm))
 			return(nil);
+
+		// Create a table out of our results.
+		t = new LookupTable();
+		for(i = 1; i <= frm.result.length; i++) {
+			t[frm.vList[i]] = frm.pList[i][frm.result[i]];
+		}
+
+		// Iterate over every edge/constraint.
+		l = getEdges();
+		for(i = 1; i <= l.length; i++) {
+			e = l[i];
+			// Make sure our args are in the right order.
+			if(e.ac3ReverseArgs == nil) {
+				v0 = t[e.vertex0.vertexID];
+				v1 = t[e.vertex1.vertexID];
+			} else {
+				v0 = t[e.vertex1.vertexID];
+				v1 = t[e.vertex0.vertexID];
+			}
+
+			// If any of the constraints fail we immediately
+			// return nil.
+			if(e.check(v0, v1) != true) {
+				return(nil);
+			}
+		}
+
+		// No complaints from any of the constraints, we're good.
 		return(true);
 	}
 
 	getSolutions() {
+		local f, idList, domainList, r;
+
+		solve();
+
+		r = new Vector();
+
+		idList = getVertexIDs();
+		domainList = new Vector(idList.length);
+		forEachVertex({ x: domainList.append(new Vector(x.domain)) });
+		f = new AC3BTFrame(idList, domainList, nil);
+		while(f != nil) {
+			if(run(f) != nil) {
+				f = self.pop();
+				r.append(saveFrame(f));
+				f = self.next(f);
+			} else {
+				f = nil;
+			}
+		}
+
+		return(r);
+	}
+
+	saveFrame(f) {
+		local ar, i;
+
+		ar = new Vector(f.result.length);
+		for(i = 1; i <= f.result.length; i++)
+			ar.append([f.vList[i], f.pList[i][f.result[i]]]);
+		return(ar.toList());
 	}
 ;
 
 
 class AC3BTFrame: BTFrame;
-/*
-class AC3BTFrame: BTFrame
-	next() {
-		local i, r, v;
-
-		r = new Vector(result);
-
-		if(r.length < vList.length) {
-			r.append(1);
-			return(createInstance(vList, pList, r));
-		}
-
-		while((v = r.pop()) != nil) {
-			for(i = v + 1; i <= pList[r.length + 1].length; i++) {
-				r.append(i);
-				return(createInstance(vList, pList, r));
-			}
-		}
-
-		return(nil);
-	}
-;
-*/
