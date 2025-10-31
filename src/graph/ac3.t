@@ -344,7 +344,7 @@ modify AC3
 	// Returns a lookup table containing the key/value pairs from
 	// the given stack frame.
 	saveAC3Frame(f) {
-		local r, i;
+		local i, t;
 
 		// Table to hold the results.
 		t = new LookupTable();
