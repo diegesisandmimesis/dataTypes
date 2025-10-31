@@ -2,6 +2,10 @@
 //
 // ac3.t
 //
+//	Implementation of the Arc Consistency Algorith #3, or AC-3, an
+//	algorithm for solving constraint satisfaction problems.
+//
+//
 #include <adv3.h>
 #include <en_us.h>
 
