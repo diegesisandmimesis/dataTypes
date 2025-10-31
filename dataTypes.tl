@@ -38,3 +38,5 @@ source: src/bt/bt.t
 source: src/disjointSet/disjointSet.t
 source: src/disjointSet/disjointSetForest.t
 source: src/disjointSet/disjointSetGraph.t
+source: src/wangTile/wangTile.t
+source: src/graph/ac3.t

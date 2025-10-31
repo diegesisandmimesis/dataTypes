@@ -256,6 +256,15 @@ Rule template 'ruleID';
 #define disjointSetFind(v) DisjointSet.find(v)
 */
 
+//
+// Wang Tile definitions
+//
+
+WangTile template 'label' [ pattern ];
+
+// Type tests
+#define isWangTile(obj) isType(obj, WangTile)
+
 
 //
 // XY declarations
