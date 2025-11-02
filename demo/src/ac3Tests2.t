@@ -22,7 +22,7 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		local g;
+		local g, str;
 
 		g = new AC3();
 
@@ -36,11 +36,13 @@ gameMain: GameMainDef
 			"\nERROR:  no solution\n ";
 			return;
 		}
-		//r.forEach({ x: aioSay('\n<<toString(x)>>\n ') });
+
+		str = new StringBuffer();
 		r.forEach(function(x) {
-			"\nSolution:\n ";
-			x.forEachAssoc({ k, v: "\n\t<<toString(k)>> =
-				<<toString(v)>>\n " });
+			x.forEachAssoc({ k, v: str.append('<<toString(k)>> =
+				<<toString(v)>> ') });
+			str.append('\n ');
 		});
+		"<<toString(str)>>\n ";
 	}
 ;

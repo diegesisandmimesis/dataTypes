@@ -29,6 +29,8 @@ class AC3Variable: Vertex
 			unaryConstraints = new Vector();
 
 		unaryConstraints.append(new AC3UnaryConstraint(fn));
+
+		return(true);
 	}
 
 	// Apply all our unary constraints and return boolean true if that
@@ -65,7 +67,8 @@ class AC3Constraint: object
 	// Set the constraint method.
 	setConstraint(fn) {
 		if(!isFunction(fn)) return(nil);
-		setMethod(&callback, fn);
+		if(callback == nil) callback = new Vector();
+		callback.append(fn);
 		return(true);
 	}
 ;
@@ -75,8 +78,11 @@ class AC3Constraint: object
 class AC3UnaryConstraint: AC3Constraint
 	construct(fn) { setConstraint(fn); }
 	checkConstraint(arg) {
-		if(propType(&callback) == TypeNil) return(nil);
-		return((callback)(arg));
+		local i;
+		if(callback == nil) return(nil);
+		for(i = 1; i <= callback.length; i++)
+			if((callback[i])(arg) != true) return(nil);
+		return(true);
 	}
 ;
 
@@ -91,7 +97,7 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 		local i, l;
 
 		// Make sure we have a function to call.
-		if(propType(&callback) == TypeNil)
+		if(callback == nil)
 			return(nil);
 
 		// Vector to keep track of the values to remove from the
@@ -121,20 +127,21 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 
 	// See if we can satisfy our constraint with this as our value.
 	_satisfy(val) {
-		local b, i;
+		local i, v0, v1;
 
 		// Go through all values in the other variable's domain.
 		for(i = 1; i <= vertex1.domain.length; i++) {
 			// Check the flag to see if we're the first or
 			// second argument.
-			if(ac3ReverseArgs == nil)
-				b = (callback)(val, vertex1.domain[i]);
-			else
-				b = (callback)(vertex1.domain[i], val);
+			if(ac3ReverseArgs == nil) {
+				v0 = val;
+				v1 = vertex1.domain[i];
+			} else {
+				v0 = vertex1.domain[i];
+				v1 = val;
+			}
 
-			// If our constraint is satisfied by these values,
-			// immediately return true.
-			if(b == true)
+			if(check(v0, v1) == true)
 				return(true);
 		}
 
@@ -142,7 +149,16 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 		return(nil);
 	}
 
-	check(v0, v1) { return((callback)(v0, v1)); }
+	// Run the given values past all our check functions.
+	check(v0, v1) {
+		local i;
+
+		if(callback == nil) return(nil);
+		for(i = 1; i <= callback.length; i++)
+			if((callback[i])(v0, v1) != true)
+				return(nil);
+		return(true);
+	}
 ;
 
 // The AC-3 solver is a graph in which each variable being solved for
@@ -228,7 +244,7 @@ class AC3: DirectedGraph, BT
 				// Iterate over all the vertex's edges,
 				// adding all of them except one we just
 				// checked to the queue.
-				v.forEachEdge(function(x) {
+				v.vertex0.forEachEdge(function(x) {
 					if(x == v) return;
 					ac3Queue.append(x);
 				});
@@ -268,10 +284,12 @@ class AC3: DirectedGraph, BT
 	_addBinaryConstraint(id0, id1, fn) {
 		local e;
 
-		e = addEdge(id0, id1);
+		if((e = getEdge(id0, id1)) == nil)
+			e = addEdge(id0, id1);
 		e.setConstraint(fn);
 
-		e = addEdge(id1, id0);
+		if((e = getEdge(id1, id0)) == nil)
+			e = addEdge(id1, id0);
 		e.setConstraint(fn);
 		e.ac3ReverseArgs = true;
 
