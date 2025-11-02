@@ -178,7 +178,7 @@ class AC3: DirectedGraph, BT
 		if((v = addVertex(id)) == nil)
 			return(nil);
 
-		v.setDomain(domain);
+		v.setDomain(new Vector(domain));
 
 		return(v);
 	}
@@ -188,7 +188,7 @@ class AC3: DirectedGraph, BT
 	// Run the solver.  Returns boolean true if a solution was found,
 	// nil otherwise.
 	solve() {
-		forEachVertex({ x: x.domain = new Vector(x.domain) });
+		//forEachVertex({ x: x.domain = new Vector(x.domain) });
 
 		if(!_checkUnaryConstraints())
 			return(nil);
@@ -314,10 +314,7 @@ modify AC3
 			return(nil);
 
 		// Create a table out of our results.
-		t = new LookupTable();
-		for(i = 1; i <= frm.result.length; i++) {
-			t[frm.vList[i]] = frm.pList[i][frm.result[i]];
-		}
+		t = frm.toTable();
 
 		// Iterate over every edge/constraint.
 		l = getEdges();
@@ -369,27 +366,5 @@ modify AC3
 
 	// Returns a lookup table containing the key/value pairs from
 	// the given stack frame.
-	saveAC3Frame(f) {
-		local i, t;
-
-		// Table to hold the results.
-		t = new LookupTable();
-
-		// f.result is an array.  Its length is the same as
-		// the number of variables, and each value in it is
-		// an index in that variable's domain.
-		// Here f.vList[i] is the ith variable's ID and
-		// f.pList[i] is the same variable's domain.
-		// f.result[i] picks an assignment for that variable, in the
-		// form of an index in the variable's domain.
-		// So if f.result[1] is 2, that means the result is
-		// assigning the value of the first variable to be the 2nd
-		// element of that variable's domain.
-		// If the domain is [ 3, 5, 7, 11 ], then
-		// f.pList[i][f.result[i]] would be 5, the 2nd element of
-		// the domain array.
-		for(i = 1; i <= f.result.length; i++)
-			t[f.vList[i]] = f.pList[i][f.result[i]];
-		return(t);
-	}
+	saveAC3Frame(f) { return(f.toTable()); }
 ;
