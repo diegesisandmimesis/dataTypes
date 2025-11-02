@@ -178,7 +178,9 @@ class AC3: DirectedGraph, BT
 		if((v = addVertex(id)) == nil)
 			return(nil);
 
-		return(v.setDomain(domain));
+		v.setDomain(domain);
+
+		return(v);
 	}
 
 	getVariable(id) { return(getVertex(id)); }
@@ -191,7 +193,10 @@ class AC3: DirectedGraph, BT
 		if(!_checkUnaryConstraints())
 			return(nil);
 
-		return(_checkBinaryConstraints());
+		if(!_checkBinaryConstraints())
+			return(nil);
+
+		return(true);
 	}
 
 	// Apply unary constraints on all variables with them.
@@ -244,8 +249,11 @@ class AC3: DirectedGraph, BT
 				// Iterate over all the vertex's edges,
 				// adding all of them except one we just
 				// checked to the queue.
-				v.vertex0.forEachEdge(function(x) {
+				forEachEdge(function(x) {
 					if(x == v) return;
+					if((x.vertex0 != v.vertex0) &&
+						(x.vertex1 != v.vertex0))
+						return;
 					ac3Queue.append(x);
 				});
 			}
