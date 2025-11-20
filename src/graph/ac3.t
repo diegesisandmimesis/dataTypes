@@ -29,6 +29,8 @@ class AC3Variable: Vertex
 			unaryConstraints = new Vector();
 
 		unaryConstraints.append(new AC3UnaryConstraint(fn));
+
+		return(true);
 	}
 
 	// Apply all our unary constraints and return boolean true if that
@@ -65,7 +67,8 @@ class AC3Constraint: object
 	// Set the constraint method.
 	setConstraint(fn) {
 		if(!isFunction(fn)) return(nil);
-		setMethod(&callback, fn);
+		if(callback == nil) callback = new Vector();
+		callback.append(fn);
 		return(true);
 	}
 ;
@@ -75,8 +78,11 @@ class AC3Constraint: object
 class AC3UnaryConstraint: AC3Constraint
 	construct(fn) { setConstraint(fn); }
 	checkConstraint(arg) {
-		if(propType(&callback) == TypeNil) return(nil);
-		return((callback)(arg));
+		local i;
+		if(callback == nil) return(nil);
+		for(i = 1; i <= callback.length; i++)
+			if((callback[i])(arg) != true) return(nil);
+		return(true);
 	}
 ;
 
@@ -91,7 +97,7 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 		local i, l;
 
 		// Make sure we have a function to call.
-		if(propType(&callback) == TypeNil)
+		if(callback == nil)
 			return(nil);
 
 		// Vector to keep track of the values to remove from the
@@ -121,20 +127,21 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 
 	// See if we can satisfy our constraint with this as our value.
 	_satisfy(val) {
-		local b, i;
+		local i, v0, v1;
 
 		// Go through all values in the other variable's domain.
 		for(i = 1; i <= vertex1.domain.length; i++) {
 			// Check the flag to see if we're the first or
 			// second argument.
-			if(ac3ReverseArgs == nil)
-				b = (callback)(val, vertex1.domain[i]);
-			else
-				b = (callback)(vertex1.domain[i], val);
+			if(ac3ReverseArgs == nil) {
+				v0 = val;
+				v1 = vertex1.domain[i];
+			} else {
+				v0 = vertex1.domain[i];
+				v1 = val;
+			}
 
-			// If our constraint is satisfied by these values,
-			// immediately return true.
-			if(b == true)
+			if(check(v0, v1) == true)
 				return(true);
 		}
 
@@ -142,7 +149,16 @@ class AC3BinaryConstraint: AC3Constraint, DirectedEdge
 		return(nil);
 	}
 
-	check(v0, v1) { return((callback)(v0, v1)); }
+	// Run the given values past all our check functions.
+	check(v0, v1) {
+		local i;
+
+		if(callback == nil) return(nil);
+		for(i = 1; i <= callback.length; i++)
+			if((callback[i])(v0, v1) != true)
+				return(nil);
+		return(true);
+	}
 ;
 
 // The AC-3 solver is a graph in which each variable being solved for
@@ -162,7 +178,9 @@ class AC3: DirectedGraph, BT
 		if((v = addVertex(id)) == nil)
 			return(nil);
 
-		return(v.setDomain(domain));
+		v.setDomain(new Vector(domain));
+
+		return(v);
 	}
 
 	getVariable(id) { return(getVertex(id)); }
@@ -170,12 +188,15 @@ class AC3: DirectedGraph, BT
 	// Run the solver.  Returns boolean true if a solution was found,
 	// nil otherwise.
 	solve() {
-		forEachVertex({ x: x.domain = new Vector(x.domain) });
+		//forEachVertex({ x: x.domain = new Vector(x.domain) });
 
 		if(!_checkUnaryConstraints())
 			return(nil);
 
-		return(_checkBinaryConstraints());
+		if(!_checkBinaryConstraints())
+			return(nil);
+
+		return(true);
 	}
 
 	// Apply unary constraints on all variables with them.
@@ -228,8 +249,11 @@ class AC3: DirectedGraph, BT
 				// Iterate over all the vertex's edges,
 				// adding all of them except one we just
 				// checked to the queue.
-				v.forEachEdge(function(x) {
+				forEachEdge(function(x) {
 					if(x == v) return;
+					if((x.vertex0 != v.vertex0) &&
+						(x.vertex1 != v.vertex0))
+						return;
 					ac3Queue.append(x);
 				});
 			}
@@ -268,10 +292,12 @@ class AC3: DirectedGraph, BT
 	_addBinaryConstraint(id0, id1, fn) {
 		local e;
 
-		e = addEdge(id0, id1);
+		if((e = getEdge(id0, id1)) == nil)
+			e = addEdge(id0, id1);
 		e.setConstraint(fn);
 
-		e = addEdge(id1, id0);
+		if((e = getEdge(id1, id0)) == nil)
+			e = addEdge(id1, id0);
 		e.setConstraint(fn);
 		e.ac3ReverseArgs = true;
 
@@ -288,10 +314,7 @@ modify AC3
 			return(nil);
 
 		// Create a table out of our results.
-		t = new LookupTable();
-		for(i = 1; i <= frm.result.length; i++) {
-			t[frm.vList[i]] = frm.pList[i][frm.result[i]];
-		}
+		t = frm.toTable();
 
 		// Iterate over every edge/constraint.
 		l = getEdges();
@@ -343,27 +366,5 @@ modify AC3
 
 	// Returns a lookup table containing the key/value pairs from
 	// the given stack frame.
-	saveAC3Frame(f) {
-		local i, t;
-
-		// Table to hold the results.
-		t = new LookupTable();
-
-		// f.result is an array.  Its length is the same as
-		// the number of variables, and each value in it is
-		// an index in that variable's domain.
-		// Here f.vList[i] is the ith variable's ID and
-		// f.pList[i] is the same variable's domain.
-		// f.result[i] picks an assignment for that variable, in the
-		// form of an index in the variable's domain.
-		// So if f.result[1] is 2, that means the result is
-		// assigning the value of the first variable to be the 2nd
-		// element of that variable's domain.
-		// If the domain is [ 3, 5, 7, 11 ], then
-		// f.pList[i][f.result[i]] would be 5, the 2nd element of
-		// the domain array.
-		for(i = 1; i <= f.result.length; i++)
-			t[f.vList[i]] = f.pList[i][f.result[i]];
-		return(t);
-	}
+	saveAC3Frame(f) { return(f.toTable()); }
 ;

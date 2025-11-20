@@ -31,6 +31,16 @@ class BTFrame: object
 		result = (v2 ? v2 : new Vector((vList ? vList.length : 10)));
 	}
 
+	toTable() {
+		local i, t;
+
+		t = new LookupTable();
+		for(i = 1; i <= result.length; i++)
+			t[vList[i]] = pList[i][result[i]];
+
+		return(t);
+	}
+
 	// Returns a copy of this frame.
 	clone() { return(createInstance(vList, pList, result)); }
 

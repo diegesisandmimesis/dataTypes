@@ -76,6 +76,8 @@ class Vertex: object
 	getEdges() { return(_edgeTable.valsToList()); }
 	getEdgeIDs() { return(_edgeTable.keysToList()); }
 
+	forEachEdge(fn) { return(getEdges().forEach(fn)); }
+
 	getAdjacentVertices() {
 		local g, r;
 
