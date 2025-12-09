@@ -11,7 +11,6 @@
 #ifdef USE_XY
 
 class WangTessellation: QuadTree
-	
 ;
 
 #endif // USE_XY

@@ -169,6 +169,8 @@ class AC3: DirectedGraph, BT
 	vertexClass = AC3Variable
 	edgeClass = AC3BinaryConstraint
 
+	nullaryConstraints = nil
+
 	forEachVariable(fn) { return(forEachVertex(fn)); }
 
 	// Add a variable.  First arg is the variable name, second is a
@@ -266,6 +268,9 @@ class AC3: DirectedGraph, BT
 
 	// Generic add a constraint method.
 	addConstraint([args]) {
+		if(args.length == 1)
+			return(_addNullaryConstraint(args[1]));
+
 		// Two args means a unary constraint (var name, check
 		// function).
 		if(args.length == 2)
@@ -277,6 +282,17 @@ class AC3: DirectedGraph, BT
 
 		// Everything else is an error.
 		return(nil);
+	}
+
+	_addNullaryConstraint(fn) {
+		if(!isFunction(fn))
+			return(nil);
+
+		if(nullaryConstraints == nil)
+			nullaryConstraints = new Vector();
+		nullaryConstraints.append(fn);
+
+		return(true);
 	}
 
 	// Add a unary constraint.
@@ -333,6 +349,14 @@ modify AC3
 			// return nil.
 			if(e.check(v0, v1) != true) {
 				return(nil);
+			}
+		}
+
+		// Check the nullary constraints, if we have any.
+		if(nullaryConstraints != nil) {
+			for(i = 1; i <= nullaryConstraints.length; i++) {
+				if(((nullaryConstraints[1])[i])(t) != true)
+					return(nil);
 			}
 		}
 
