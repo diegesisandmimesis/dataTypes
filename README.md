@@ -1237,6 +1237,27 @@ integer values.
   Can be accessed with the ``*`` operator; ``m0 * m1`` is equivalent to
   ``m0.multiply(m1)``.
 
+#### MagicSquare
+
+A ``MagicSquare`` is an ``IntegerMatrix`` whose rows, columns, and
+diagonals all sum to the same value, the magic sum.
+
+The ``MagicSquare`` constructor takes a single argument, the order
+of the square.  Currently **only even number magic squares** are supported.
+
+The values of each cell will be computed automatically.
+
+##### Methods
+
+* ``getMagicSum()``
+
+  Returns the magic sum for this magic square.
+
+* ``validate()``
+
+  Validates the magic square, returning boolean ``true`` on success or
+  ``nil`` on failure.  Should never fail.
+
 <a name="ts"></a>
 ### TS
 
