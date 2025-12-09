@@ -142,6 +142,23 @@ class MagicSquare: IntegerMatrix
 				return(nil);
 		}
 
+		chk = 0;
+		for(j = 1; j <= size[2]; j++) {
+			chk += get(j, j);
+		}
+		if(chk != v)
+			return(nil);
+
+		chk = 0;
+		i = size[2];
+		for(j = 1; j <= size[2]; j++) {
+			chk += get(i, j);
+			i -= 1;
+		}
+		if(chk != v)
+			return(nil);
+
+
 		return(true);
 	}
 ;
