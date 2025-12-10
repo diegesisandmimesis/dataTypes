@@ -33,6 +33,8 @@ source: src/ts/tsProf.t
 source: src/hashTable/hashTable.t
 source: src/matrix/matrix.t
 source: src/matrix/magicSquare.t
+source: src/matrix/conwaySquare.t
+source: src/matrix/agrippaSquare.t
 source: src/bt/btStack.t
 source: src/bt/btFrame.t
 source: src/bt/bt.t
