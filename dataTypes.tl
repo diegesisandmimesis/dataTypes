@@ -33,7 +33,9 @@ source: src/ts/tsProf.t
 source: src/hashTable/hashTable.t
 source: src/matrix/matrix.t
 source: src/matrix/magicSquare.t
-source: src/matrix/conwaySquare.t
+source: src/matrix/magicSquareOdd.t
+source: src/matrix/magicSquareSinglyEven.t
+source: src/matrix/magicSquareDoublyEven.t
 source: src/matrix/agrippaSquare.t
 source: src/bt/btStack.t
 source: src/bt/btFrame.t

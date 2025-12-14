@@ -2,9 +2,7 @@
 //
 // magicSquare.t
 //
-//	Provides a magic square class.  Currently only generates magic squares
-//	with odd orders.
-//
+//	Provides a magic square class.
 //
 // USAGE
 //
@@ -18,6 +16,8 @@
 #include "dataTypes.h"
 
 // Helper class for magic square generation.
+// Used when computing odd-order squares via the Siamese method.  Handles
+// wrapping around edges of the matrix.
 class _msXY: object
 	x = nil
 	y = nil
@@ -45,71 +45,78 @@ class _msXY: object
 	clone() { return(new _msXY(self.x, self.y, self.n)); }
 ;
 
+// Enum values for the magic square genres.
+enum oddMagicSquare, singlyEvenMagicSquare, doublyEvenMagicSquare;
+
 // Magic square class.
 class MagicSquare: IntegerMatrix
+	_magicSquareType = nil
+
 	construct(n) {
 		inherited(n, n);
 		generate();
 	}
 
+	getMagicSquareOrder() { return(size[1]); }
+
+	// Returns the enum value for this magic square's genre.
+	getMagicSquareType() {
+		if(_magicSquareType == nil)
+			_magicSquareType = computeMagicSquareType();
+		return(_magicSquareType);
+	}
+
+	// Compute and return the genre of the square:  odd, singly-even,
+	// or doubly-even.
+	computeMagicSquareType() {
+		if(size[1] % 2)
+			return(oddMagicSquare);
+		if((size[1] / 2) % 2)
+			return(singlyEvenMagicSquare);
+		return(doublyEvenMagicSquare);
+	}
+
+	// Generate the square.
 	generate() {
+		// Trivial case of square of order 1:  a 1x1 matrix
+		// containing the value 1.
 		if(size[1] == 1) {
 			set(1, 1, 1);
 			return;
 		}
-		if(size[1] % 2)
-			generateOdd();
-		else
-			generateEven();
-	}
 
-	generateEven() {}
+		// There is no magic square of order 2.
+		if(size[1] == 2)
+			return;
 
-	// Generate an odd-order magic square using Loubère's method.
-	generateOdd() {
-		local n, r, sz;
-
-		// Total number of squares to fill
-		sz = size[1] * size[2];
-
-		// First we're placing the one.
-		n = 1;
-
-		// Start out in the middle of the top row.
-		//r = new _msXY((size[1] / 2) + 1, 1, size[1]);
-		r = firstMagicSquareIndex();
-
-		// Iterate over all the values.
-		while(n <= sz) {
-			set(r.x, r.y, n);
-			r = nextMagicSquareIndex(r);
-			n += 1;
+		// Punt to the appropriate generation method.
+		switch(getMagicSquareType()) {
+			case oddMagicSquare:
+				generateOdd();
+				break;
+			case singlyEvenMagicSquare:
+				generateSinglyEven();
+				break;
+			case doublyEvenMagicSquare:
+				generateDoublyEven();
+				break;
 		}
 	}
 
-	// Returns an _msXY instance giving the location of the cell
-	// to start with.
-	firstMagicSquareIndex() {
-		return(new _msXY((size[1] / 2) + 1, 1, size[1]));
-	}
+	// Fill the matrix with sequential values.  Doesn't generate a magic
+	// square, but is used by some generation methods as a preliminary
+	// step.
+	fillMagicSquare() {
+		local i, j, n, v;
 
-	// Given a current cell, return the next cell to fill.
-	nextMagicSquareIndex(v) {
-		local r;
-
-		// First guess, pick the cell up one and one to the right.
-		r = v.clone();
-		r.add(1, -1);
-
-		// If the value in our chosen cell is already full, instead
-		// pick the cell below the starting cell.
-		if(get(r.x, r.y) != nil) {
-			r = v.clone();
-			r.add(0, 1);
+		n = size[1];
+		v = 1;
+		for(j = 1; j <= n; j++) {
+			for(i = 1; i <= n; i++) {
+				set(i, j, v);
+				v += 1;
+			}
 		}
-
-		// That's our pick.
-		return(r);
 	}
 
 	// Get the magic sum for this square.
@@ -117,10 +124,11 @@ class MagicSquare: IntegerMatrix
 		local i, r, v;
 
 		r = 0;
-		for(i = 1; i <= size[1]; i++)
+		for(i = 1; i <= size[1]; i++) {
 			if(!isInteger(v = get(i, 1)))
 				return(nil);
 			r += v;
+		}
 
 		return(r);
 	}
@@ -142,8 +150,9 @@ class MagicSquare: IntegerMatrix
 			for(i = 1; i <= size[1]; i++) {
 				chk += get(i, j);
 			}
-			if(chk != v)
+			if(chk != v) {
 				return(nil);
+			}
 		}
 
 		// Check the columns.
