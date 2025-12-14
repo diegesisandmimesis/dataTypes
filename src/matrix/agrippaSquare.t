@@ -38,8 +38,9 @@ class AgrippaSquare: MagicSquare
 	// Use Agrippa's method(s) for low-order even squares.
 	generateEven() {
 		// We don't know how to construct larger squares.
-		if(size[1] > 9)
-			return;
+		//if(size[1] > 9) {
+			//return;
+		//}
 		if((size[1] / 2) % 2)
 			generateSinglyEven();
 		else
@@ -130,6 +131,10 @@ class AgrippaSquare: MagicSquare
 	// whose sides are an even multiple of an even multiple of two.
 	// Ex: order 4.
 	generateDoublyEven() {
+		if(size[1] > 9) {
+			inherited();
+			return;
+		}
 		_generateEvenBase();
 		_invertEvenDiagonals();
 	}
@@ -137,6 +142,10 @@ class AgrippaSquare: MagicSquare
 	// Method for singly even squares.  That is, squares whose sides
 	// aren't doubly even.  Ex:  order 6.
 	generateSinglyEven() {
+		if(size[1] > 9) {
+			inherited();
+			return;
+		}
 		_generateEvenBase();
 		_invertEvenDiagonals();
 		_permuteSaturn();

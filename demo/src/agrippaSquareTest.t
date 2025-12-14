@@ -29,7 +29,7 @@ gameMain: GameMainDef
 		local i, sq;
 
 		i = 1;
-		for(i = 3; i <= 9; i++) {
+		for(i = 3; i <= 12; i++) {
 			sq = new AgrippaSquare(i);
 			sq.log();
 			"\nvalidate = <<toString(sq.validate())>>\n ";
