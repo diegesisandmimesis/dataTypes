@@ -183,6 +183,10 @@ MarkovChain template [ _vertexList ] [ _edgeMatrix ] [ _markovIV ];
 // Templates
 Rule template 'ruleID';
 
+// Macro for defining rules that evaluate a single expression.
+#define DefineRule(fn) \
+	Rule match(data?) { return(fn); } \
+
 //
 // Tuple definitions
 //
