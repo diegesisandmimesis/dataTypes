@@ -67,15 +67,34 @@ class Tuple: object
 
 		if(cls.ofKind(Collection)) {
 			for(i = 1; i <= cls.length; i++) {
-				if((cls[i] == v) || v.ofKind(cls[i]))
+				if(_matchValue(v, cls[i]))
+				//if((cls[i] == v) || v.ofKind(cls[i]))
 					return(true);
 			}
 			return(nil);
 		}
 
-		if(v == cls) return(true);
+		//if(v == cls) return(true);
 
-		return(v.ofKind(cls));
+		//return(v.ofKind(cls));
+		return(_matchValue(v, cls));
+	}
+
+	_matchValue(v0, v1) {
+		local i;
+
+		if(v0.ofKind(Collection)) {
+			for(i = 1; i <= v0.length; i++) {
+				if(_matchValue(v0[1], v1))
+					return(true);
+			}
+		}
+
+		return(_matchSingle(v0, v1));
+	}
+
+	_matchSingle(v0, v1) {
+		return((v0 == v1) || (v0 && v0.ofKind(v1)));
 	}
 
 	matchSrcObject(v)
