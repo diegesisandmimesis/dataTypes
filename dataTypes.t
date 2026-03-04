@@ -229,6 +229,56 @@ modify Vector
 		removeElementAt(-1);
 		return(r);
 	}
+
+	// Returns the sum of this vector with the argument vector.
+	// Only works with vectors of integers.
+	add(v) {
+		local i, r;
+
+		// Arg must be a vector and its length must be the same as
+		// ours.
+		if(!isVector(v) || (v.length != length))
+			return(nil);
+
+		r = new Vector(length);
+		for(i = 1; i <= length; i++)
+			r.append(self[i] + v[i]);
+
+		return(r);
+	}
+
+	// Dot product.  Only works for vectors of integers.
+	dot(v) {
+		local i, r;
+
+		// Arg must be a vector and its length must be the same as
+		// ours.
+		if(!isVector(v) || (v.length != length))
+			return(nil);
+
+		r = 0;
+		for(i = 1; i <= length; i++) {
+			// Make sure both elements are integers.
+			if(!isInteger(self[i]) || !isInteger(v[i]))
+				return(nil);
+
+			r += self[i] * v[i];
+		}
+
+		return(r);
+	}
+
+	// Rectified linear unit function.  Returns the non-negatve
+	// part of the array.  Only works for integer arrays.
+	relu() {
+		local i, r;
+
+		r = new Vector(length);
+		for(i = 1; i <= length; i++)
+			r.append((self[i] > 0) ? self[i] : 0);
+
+		return(r);
+	}
 ;
 
 modify Collection
