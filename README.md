@@ -2120,6 +2120,23 @@ Methods that check for ``equals`` include ``union()``, ``intersection()``,
   Returns a vector containing all the elements that are in exactly one of
   the two vectors (the argument vector and the calling vector).
 
+The following methods check for and will only work with ``Vector``s of integers:
+
+* ``add(v)``
+
+  Adds this vector and the argument vector.
+
+    Returns a ``Vector`` whose *i*th element is ``self[i] + v[i]``.
+
+* ``dot(v)``
+
+  Returns the dot product of this vector and the argument vector.  That's the scalar sum of ``self[i] * v[i]`` for all *i* iterated over the length of the vector(s).
+
+* ``relu()``
+
+  Applies the rectified linear unit fuction to the vector.  This returns an array whose elements are either the element's current value if it is positive or 0 if negative.
+
+
 <a name="lookuptable"/></a>
 ### LookupTable
 
