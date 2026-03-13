@@ -145,8 +145,9 @@ Rule template 'ruleID';
 //
 
 // Type tests
-#define isMatrix(obj) (isType(obj, Matrix))
-#define isIntegerMatrix(obj) (isType(obj, IntegerMatrix))
+#define isMatrix(obj) isType(obj, Matrix)
+#define isIntegerMatrix(obj) isType(obj, IntegerMatrix)
+#define isMatrix2D(obj) isType(obj, Matrix2D)
 
 
 //

@@ -37,6 +37,7 @@ source: src/matrix/magicSquareOdd.t
 source: src/matrix/magicSquareSinglyEven.t
 source: src/matrix/magicSquareDoublyEven.t
 source: src/matrix/agrippaSquare.t
+source: src/matrix/matrix2d.t
 source: src/bt/btStack.t
 source: src/bt/btFrame.t
 source: src/bt/bt.t
