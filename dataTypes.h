@@ -232,4 +232,6 @@ WangTile template 'label' [ pattern ];
 
 #define hasEquals(obj) (isObject(obj) && obj.propDefined(&equals) && (obj.propType(&equals) != TypeNil))
 
+#define INT_MAX 2147483647
+
 #define DATA_TYPES_H
