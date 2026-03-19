@@ -1258,6 +1258,90 @@ The values of each cell will be computed automatically.
   Validates the magic square, returning boolean ``true`` on success or
   ``nil`` on failure.  Should never fail.
 
+
+<a name="matrix2d"></a>
+### Matrix2D
+
+The ``Matrix2D`` is an independent matrix implmentation that shares essentially no code with ``Matrix``.  It's intended to be more performant when the use calls for repeated access to entire rows at a time.
+
+``Matrix2D`` is, as the name suggests, only capable of implementing two-dimensional matrices.
+
+The constructor supports two kinds of declaration:
+```
+        // Create a matrix with three rows and four columns, filling
+        // each cell with the value 1.  The third argument is optional,
+        // and if omitted the matrix will be filled with the value 0.
+        local m0 = new Matrix2D(3, 4, 1);
+
+        // Create a matrix with three rows and four columns with the
+        // given values.  The first row of the matrix will be [ 1, 2, 3, 4 ].
+        local m1 = new Matrix2D([
+                [ 1, 2, 3, 4 ],
+                [ 5, 6, 7, 8 ],
+                [ 9, 0, 1, 2 ]
+        ]);
+```
+#### Properties
+
+* ``columns = 0``
+
+  Returns the number of columns in the matrix.  Computed internally; should not be set directly.
+
+* ``rows = 0``
+
+  Returns the number rows in the matrix.  Computed internally; should not be set directly.
+
+#### Methods
+
+* ``clone()``
+
+  Returns a shallow clone of the current matrix.
+
+* ``equals(m)``
+
+  Returns boolean ``true`` if argument *m* is another ``Matrix2D`` which is cell-wise equal to this matrix.
+
+* ``fill(v)``
+
+  Fills each cell of the matrix with the value *v*.
+
+* ``get(i, j)``
+
+  Returns the value stored in row *i*, column *j*.
+
+  Attempts to get out-of-bounds values will return ``nil``.
+
+* ``multiplyVector(v)``
+
+  Returns the product of this matrix and the vector *v*.
+
+  This will be the dot product of each row and the vector, which will be a vector whose length is the same as the matrix's number of columns.  If any value in either the matrix or vector are non-numeric ``nil`` wil be returned instead.
+
+* ``set(i, j, v)``
+
+  Stores the value *v* in row *i*, column *j*.
+
+  Returns boolean ``true`` on success and ``nil`` on failure.
+
+* ``transpose()``
+
+  Returns the transpose of this matrix.
+
+* ``validate(v?)``
+
+  Returns boolean ``true`` if the argument *v* is a matrix in vector-of-vectors form suitable for initializing a ``Matrix2D`` instance.
+
+  If *v* is not given, the checks will be run on this matrix's internal state instead.
+
+  Calls the ``validator()`` method (if defined) on the value of each cell.
+
+* ``validator(v)``
+
+  If defined, the ``validator()`` method must accept a single value as its argument and return boolean ``true`` if it is a valid value for a matrix cell, ``nil`` otherwise.
+
+  Used to allow instances/subclass to enforce datatype requirements on insertions into the matrix.
+
+
 <a name="ts"></a>
 ### TS
 
@@ -2047,94 +2131,76 @@ test for equality (``someElement == otherElement``) will be used instead.
 Methods that check for ``equals`` include ``union()``, ``intersection()``,
 ``complement()``, ``isSubsetOf()``, and ``Vector.equals()``.
 
+* ``add(v)``
+
+  Adds this vector and the argument vector.
+
+  Returns a ``Vector`` whose *i*th element is ``self[i] + v[i]``.
+
+* ``complement(v)``
+
+  Returns the complement of this vector with the argument vector.  That is, the elements of this vector that are not in the argument vector.  Or in set theoretic terms, if this vector is A and the argument vector is B, A \ B.
+
+* ``dot(v)``
+
+  Returns the dot product of this vector and the argument vector.  That's the scalar sum of ``self[i] * v[i]`` for all *i* iterated over the length of the vector(s).
+
+* ``equals(v, ord?)``
+
+  Returns boolean ``true`` if this vector and the argument vector contain the same elements.  If the second argument is boolean ``true`` the elements must be in the same order, if not they can be in any order.
+
+* ``intersection(v)``
+
+  Returns the intersection of this vector and the argument vector.  That is, it returns the elements that are present in both vectors.
+
+* ``isSubsetOf(v)``
+
+  Returns boolean true if the argument vector ``v`` contains all the elements of the calling vector.
+
+
+* ``relu()``
+
+  Applies the rectified linear unit fuction to the vector.  This returns a ``Vector`` whose elements are either the element's current value if it is positive or 0 if negative.
+
+
+* ``rotate(n?)``
+
+  Rotates the vector by *n* steps, defaulting to 1 if no argument is given.
+
+  Number of steps can be positive or negative, indicating right or left rotation respectively.  See also ``rotateRight()`` and ``rotateLeft()`` below.
+
+* ``rotateRight(n?)``
+
+  Rotate the vector right by *n* steps, defaulting to 1.  Right rotation moves all elements "up", wrapping elements at the end back to the start.
+
+  Example:  ``[ 1, 2, 3, 4 ]`` rotated right one step becomes ``[ 4, 1, 2, 3]``.  The same vector rotated right two steps becomes ``[ 3, 4, 1, 2]``.
+
+  Can be accessed by the ``>>`` operator;  ``v >> 2`` is equivalent to ``v.rotateRight(2)``.
+
+* ``rotateLeft(n?)``
+
+  Rotate the vector left by *n* steps, defaulting to 1.  Left rotation moves all elements "down", wrapping elements at the start onto the end.
+
+  Example:  ``[ 1, 2, 3, 4 ]`` rotated left one step becomes ``[ 2, 3, 4, 1 ]``.  The same vector rotated left two steps becomes ``[ 3, 4, 1, 2 ]``.
+
+  Can be accessed by the ``<<`` operator;  ``v << 2`` is equivalent to ``v.rotateLeft(2)``.
+
 * ``swap(i, j)``
 
   Swaps elements *i* and *j*.
 
   Returns boolean ``true`` on success, ``nil`` on error.
 
-* ``union(v)``
-
-  Returns the union of this vector and the argument vector, modifying neither.
-  This is equivalent to ``Vector.appendUnique()`` without modifying the
-  original.
-
-* ``intersection(v)``
-
-  Returns the intersection of this vector and the argument vector.  That is,
-  it returns the elements that are present in both vectors.
-
-* ``complement(v)``
-
-  Returns the complement of this vecZZtor with the argument vector.  That is,
-  the elements of this vector that are not in the argument vector.  Or
-  in set theoretic terms, if this vector is A and the argument vector is
-  B, A \ B.
-
-* ``equals(v, ord?)``
-
-  Returns boolean ``true`` if this vector and the argument vector contain
-  the same elements.  If the second argument is boolean ``true`` the
-  elements must be in the same order, if not they can be in any order.
-
-* ``isSubsetOf(v)``
-
-  Returns boolean true if the argument vector ``v`` contains all the elements
-  of the calling vector.
-
-* ``rotate(n?)``
-
-  Rotates the vector by *n* steps, defaulting to 1 if no argument is given.
-  Number of steps can be positive or negative, indicating right or left
-  rotation respectively.  See also ``rotateRight()`` and ``rotateLeft()``
-  below.
-
-* ``rotateRight(n?)``
-
-  Rotate the vector right by *n* steps, defaulting to 1.  Right rotation
-  moves all elements "up", wrapping elements at the end back to the
-  start.
-
-  Example:  ``[ 1, 2, 3, 4 ]`` rotated right one step becomes
-  ``[ 4, 1, 2, 3]``.  The same vector rotated right two steps becomes
-  ``[ 3, 4, 1, 2]``.
-
-  Can be accessed by the ``>>`` operator;  ``v >> 2`` is equivalent to
-  ``v.rotateRight(2)``.
-
-* ``rotateLeft(n?)``
-
-  Rotate the vector left by *n* steps, defaulting to 1.  Left rotation
-  moves all elements "down", wrapping elements at the start onto the
-  end.
-
-  Example:  ``[ 1, 2, 3, 4 ]`` rotated left one step becomes
-  ``[ 2, 3, 4, 1 ]``.  The same vector rotated left two steps becomes
-  ``[ 3, 4, 1, 2 ]``.
-
-  Can be accessed by the ``<<`` operator;  ``v << 2`` is equivalent to
-  ``v.rotateLeft(2)``.
-
 * ``symmetricDifference(v)``
 
-  Returns a vector containing all the elements that are in exactly one of
-  the two vectors (the argument vector and the calling vector).
+  Returns a vector containing all the elements that are in exactly one of the two vectors (the argument vector and the calling vector).
 
 The following methods check for and will only work with ``Vector``s of integers:
 
-* ``add(v)``
+* ``union(v)``
 
-  Adds this vector and the argument vector.
+  Returns the union of this vector and the argument vector, modifying neither. This is equivalent to ``Vector.appendUnique()`` without modifying the original.
 
-    Returns a ``Vector`` whose *i*th element is ``self[i] + v[i]``.
-
-* ``dot(v)``
-
-  Returns the dot product of this vector and the argument vector.  That's the scalar sum of ``self[i] * v[i]`` for all *i* iterated over the length of the vector(s).
-
-* ``relu()``
-
-  Applies the rectified linear unit fuction to the vector.  This returns an array whose elements are either the element's current value if it is positive or 0 if negative.
 
 
 <a name="lookuptable"/></a>
