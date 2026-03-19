@@ -96,6 +96,18 @@ class Matrix2D: object
 		return(r);
 	}
 
+	unsafeMultiplyVector(v) {
+		local r;
+
+		if(!isVector(v))
+			return(nil);
+
+		r = new Vector(v.length);
+		_matrix.forEach({ x: r.append(v.unsafeDot(x)) });
+
+		return(r);
+	}
+
 	transpose() {
 		local i, j, r;
 

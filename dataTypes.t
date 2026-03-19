@@ -241,8 +241,11 @@ modify Vector
 			return(nil);
 
 		r = new Vector(length);
-		for(i = 1; i <= length; i++)
+		for(i = 1; i <= length; i++) {
+			if(!isInteger(self[i]) || !isInteger(v[i]))
+				return(nil);
 			r.append(self[i] + v[i]);
+		}
 
 		return(r);
 	}
@@ -264,6 +267,35 @@ modify Vector
 
 			r += self[i] * v[i];
 		}
+
+		return(r);
+	}
+
+	// Dot product.  Only works for vectors of integers and doesn't do
+	// any type checking.
+	unsafeDot(v) {
+		local i, r;
+
+		// Still do the length check.
+		if(v.length != length)
+			return(nil);
+
+		r = 0;
+		for(i = 1; i <= length; i++)
+			r += self[i] * v[i];
+
+		return(r);
+	}
+
+	unsafeAdd(v) {
+		local i, r;
+
+		if(v.length != length)
+			return(nil);
+
+		r = new Vector(length);
+		for(i = 1; i <= length; i++)
+			r.append(self[i] + v[i]);
 
 		return(r);
 	}
