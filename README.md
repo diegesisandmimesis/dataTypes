@@ -1315,7 +1315,7 @@ The constructor supports two kinds of declaration:
 
   Returns the product of this matrix and the vector *v*.
 
-  This will be the dot product of each row and the vector, which will be a vector whose length is the same as the matrix's number of columns.  If any value in either the matrix or vector are non-numeric ``nil`` wil be returned instead.
+  This will be the dot product of each row and the vector, which will be a vector whose length is the same as the matrix's number of rows.  If any value in either the matrix or vector are non-numeric ``nil`` wil be returned instead.
 
 * ``set(i, j, v)``
 
