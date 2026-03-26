@@ -355,7 +355,7 @@ modify AC3
 		// Check the nullary constraints, if we have any.
 		if(nullaryConstraints != nil) {
 			for(i = 1; i <= nullaryConstraints.length; i++) {
-				if(((nullaryConstraints[1])[i])(t) != true)
+				if((nullaryConstraints[i])(t) != true)
 					return(nil);
 			}
 		}

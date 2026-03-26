@@ -227,8 +227,10 @@ class Matrix: object
 
 	// Returns boolean true if the argument matrix is element-for-element
 	// equal to the calling matrix.
+	// Only works on 2d matrices.
 	equals(m) {
 		local b, i;
+		if(dim > 2) return(nil);
 		if(!isMatrix(m)) return(nil);
 		if(dim != m.dim) return(nil);
 		for(i = 1; i <= size.length; i++)

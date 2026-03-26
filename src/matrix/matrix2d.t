@@ -128,8 +128,8 @@ class Matrix2D: object
 
 	_validateCoord(i, j) {
 		if(!isInteger(i) || !isInteger(j)) return(nil);
-		if((i < 0) || (i > rows)) return(nil);
-		if((j < 0) || (j > columns)) return(nil);
+		if((i < 1) || (i > rows)) return(nil);
+		if((j < 1) || (j > columns)) return(nil);
 		return(true);
 	}
 

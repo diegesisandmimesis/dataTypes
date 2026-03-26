@@ -42,7 +42,7 @@ class FiniteStateMachineSorted: FSM
 	stateClass = FSMStateSorted
 
 	// Tweak to base method.
-	addState(obj) {
+	addFSMState(obj) {
 		if(!inherited(obj))
 			return(nil);
 

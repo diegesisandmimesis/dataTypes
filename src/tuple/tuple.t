@@ -85,7 +85,7 @@ class Tuple: object
 
 		if(v0.ofKind(Collection)) {
 			for(i = 1; i <= v0.length; i++) {
-				if(_matchValue(v0[1], v1))
+				if(_matchValue(v0[i], v1))
 					return(true);
 			}
 		}
