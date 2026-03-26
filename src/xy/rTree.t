@@ -171,6 +171,8 @@ class RTree: object
 			// our sibling.
 			prev.addNode(obj);
 		}
+
+		return(obj);
 	}
 
 	// Locate the best branch to query for the given XY instance.

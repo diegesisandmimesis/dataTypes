@@ -72,7 +72,7 @@ class Matrix2D: object
 		return(true);
 	}
 
-	clone() { return(createInstance(_matrix)); }
+	clone() { return(createInstanceOfSelf(_matrix)); }
 
 	// Fill the matrix with a single value.
 	fill(v) {
@@ -154,8 +154,8 @@ class Matrix2D: object
 		if((m.rows != rows) || (m.columns != columns))
 			return(nil);
 
-		for(j = 1; j <= rows; j++) {
-			for(i = 1; i <= columns; i++) {
+		for(j = 1; j <= columns; j++) {
+			for(i = 1; i <= rows; i++) {
 				if(m.get(i, j) != get(i, j))
 					return(nil);
 			}

@@ -36,7 +36,7 @@ class FiniteStateMachineStateSorted: FSMState
 	}
 ;
 
-class FSMStateSorted: FiniteStateMachineSorted;
+class FSMStateSorted: FiniteStateMachineStateSorted;
 
 class FiniteStateMachineSorted: FSM
 	stateClass = FSMStateSorted

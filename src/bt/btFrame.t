@@ -35,14 +35,18 @@ class BTFrame: object
 		local i, t;
 
 		t = new LookupTable();
-		for(i = 1; i <= result.length; i++)
-			t[vList[i]] = pList[i][result[i]];
+		for(i = 1; i <= result.length; i++) {
+			if(_btMultiDomain == true)
+				t[vList[i]] = pList[i][result[i]];
+			else
+				t[vList[i]] = pList[result[i]];
+		}
 
 		return(t);
 	}
 
 	// Returns a copy of this frame.
-	clone() { return(createInstance(vList, pList, result)); }
+	clone() { return(createInstanceOfSelf(vList, pList, result)); }
 
 	next() {
 		if(_btMultiDomain == true)
@@ -80,7 +84,9 @@ class BTFrame: object
 		// Our results vector is as long as the list of objects
 		// we're assigning values to, so we pop the value off
 		// the end.
-		while((v = r.pop()) != nil) {
+		//while((v = r.pop()) != nil) {
+		while(r.length > 0) {
+			v = r.pop();
 			// We try to pick the next allowed value.  If
 			// this was already the last one, then we'll
 			// never go through the loop (because v + 1
@@ -133,7 +139,9 @@ class BTFrame: object
 
 		// Pop off the value on the end and the pick the next
 		// value from the corresponding domain.
-		while((v = r.pop()) != nil) {
+		//while((v = r.pop()) != nil) {
+		while(r.length > 0) {
+			v = r.pop();
 			// v is the value we just popped off, which is an
 			// index in one of the domains in pList.  So we're
 			// always just picking the next index.

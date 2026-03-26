@@ -25,7 +25,7 @@ class XY: object
 	construct(v0, v1) { x = v0; y = v1; }
 
 	// Returns a new XY instance with the same values as this one.
-	clone() { return(new XY(x, y)); }
+	clone() { return(createInstance(x, y)); }
 
 	// Copy the values from the passed argument to ourselves.
 	copy(v) {

@@ -448,7 +448,8 @@ class Graph: object
 	clone() {
 		local r;
 
-		r = new Graph();
+		//r = new Graph();
+		r = createInstanceOfSelf();
 
 		forEachVertex({ v: r.addVertex(v.vertexID) });
 		forEachEdge({

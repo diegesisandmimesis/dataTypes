@@ -18,7 +18,7 @@
 #define nilToInt(v, def) ((v == nil) ? def : toInteger(v))
 
 // Set obj to be v, but only if obj is currently nil
-#define noClobber(obj, v) (obj = (obj == nil) ? v : nil)
+#define noClobber(obj, v) (obj = (obj == nil) ? v : obj)
 
 // Get an object's outermost containing room
 #define gOutermostRoom(obj) (isThing(obj) ? obj.getOutermostRoom() : nil)

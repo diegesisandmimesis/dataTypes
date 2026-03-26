@@ -383,6 +383,15 @@ modify TadsObject
 			self.(o) = cfg.(o);
 		});
 	}
+
+	createInstanceOfSelf([args]) {
+		local l;
+
+		l = getSuperclassList();
+		if(args.length < 1)
+			return(createInstanceOf(l...));
+		return(createInstanceOf([l[1]] + args, l.sublist(1)...));
+	}
 ;
 
 // Modify LookupTable to add a method that returns the first key for

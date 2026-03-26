@@ -46,6 +46,8 @@ class MarkovChain: StateMachine
 
 		r = inherited(v0, v1, v);
 		r.markovBaseWeight = markovBaseWeight;
+
+		return(r);
 	}
 
 	// This is where we convert the edge matrix.  In a normal graph

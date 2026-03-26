@@ -66,7 +66,7 @@ class Rectangle: object
 
 	// Returns a copy of this rectangle.
 	clone() {
-		return(new Rectangle(corner0 ? corner0.clone() : nil,
+		return(createInstance(corner0 ? corner0.clone() : nil,
 			corner1 ? corner1.clone() : nil));
 	}
 

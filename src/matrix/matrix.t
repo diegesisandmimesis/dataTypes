@@ -297,7 +297,7 @@ class Matrix: object
 	clone() {
 		local m;
 
-		m = createInstance(size[1], size[2]);
+		m = createInstanceOfSelf(size[1], size[2]);
 		m.load(linearize());
 		return(m);
 	}
