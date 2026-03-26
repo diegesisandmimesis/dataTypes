@@ -22,7 +22,8 @@ class DisjointSetForest: object
 	}
 
 	// Return the top-level parent of the given disjoint-set.
-	// Argument can be a DisjointSet instance or an ID.
+	// Argument can be a DisjointSet instance or an ID.  IDs must
+	// be strings.
 	// Return value will be a DisjointSet instance.
 	find(v) {
 		if(isString(v))

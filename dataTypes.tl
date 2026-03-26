@@ -13,7 +13,6 @@ source: src/graph/adjacencyMatrix.t
 source: src/graph/graphInit.t
 source: src/graph/graphTheory.t
 source: src/finiteStateMachine/finiteStateMachine.t
-source: src/finiteStateMachine/finiteStateMachineSorted.t
 source: src/finiteStateMachine/finiteStateMachineInit.t
 source: src/markovChain/markovState.t
 source: src/markovChain/markovTransition.t

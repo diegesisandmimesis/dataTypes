@@ -152,7 +152,7 @@ class Rectangle: object
 
 		d = offset(x, y);
 
-		return(d.x + d.y);
+		return(abs(d.x) + abs(d.y));
 	}
 
 	// Returns the area of the rectangle if expanded to include the

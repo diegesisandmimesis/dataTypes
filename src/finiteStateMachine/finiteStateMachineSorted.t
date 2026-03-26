@@ -4,6 +4,9 @@
 //
 //	Extensions to the base FSM logic to order states.
 //
+//	WARNING: Not currently used for anything, may be untested, may be
+//	deleted at a later date.
+//
 //
 #include <adv3.h>
 #include <en_us.h>
@@ -15,7 +18,7 @@ class FiniteStateMachineStateSorted: FSMState
 	_defaultOrder = 99	// Default order if none is given
 
 	// Update for the base method.
-	initFiniteStateMachineState() {
+	initializeFiniteStateMachineState() {
 		inherited();
 		_canonicalizeOrder();
 	}
@@ -89,7 +92,7 @@ class FiniteStateMachineSorted: FSM
 
 		l = getFSMStates().subset({ x: x.isActive() });
 		l = l.sort(true, { a, b:
-			nilToInt(a.order, 99) - nilToInt(b.order, 99) });
+			nilToInt(b.order, 99) - nilToInt(a.order, 99) });
 		return(l);
 	}
 ;

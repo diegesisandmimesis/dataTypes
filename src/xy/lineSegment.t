@@ -43,7 +43,7 @@ class LineSegment: object
 	equals(v) {
 		if(!isLineSegment(v)) return(nil);
 		return((_v0.equals(v._v0) && _v1.equals(v._v1))
-			&& (_v1.equals(v._v0) && _v0.equals(v._v1)));
+			|| (_v1.equals(v._v0) && _v0.equals(v._v1)));
 	}
 
 	coincident(v) {

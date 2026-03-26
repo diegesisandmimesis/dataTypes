@@ -294,6 +294,7 @@ class Matrix: object
 		return(r);
 	}
 
+	// Note:  only works for 2d matrices.
 	clone() {
 		local m;
 
