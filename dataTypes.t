@@ -390,7 +390,7 @@ modify TadsObject
 		l = getSuperclassList();
 		if(args.length < 1)
 			return(createInstanceOf(l...));
-		return(createInstanceOf([l[1]] + args, l.sublist(1)...));
+		return(createInstanceOf([l[1]] + args, l.sublist(2)...));
 	}
 ;
 
