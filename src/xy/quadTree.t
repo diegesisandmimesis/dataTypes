@@ -62,8 +62,13 @@ class QuadTree: object
 
 	// Returns the bounding box, without fail.
 	getBoundingBox() {
+		/* Constructor prevents _boundingBox from being nil, but
+		 * even if it gets squished new Rectangle() is invalid:
+		 * the constructor requires arguments to define the
+		 * rectangle corners, which we don't know here.
 		if(_boundingBox == nil)
 			_boundingBox = new Rectangle();
+		*/
 		return(_boundingBox);
 	}
 

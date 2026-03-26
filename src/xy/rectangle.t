@@ -136,7 +136,8 @@ class Rectangle: object
 		else
 			v0 = new XY(x, y);
 
-		v1 = new XY(0, 0);
+		//v1 = new XY(0, 0);
+		v1 = v0.clone();
 		if(v0.x < corner0.x) v1.x = corner0.x;
 		if(v0.x > corner1.x) v1.x = corner1.x;
 		if(v0.y < corner0.y) v1.y = corner0.y;
