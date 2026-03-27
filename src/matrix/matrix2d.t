@@ -133,6 +133,15 @@ class Matrix2D: object
 		return(true);
 	}
 
+	getRow(i) {
+		if(!isInteger(i) || (i < 1) || (i > rows)) return(nil);
+		return(_matrix ? _matrix[i] : nil);
+	}
+
+	unsafeGetRow(i) {
+		return(_matrix ? _matrix[i] : nil);
+	}
+
 	get(i, j) {
 		if(!_validateCoord(i, j)) return(nil);
 		return(_matrix ? _matrix[i][j] : nil);
