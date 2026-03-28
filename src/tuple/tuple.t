@@ -83,7 +83,8 @@ class Tuple: object
 	_matchValue(v0, v1) {
 		local i;
 
-		if(v0.ofKind(Collection)) {
+		//if(v0.ofKind(Collection)) {
+		if(isCollection(v0)) {
 			for(i = 1; i <= v0.length; i++) {
 				if(_matchValue(v0[i], v1))
 					return(true);
