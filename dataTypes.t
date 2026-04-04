@@ -230,6 +230,17 @@ modify Vector
 		return(r);
 	}
 
+	shift() {
+		local r;
+		if(self.length == 0) return(nil);
+		r = self[1];
+		removeElementAt(1);
+		return(r);
+	}
+	unshift(v) {
+		insertAt(1, v);
+	}
+
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
