@@ -241,6 +241,8 @@ modify Vector
 		insertAt(1, v);
 	}
 
+	maxAbs() { return(max(abs(minVal()), abs(maxVal()))); }
+
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
