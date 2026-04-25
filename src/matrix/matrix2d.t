@@ -11,6 +11,8 @@
 class Matrix2D: object
 	validator = nil
 
+	defaultValue = 0
+
 	rows = (_matrix ? _matrix.length : 0)
 	columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0)
 
@@ -31,7 +33,7 @@ class Matrix2D: object
 	createMatrix(r, c, v?) {
 		local i;
 
-		v = (v ? v : 0);
+		v = (v ? v : defaultValue);
 
 		_matrix = new Vector(r);
 		for(i = 0; i < r; i++)
