@@ -84,6 +84,30 @@ class Matrix2D: object
 		return(true);
 	}
 
+	multiplyScalar(v) {
+		local r;
+
+		if(!isInteger(v))
+			return(nil);
+
+		r = new Vector(rows);
+		_matrix.forEach({ x: r.append(x.mapAll({ y: y * v })) });
+
+		return(new Matrix2D(r));
+	}
+
+	mapAll(fn) {
+		local r;
+
+		if(!isFunction(fn))
+			return(nil);
+
+		r = new Vector(rows);
+		_matrix.forEach({ x: r.append(x.mapAll({ y: (fn)(y) })) });
+
+		return(new Matrix2D(r));
+	}
+
 	multiplyVector(v) {
 		local r;
 
@@ -171,5 +195,55 @@ class Matrix2D: object
 		}
 
 		return(true);
+	}
+
+	_addSubtract(m, subt?) {
+		local i, j, l, r0, r1, r;
+
+		if(!isMatrix2D(m))
+			return(nil);
+		if((m.rows != rows) || (m.columns != columns))
+			return(nil);
+
+		l = new Vector(rows);
+		for(j = 1; j <= rows; j++) {
+			r0 = getRow(j);
+			r1 = m.getRow(j);
+			r = new Vector(columns);
+			for(i = 1; i <= columns; i++) {
+				if(subt)
+					r.append(r0[i] - r1[i]);
+				else
+					r.append(r0[i] + r1[i]);
+			}
+			l.append(r);
+		}
+
+		return(new Matrix2D(l));
+	}
+
+	add(m) { return(_addSubtract(m)); }
+	subtract(m) { return(_addSubtract(m, true)); }
+
+	frobeniusNorm() {
+		local d;
+
+		d = 0;
+		mapAll({ x: d += (x * x) });
+		return(sqrtIntNR(d));
+	}
+
+	frobeniusDistance(m) {
+		local d;
+
+		if((d = subtract(m)) == nil)
+			return(nil);
+
+		return(d.frobeniusNorm());
+	}
+
+	maxFrobeniusDistance(v?) {
+		v = (v ? v : 1000);
+		return(sqrtInt(rows * columns * v * v));
 	}
 ;
