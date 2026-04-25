@@ -245,7 +245,13 @@ class Matrix2D: object
 	}
 
 	maxFrobeniusDistance(v?) {
-		v = (v ? v : 1000);
+		if(v == nil) {
+			v = 0;
+			mapAll(function(x) {
+				if(abs(x) > v)
+					v = abs(x);
+			});
+		}
 		return(sqrtInt(rows * columns * v * v));
 	}
 ;
