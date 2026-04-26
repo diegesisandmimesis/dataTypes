@@ -254,4 +254,9 @@ class Matrix2D: object
 		}
 		return(sqrtInt(rows * columns * v * v));
 	}
+
+	log() {
+		if(!_matrix) "\nno matrix\n ";
+		_matrix.forEach({ x: "\n[ <<x.join(', ')>> ]\n " });
+	}
 ;
