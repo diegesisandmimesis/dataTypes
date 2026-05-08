@@ -426,3 +426,14 @@ modify LookupTable
 		return(nil);
 	}
 ;
+
+modify List
+	equals(l) {
+		local i;
+		if(!isCollection(l)) return(nil);
+		if(length != l.length) return(nil);
+		for(i = 1; i <= l.length; i++)
+			if(l[i] != self[i]) return(nil);
+		return(true);
+	}
+;
