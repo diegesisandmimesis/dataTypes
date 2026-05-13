@@ -263,6 +263,24 @@ modify Vector
 		return(r);
 	}
 
+	subtract(v) {
+		local i, r;
+
+		// Arg must be a vector and its length must be the same as
+		// ours.
+		if(!isVector(v) || (v.length != length))
+			return(nil);
+
+		r = new Vector(length);
+		for(i = 1; i <= length; i++) {
+			if(!isInteger(self[i]) || !isInteger(v[i]))
+				return(nil);
+			r.append(self[i] - v[i]);
+		}
+
+		return(r);
+	}
+
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
 		local i, r;
@@ -309,6 +327,19 @@ modify Vector
 		r = new Vector(length);
 		for(i = 1; i <= length; i++)
 			r.append(self[i] + v[i]);
+
+		return(r);
+	}
+
+	unsafeSubtract(v) {
+		local i, r;
+
+		if(v.length != length)
+			return(nil);
+
+		r = new Vector(length);
+		for(i = 1; i <= length; i++)
+			r.append(self[i] - v[i]);
 
 		return(r);
 	}
