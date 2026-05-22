@@ -20,16 +20,21 @@ class HashTable: object
 	_initArray(id) { return( _table[id] = new Vector()); }
 
 	// Insert the value v with key ID.
-	insert(id, v) {
+	insert(id, v, uniq?) {
 		local ar;
 
 		if((ar = _getArray(id)) == nil)
 			ar = _initArray(id);
 
+		if((uniq == true) && (ar.indexOf(v) != nil))
+			return(nil);
+
 		ar.append(v);
 
 		return(true);
 	}
+
+	insertUnique(id, v) { return(insert(id, v, true)); }
 
 	// Remove the given key-value pair.
 	delete(id, v) {
