@@ -458,6 +458,7 @@ class Matrix0: Matrix
 modify Matrix
 	// Arcane.  For an explanation see the comments in the intMath
 	// module.
+	/*
 	_sqrtInt(v) {
 		local c, r, shift;
 
@@ -472,6 +473,22 @@ modify Matrix
 				r = c;
 		}
 		return(r);
+	}
+	*/
+	_sqrtInt(v) {
+		local x, y;
+
+		if(v <= 0)
+			return(0);
+
+		x = v;
+		y = (x + 1) / 2;
+		while(y < x) {
+			x = y;
+			y = (x + (v / x)) / 2;
+		}
+
+		return(x);
 	}
 ;
 #else

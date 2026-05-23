@@ -232,7 +232,7 @@ class Matrix2D: object
 
 		d = 0;
 		mapAll({ x: d += (x * x) });
-		return(sqrtIntNR(d));
+		return(Matrix._sqrtInt(d));
 	}
 
 	frobeniusDistance(m) {
@@ -252,7 +252,7 @@ class Matrix2D: object
 					v = abs(x);
 			});
 		}
-		return(sqrtInt(rows * columns * v * v));
+		return(Matrix._sqrtInt(rows * columns * v * v));
 	}
 
 	log() {
