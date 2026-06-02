@@ -44,33 +44,91 @@ class XY: object
 	operator +(x) { return(add(x)); }
 
 	// Returns the sum of ourselves and the passed XY instance.
-	add(v) {
+	add(v, fl?) {
 		if(!isXY(v)) return(nil);
+		if(fl == true) {
+			x += v.x;
+			y += v.y;
+			return(self);
+		}
+		return(new XY(x + v.x, y + v.y));
+	}
+
+	unsafeAdd(v, fl?) {
+		if(fl == true) {
+			x += v.x;
+			y += v.y;
+			return(self);
+		}
 		return(new XY(x + v.x, y + v.y));
 	}
 
 	operator -(x) { return(subtract(x)); }
 
 	// Returns the difference of ourselves and the passed XY instance.
-	subtract(v) {
+	subtract(v, fl?) {
 		if(!isXY(v)) return(nil);
+		if(fl == true) {
+			x -= v.x;
+			y -= v.y;
+			return(self);
+		}
+		return(new XY(x - v.x, y - v.y));
+	}
+
+	unsafeSubtract(v, fl?) {
+		if(fl == true) {
+			x -= v.x;
+			y -= v.y;
+			return(self);
+		}
 		return(new XY(x - v.x, y - v.y));
 	}
 
 	operator *(x) { return(multiply(x)); }
 
 	// Scale by the given factor.
-	multiply(n) {
+	multiply(n, fl?) {
 		if(!isInteger(n)) return(nil);
+		if(fl == true) {
+			x *= n;
+			y *= n;
+			return(self);
+		}
 		return(new XY(x * n, y * n));
 	}
+
+	unsafeMultiply(n, fl?) {
+		if(fl == true) {
+			x *= n;
+			y *= n;
+			return(self);
+		}
+		return(new XY(x * n, y * n));
+	}
+
 
 	operator /(x) { return(divide(x)); }
 
 	// Shrink by the given factor.
-	divide(n) {
+	divide(n, fl?) {
 		if(!isInteger(n)) return(nil);
 		if(n == 0) return(nil);
+		if(fl == true) {
+			x /= n;
+			y /= n;
+			return(self);
+		}
+		return(new XY(x / n, y / n));
+	}
+
+	unsafeDivide(n, fl?) {
+		if(n == 0) return(nil);
+		if(fl == true) {
+			x /= n;
+			y /= n;
+			return(self);
+		}
 		return(new XY(x / n, y / n));
 	}
 
