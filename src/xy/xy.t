@@ -38,7 +38,7 @@ class XY: object
 	// Returns integer approximation of our distance from the origin.
 	length() {
 		if(!isInteger(x) || !isInteger(y)) return(nil);
-		return(sqrtInt((x * x) + (y * y)));
+		return(Matrix._sqrtInt((x * x) + (y * y)));
 	}
 
 	operator +(x) { return(add(x)); }
@@ -140,7 +140,7 @@ class XY: object
 		if(!isXY(v)) return(nil);
 		v0 = x - v.x;
 		v1 = y - v.y;
-		return(sqrtInt((v0 * v0) + (v1 * v1)));
+		return(Matrix._sqrtInt((v0 * v0) + (v1 * v1)));
 	}
 
 	// Treat the XY coords as a vector (from the origin) and
