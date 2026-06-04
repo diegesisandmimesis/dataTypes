@@ -269,6 +269,28 @@ class Graph: object
 		return(r);
 	}
 
+	degreeMatrix() {
+		local i, l, m, v;
+
+		l = getVertexIDs().sort();
+		if(!l || (l.length < 1))
+			return(nil);
+
+		m = new IntegerMatrix(l.length, l.length);
+		m.fill(0);
+
+		for(i = 1; i <= l.length; i++) {
+			v = getVertex(l[i]);
+			m.set(i, i, v.getDegree());
+		}
+
+		return(m);
+	}
+
+	laplacianMatrix() {
+		return(degreeMatrix().subtract(adjacencyMatrix().getMatrix()));
+	}
+
 	// Clear anything we've cached.
 	graphUpdated() {
 		_edgeList = nil;

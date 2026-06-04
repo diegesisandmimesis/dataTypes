@@ -30,7 +30,7 @@ gameMain: GameMainDef
 
 	newGame() {
 		if(test2D && testAsymmetric() && testOOB()
-			&& testTranspose()) {
+			&& testTranspose() && testMultiply()) {
 			"\npassed all tests\n ";
 		} else {
 			"\nERROR: failed one or more tests\n ";
@@ -175,5 +175,33 @@ gameMain: GameMainDef
 		}
 
 		return(true);
+	}
+
+	testMultiply() {
+		local m0, m1, mr, r;
+
+		m0 = new Matrix2D([
+			[ 1, 2, 3 ],
+			[ 4, 5, 6 ]
+		]);
+		m1 = new Matrix2D([
+			[ 7, 8 ],
+			[ 9, 10 ],
+			[ 11, 12 ]
+		]);
+
+		mr = new Matrix2D([
+			[ 58, 64 ],
+			[ 139, 154 ]
+		]);
+		r = m0.multiply(m1);
+
+		if(!mr.equals(r)) {
+			"\nERROR: multiply() failed\n ";
+			return(nil);
+		}
+
+		return(true);
+
 	}
 ;

@@ -16,7 +16,10 @@ class Matrix2D: object
 	rows = (_matrix ? _matrix.length : 0)
 	columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0)
 
+	// Matrix in row-first, vector-of-vectors format.
 	_matrix = nil
+
+	// Matrix transpose.
 	_transpose = nil
 
 	construct(v0, v1?, v2?) {
@@ -84,6 +87,30 @@ class Matrix2D: object
 		markDirty();
 
 		return(true);
+	}
+
+	multiply(m) {
+		local i, j, n, r, row0, row1, row;
+
+		if(!isMatrix2D(m) || columns != m.rows)
+			return(nil);
+
+		n = m.columns;
+		//m = new Matrix2D(m.transpose());
+		m = m.transpose();
+
+		r = new Vector(rows);
+		for(i = 1; i <= rows; i++) {
+			row0 = getRow(i);
+			row = new Vector(n);
+			for(j = 1; j <= n; j++) {
+				row1 = m[j];
+				row.append(row0.unsafeDot(row1));
+			}
+			r.append(row);
+		}
+
+		return(new Matrix2D(r));
 	}
 
 	multiplyScalar(v) {

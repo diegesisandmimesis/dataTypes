@@ -417,6 +417,29 @@ class IntegerMatrix: Matrix
 
 		return(r);
 	}
+
+	_addSubtract(m, fl?) {
+		local i, j, r, t;
+
+		if(!isMatrix(m)) return(nil);
+		if((dim != 2) || (m.dim != 2)) return(nil);
+		if(size[1] != m.size[2]) return(nil);
+		r = self.createInstance(m.size[1], size[2]);
+		for(j = 1; j <= size[2]; j++) {
+			for(i = 1; i <= m.size[1]; i++) {
+				if(fl == true)
+					t = get(i, j) - m.get(i, j);
+				else
+					t = get(i, j) + m.get(i, j);
+				r.set(i, j, t);
+			}
+		}
+
+		return(r);
+	}
+
+	add(m) { return(_addSubtract(m)); }
+	subtract(m) { return(_addSubtract(m, true)); }
 ;
 
 
