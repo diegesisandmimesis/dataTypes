@@ -13,8 +13,8 @@ class Matrix2D: object
 
 	defaultValue = 0
 
-	rows = (_matrix ? _matrix.length : 0)
-	columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0)
+	rows = 0
+	columns = 0
 
 	// Matrix in row-first, vector-of-vectors format.
 	_matrix = nil
@@ -29,6 +29,11 @@ class Matrix2D: object
 			initMatrix(v0);
 	}
 
+	_setDimensions() {
+		rows = (_matrix ? _matrix.length : 0);
+		columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0);
+	}
+
 	markDirty() {
 		_transpose = nil;
 	}
@@ -41,6 +46,7 @@ class Matrix2D: object
 		_matrix = new Vector(r);
 		for(i = 0; i < r; i++)
 			_matrix.append(new Vector(c).fillValue(v, 1, c));
+		_setDimensions();
 	}
 
 	initMatrix(v) {
@@ -50,6 +56,7 @@ class Matrix2D: object
 		_matrix = new Vector(v.length);
 		v.forEach({ x: _matrix.append(new Vector(x)) });
 		markDirty();
+		_setDimensions();
 
 		return(true);
 	}
@@ -90,7 +97,7 @@ class Matrix2D: object
 	}
 
 	multiply(m) {
-		local i, j, n, r, row0, row1, row;
+		local i, j, n, nrows, r, row0, row1, row;
 
 		if(!isMatrix2D(m) || columns != m.rows)
 			return(nil);
@@ -98,8 +105,9 @@ class Matrix2D: object
 		n = m.columns;
 		m = m.transpose();
 
-		r = new Vector(rows);
-		for(i = 1; i <= rows; i++) {
+		nrows = rows;
+		r = new Vector(nrows);
+		for(i = 1; i <= nrows; i++) {
 			row0 = getRow(i);
 			row = new Vector(n);
 			for(j = 1; j <= n; j++) {
@@ -162,16 +170,20 @@ class Matrix2D: object
 	}
 
 	transpose() {
-		local i, j, r;
+		local i, j, nColumns, nRows, r, v;
 
 		if(isMatrix2D(_transpose))
 			return(_transpose);
 
-		r = new Vector(columns);
-		for(j = 1; j <= columns; j++) {
-			r.append(new Vector(rows));
-			for(i = 1; i <= rows; i++)
-				r[r.length].append(_matrix[i][j]);
+		nColumns = columns;
+		nRows = rows;
+
+		r = new Vector(nColumns);
+		for(j = 1; j <= nColumns; j++) {
+			v = new Vector(nRows);
+			for(i = 1; i <= nRows; i++)
+				v.append(_matrix[i][j]);
+			r.append(v);
 		}
 
 		_transpose = createInstanceOfSelf(r);
@@ -212,15 +224,17 @@ class Matrix2D: object
 	query(i, j) { return(get(i, j)); }
 
 	equals(m) {
-		local i, j;
+		local i, j, nColumns, nRows;
 
 		if(!isMatrix2D(m))
 			return(nil);
 		if((m.rows != rows) || (m.columns != columns))
 			return(nil);
 
-		for(j = 1; j <= columns; j++) {
-			for(i = 1; i <= rows; i++) {
+		nColumns = columns;
+		nRows = rows;
+		for(j = 1; j <= nColumns; j++) {
+			for(i = 1; i <= nRows; i++) {
 				if(m.get(i, j) != get(i, j))
 					return(nil);
 			}
@@ -230,19 +244,22 @@ class Matrix2D: object
 	}
 
 	_addSubtract(m, subt?) {
-		local i, j, l, r0, r1, r;
+		local i, j, l, nColumns, nRows, r0, r1, r;
 
 		if(!isMatrix2D(m))
 			return(nil);
 		if((m.rows != rows) || (m.columns != columns))
 			return(nil);
 
-		l = new Vector(rows);
-		for(j = 1; j <= rows; j++) {
+		nRows = rows;
+		nColumns = columns;
+
+		l = new Vector(nRows);
+		for(j = 1; j <= nRows; j++) {
 			r0 = getRow(j);
 			r1 = m.getRow(j);
-			r = new Vector(columns);
-			for(i = 1; i <= columns; i++) {
+			r = new Vector(nColumns);
+			for(i = 1; i <= nColumns; i++) {
 				if(subt)
 					r.append(r0[i] - r1[i]);
 				else
