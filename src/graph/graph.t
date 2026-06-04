@@ -247,7 +247,7 @@ class Graph: object
 	}
 
 	adjacencyMatrix(lst?) {
-		local l, m, r, v, x, y;
+		local l, m, v, x, y;
 
 		l = getVertexIDs().sort();
 		if(isCollection(lst) && (lst.length == l.length))
@@ -279,7 +279,7 @@ class Graph: object
 		if(!l || (l.length < 1))
 			return(nil);
 
-		m = new IntegerMatrix(l.length, l.length);
+		m = matrixClass.createInstance(l.length, l.length);
 		m.fill(0);
 
 		for(i = 1; i <= l.length; i++) {

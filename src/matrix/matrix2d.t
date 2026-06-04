@@ -49,7 +49,7 @@ class Matrix2D: object
 
 		_matrix = new Vector(v.length);
 		v.forEach({ x: _matrix.append(new Vector(x)) });
-		//markDirty();
+		markDirty();
 
 		return(true);
 	}
@@ -84,7 +84,7 @@ class Matrix2D: object
 		if(!_matrix) return(nil);
 
 		_matrix.forEach({ x: x.fillValue(v, 1, _matrix[1].length) });
-		//markDirty();
+		markDirty();
 
 		return(true);
 	}
@@ -204,9 +204,12 @@ class Matrix2D: object
 		if(!_matrix) return(nil);
 		if(!_validateCoord(i, j)) return(nil);
 		_matrix[i][j] = v;
-		//markDirty();
+		markDirty();
 		return(true);
 	}
+
+	insert(i, j, v) { set(i, j, v); }
+	query(i, j) { return(get(i, j)); }
 
 	equals(m) {
 		local i, j;
