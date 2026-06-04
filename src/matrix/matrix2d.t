@@ -49,7 +49,7 @@ class Matrix2D: object
 
 		_matrix = new Vector(v.length);
 		v.forEach({ x: _matrix.append(new Vector(x)) });
-		markDirty();
+		//markDirty();
 
 		return(true);
 	}
@@ -84,7 +84,7 @@ class Matrix2D: object
 		if(!_matrix) return(nil);
 
 		_matrix.forEach({ x: x.fillValue(v, 1, _matrix[1].length) });
-		markDirty();
+		//markDirty();
 
 		return(true);
 	}
@@ -96,7 +96,6 @@ class Matrix2D: object
 			return(nil);
 
 		n = m.columns;
-		//m = new Matrix2D(m.transpose());
 		m = m.transpose();
 
 		r = new Vector(rows);
@@ -104,7 +103,8 @@ class Matrix2D: object
 			row0 = getRow(i);
 			row = new Vector(n);
 			for(j = 1; j <= n; j++) {
-				row1 = m[j];
+				//row1 = m[j];
+				row1 = m.getRow(j);
 				row.append(row0.unsafeDot(row1));
 			}
 			r.append(row);
@@ -164,7 +164,7 @@ class Matrix2D: object
 	transpose() {
 		local i, j, r;
 
-		if(isCollection(_transpose))
+		if(isMatrix2D(_transpose))
 			return(_transpose);
 
 		r = new Vector(columns);
@@ -174,9 +174,9 @@ class Matrix2D: object
 				r[r.length].append(_matrix[i][j]);
 		}
 
-		_transpose = r;
+		_transpose = createInstanceOfSelf(r);
 
-		return(r);
+		return(_transpose);
 	}
 
 	_validateCoord(i, j) {
@@ -204,7 +204,7 @@ class Matrix2D: object
 		if(!_matrix) return(nil);
 		if(!_validateCoord(i, j)) return(nil);
 		_matrix[i][j] = v;
-		markDirty();
+		//markDirty();
 		return(true);
 	}
 
@@ -286,4 +286,6 @@ class Matrix2D: object
 		if(!_matrix) "\nno matrix\n ";
 		_matrix.forEach({ x: "\n[ <<x.join(', ')>> ]\n " });
 	}
+
+	forEach(fn) { return(_matrix.forEach(fn)); }
 ;

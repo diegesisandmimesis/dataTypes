@@ -27,6 +27,8 @@ class Graph: object
 
 	_vertexLabels = nil
 
+	matrixClass = Matrix2D
+
 	// Add a vertex to the graph.
 	//	addVertex(foo);		If foo is a Vertex instance, add it
 	//	addVertex('foo', foo);	Add Vertex instance foo with ID 'foo'
@@ -251,7 +253,7 @@ class Graph: object
 		if(isCollection(lst) && (lst.length == l.length))
 			l = lst;
 
-		m = new IntegerMatrix(l.length, l.length);
+		m = matrixClass.createInstance(l.length, l.length);
 		m.fill(0);
 		l.forEach(function(id) {
 			if((y = l.indexOf(id)) == nil) return;
@@ -264,9 +266,10 @@ class Graph: object
 			});
 		});
 
-		r = new AdjacencyMatrix(l, m);
+		//r = new AdjacencyMatrix(l, m);
 
-		return(r);
+		//return(r);
+		return(m);
 	}
 
 	degreeMatrix() {
@@ -288,7 +291,7 @@ class Graph: object
 	}
 
 	laplacianMatrix() {
-		return(degreeMatrix().subtract(adjacencyMatrix().getMatrix()));
+		return(degreeMatrix().subtract(adjacencyMatrix()));
 	}
 
 	// Clear anything we've cached.

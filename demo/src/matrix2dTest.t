@@ -30,7 +30,8 @@ gameMain: GameMainDef
 
 	newGame() {
 		if(test2D && testAsymmetric() && testOOB()
-			&& testTranspose() && testMultiply()) {
+			&& testTranspose() && testMultiply()
+			&& testAdd() && testSubtract()) {
 			"\npassed all tests\n ";
 		} else {
 			"\nERROR: failed one or more tests\n ";
@@ -153,7 +154,8 @@ gameMain: GameMainDef
 			[ 3, 4 ],
 			[ 5, 6 ]
 		]);
-		n = new Matrix2D(m.transpose());
+		//n = new Matrix2D(m.transpose());
+		n = m.transpose();
 
 		t = new Matrix2D([
 			[ 1, 3, 5 ],
@@ -164,7 +166,7 @@ gameMain: GameMainDef
 			"\nERROR: transpose test failed\n ";
 			return(nil);
 		}
-		if(!new Matrix2D(n.transpose()).equals(m)) {
+		if(!n.transpose().equals(m)) {
 			"\nERROR: double transpose test failed\n ";
 			return(nil);
 		}
@@ -195,6 +197,60 @@ gameMain: GameMainDef
 			[ 139, 154 ]
 		]);
 		r = m0.multiply(m1);
+
+		if(!mr.equals(r)) {
+			"\nERROR: multiply() failed\n ";
+			return(nil);
+		}
+
+		return(true);
+
+	}
+
+	testAdd() {
+		local m0, m1, mr, r;
+
+		m0 = new Matrix2D([
+			[ 1, 2, 3 ],
+			[ 4, 5, 6 ]
+		]);
+		m1 = new Matrix2D([
+			[ 7, 8, 9 ],
+			[ 10, 11, 12 ]
+		]);
+
+		mr = new Matrix2D([
+			[ 8, 10, 12 ],
+			[ 14, 16, 18 ]
+		]);
+		r = m0.add(m1);
+
+		if(!mr.equals(r)) {
+			"\nERROR: multiply() failed\n ";
+			return(nil);
+		}
+
+		return(true);
+
+	}
+
+	testSubtract() {
+		local m0, m1, mr, r;
+
+		m0 = new Matrix2D([
+			[ 1, 2, 3 ],
+			[ 4, 5, 6 ]
+		]);
+		m1 = new Matrix2D([
+			[ 7, 8, 9 ],
+			[ 10, 11, 12 ]
+		]);
+
+		mr = new Matrix2D([
+			[ 6, 6, 6 ],
+			[ 6, 6, 6 ]
+		]);
+		r = m1.subtract(m0);
 
 		if(!mr.equals(r)) {
 			"\nERROR: multiply() failed\n ";
