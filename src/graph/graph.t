@@ -474,7 +474,7 @@ class Graph: object
 		local r;
 
 		//r = new Graph();
-		r = createInstanceOfSelf();
+		r = newInstanceOfSelf();
 
 		forEachVertex({ v: r.addVertex(v.vertexID) });
 		forEachEdge({

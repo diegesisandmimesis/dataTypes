@@ -102,11 +102,12 @@ modify Vector
 	// compared) and should return boolean true if they should be
 	// considered equal.
 	equals(v, ord?) {
-		local i, s;
+		local i, n, s;
 
 		if(!isVector(v)) return(nil);
 		if(self.length() != v.length()) return(nil);
-		for(i = 1; i <= self.length(); i++) {
+		n = length;
+		for(i = 1; i <= n; i++) {
 			if(ord == true) {
 				if(hasEquals(self[i])) {
 					if(self[i].equals(v[i]) != true)
@@ -144,11 +145,12 @@ modify Vector
 	// being tested) and should return boolean true if they should
 	// be considered equal.
 	isSubsetOf(v) {
-		local i, s;
+		local i, n, s;
 
 		if(!isVector(v)) return(nil);
 		if(v.length < self.length) return(nil);
-		for(i = 1; i <= self.length(); i++) {
+		n = length;
+		for(i = 1; i <= n; i++) {
 			if(hasEquals(self[i])) {
 				s = v.subset({ x: self[i].equals(x) });
 				if(s.length < 1) return(nil);
@@ -207,10 +209,11 @@ modify Vector
 	}
 
 	invert() {
-		local i, l;
+		local i, l, n;
 
-		l = new Vector(self.length);
-		for(i = self.length; i > 0; i--)
+		n = length;
+		l = new Vector(n);
+		for(i = n; i > 0; i--)
 			l.append(self[i]);
 		return(l);
 	}
@@ -246,15 +249,17 @@ modify Vector
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
-		local i, r;
+		local i, n, r;
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
 		if(!isVector(v) || (v.length != length))
 			return(nil);
 
-		r = new Vector(length);
-		for(i = 1; i <= length; i++) {
+		n = length;
+
+		r = new Vector(n);
+		for(i = 1; i <= n; i++) {
 			if(!isInteger(self[i]) || !isInteger(v[i]))
 				return(nil);
 			r.append(self[i] + v[i]);
@@ -264,15 +269,16 @@ modify Vector
 	}
 
 	subtract(v) {
-		local i, r;
+		local i, n, r;
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
 		if(!isVector(v) || (v.length != length))
 			return(nil);
 
-		r = new Vector(length);
-		for(i = 1; i <= length; i++) {
+		n = length;
+		r = new Vector(n);
+		for(i = 1; i <= n; i++) {
 			if(!isInteger(self[i]) || !isInteger(v[i]))
 				return(nil);
 			r.append(self[i] - v[i]);
@@ -283,7 +289,7 @@ modify Vector
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
-		local i, r;
+		local i, n, r;
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
@@ -291,7 +297,8 @@ modify Vector
 			return(nil);
 
 		r = 0;
-		for(i = 1; i <= length; i++) {
+		n = length;
+		for(i = 1; i <= n; i++) {
 			// Make sure both elements are integers.
 			if(!isInteger(self[i]) || !isInteger(v[i]))
 				return(nil);
@@ -305,40 +312,43 @@ modify Vector
 	// Dot product.  Only works for vectors of integers and doesn't do
 	// any type checking.
 	unsafeDot(v) {
-		local i, r;
+		local i, n, r;
 
 		// Still do the length check.
 		if(v.length != length)
 			return(nil);
 
 		r = 0;
-		for(i = 1; i <= length; i++)
+		n = length;
+		for(i = 1; i <= n; i++)
 			r += self[i] * v[i];
 
 		return(r);
 	}
 
 	unsafeAdd(v) {
-		local i, r;
+		local i, n, r;
 
 		if(v.length != length)
 			return(nil);
 
-		r = new Vector(length);
-		for(i = 1; i <= length; i++)
+		n = length;
+		r = new Vector(n);
+		for(i = 1; i <= n; i++)
 			r.append(self[i] + v[i]);
 
 		return(r);
 	}
 
 	unsafeSubtract(v) {
-		local i, r;
+		local i, n, r;
 
 		if(v.length != length)
 			return(nil);
 
-		r = new Vector(length);
-		for(i = 1; i <= length; i++)
+		n = length;
+		r = new Vector(n);
+		for(i = 1; i <= n; i++)
 			r.append(self[i] - v[i]);
 
 		return(r);
@@ -347,10 +357,11 @@ modify Vector
 	// Rectified linear unit function.  Returns the non-negatve
 	// part of the array.  Only works for integer arrays.
 	relu() {
-		local i, r;
+		local i, n, r;
 
-		r = new Vector(length);
-		for(i = 1; i <= length; i++)
+		n = length;
+		r = new Vector(n);
+		for(i = 1; i <= n; i++)
 			r.append((self[i] > 0) ? self[i] : 0);
 
 		return(r);
@@ -428,12 +439,22 @@ modify TadsObject
 		});
 	}
 
+	// Utility method for building class + mixin instances with
+	// semantics similar to TadsObject.createInstanceOf().
 	createInstanceOfSelf([args]) {
 		local l;
 
 		l = getSuperclassList();
 		if(args.length < 1)
 			return(createInstanceOf(l...));
+		return(createInstanceOf([l[1]] + args, l.sublist(2)...));
+	}
+
+	// Like above, but uses createInstance() semantics.
+	newInstanceOfSelf([args]) {
+		local l;
+
+		l = getSuperclassList();
 		return(createInstanceOf([l[1]] + args, l.sublist(2)...));
 	}
 ;
@@ -448,11 +469,12 @@ modify TadsObject
 //	will return "b".
 modify LookupTable
 	keyWhich(cb) {
-		local i, l;
+		local i, l, n;
 
 		if(!isFunction(cb)) return(nil);
 		l = keysToList();
-		for(i = 1; i <= l.length(); i++)
+		n = l.length;
+		for(i = 1; i <= n; i++)
 			if((cb)(self[l[i]])) return(l[i]);
 		return(nil);
 	}
@@ -460,10 +482,11 @@ modify LookupTable
 
 modify List
 	equals(l) {
-		local i;
+		local i, n;
 		if(!isCollection(l)) return(nil);
 		if(length != l.length) return(nil);
-		for(i = 1; i <= l.length; i++)
+		n = l.length;
+		for(i = 1; i <= n; i++)
 			if(l[i] != self[i]) return(nil);
 		return(true);
 	}

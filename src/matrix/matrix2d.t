@@ -29,6 +29,23 @@ class Matrix2D: object
 			initMatrix(v0);
 	}
 
+	// Wraps an matrix around an existing vector-of-vectors.  Relies
+	// on the caller to validate the argument.
+	// This is mostly done as a performance tweak for the various
+	// arithmatic methods that construct known-valid vector-of-vector
+	// matrix definitions (the thing that will live in _matrix in
+	// an instance), so going through the constructor would just
+	// be burning cycles creating a new copy of the valid new data.
+	_wrap(v) {
+		local r;
+
+		r = createInstanceOfSelf();
+		r._matrix = v;
+		r._setDimensions();
+
+		return(r);
+	}
+
 	_setDimensions() {
 		rows = (_matrix ? _matrix.length : 0);
 		columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0);
@@ -108,17 +125,17 @@ class Matrix2D: object
 		nrows = rows;
 		r = new Vector(nrows);
 		for(i = 1; i <= nrows; i++) {
-			row0 = getRow(i);
+			row0 = unsafeGetRow(i);
 			row = new Vector(n);
 			for(j = 1; j <= n; j++) {
 				//row1 = m[j];
-				row1 = m.getRow(j);
+				row1 = m.unsafeGetRow(j);
 				row.append(row0.unsafeDot(row1));
 			}
 			r.append(row);
 		}
 
-		return(new Matrix2D(r));
+		return(_wrap(r));
 	}
 
 	multiplyScalar(v) {
@@ -130,7 +147,7 @@ class Matrix2D: object
 		r = new Vector(rows);
 		_matrix.forEach({ x: r.append(x.mapAll({ y: y * v })) });
 
-		return(new Matrix2D(r));
+		return(_wrap(r));
 	}
 
 	mapAll(fn) {
@@ -142,7 +159,7 @@ class Matrix2D: object
 		r = new Vector(rows);
 		_matrix.forEach({ x: r.append(x.mapAll({ y: (fn)(y) })) });
 
-		return(new Matrix2D(r));
+		return(_wrap(r));
 	}
 
 	multiplyVector(v) {
@@ -186,7 +203,7 @@ class Matrix2D: object
 			r.append(v);
 		}
 
-		_transpose = createInstanceOfSelf(r);
+		_transpose = _wrap(r);
 
 		return(_transpose);
 	}
@@ -268,7 +285,7 @@ class Matrix2D: object
 			l.append(r);
 		}
 
-		return(new Matrix2D(l));
+		return(_wrap(l));
 	}
 
 	add(m) { return(_addSubtract(m)); }
