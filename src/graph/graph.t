@@ -272,12 +272,12 @@ class Graph: object
 		return(m);
 	}
 
-	degreeMatrix() {
+	degreeMatrix(lst?) {
 		local i, l, m, v;
 
 		l = getVertexIDs().sort();
-		if(!l || (l.length < 1))
-			return(nil);
+		if(isCollection(lst) && (lst.length == l.length))
+			l = lst;
 
 		m = matrixClass.createInstance(l.length, l.length);
 		m.fill(0);
@@ -290,8 +290,8 @@ class Graph: object
 		return(m);
 	}
 
-	laplacianMatrix() {
-		return(degreeMatrix().subtract(adjacencyMatrix()));
+	laplacianMatrix(lst?) {
+		return(degreeMatrix(lst).subtract(adjacencyMatrix(lst)));
 	}
 
 	// Clear anything we've cached.
