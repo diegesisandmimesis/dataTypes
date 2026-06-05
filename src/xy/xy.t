@@ -44,24 +44,24 @@ class _XY: object
 	}
 
 	// Returns the sum of ourselves and the passed XY instance.
-	add(v) { return(new XY(x + v.x, y + v.y)); }
+	add(v) { return(createInstance(x + v.x, y + v.y)); }
 	operator +(x) { return(add(x)); }
 	iadd(v) { x += v.x; y += v.y; return(self); }
 
 	// Returns the difference of ourselves and the passed XY instance.
-	subtract(v) { return(new XY(x - v.x, y - v.y)); }
+	subtract(v) { return(createInstance(x - v.x, y - v.y)); }
 	operator -(x) { return(subtract(x)); }
 	isubtract(v) { x -= v.x; y -= v.y; return(self); }
 
 	// Scale by the given factor.
-	multiply(n) { return(new XY(x * n, y * n)); }
+	multiply(n) { return(createInstance(x * n, y * n)); }
 	operator *(x) { return(multiply(x)); }
 	imultiply(n) { x *= n; y *= n; return(self); }
 
 	// Shrink by the given factor.
 	divide(n) {
 		if(n == 0) return(nil);
-		return(new XY(x / n, y / n));
+		return(createInstance(x / n, y / n));
 	}
 	operator /(x) { return(divide(x)); }
 
@@ -113,7 +113,6 @@ class _XY: object
 	}
 
 	dot(v) { return((x * v.x) + (y * v.y)); }
-	idot(v) { x *= v.x; y *= v.y; return(self); }
 
 	toStr() { return('(<<toString(x)>>, <<toString(y)>>)'); }
 ;
