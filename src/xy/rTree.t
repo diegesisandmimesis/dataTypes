@@ -177,7 +177,7 @@ class RTree: object
 
 	// Locate the best branch to query for the given XY instance.
 	findBranch(v) {
-		local i, min, pick;
+		local i, min, n, pick;
 
 		// If we're a leaf node then we have no branches, so we're
 		// (necessarily) the answer to the question being asked.
@@ -186,7 +186,8 @@ class RTree: object
 
 		// First, we see if any of our branches contain the point
 		// being queries.  If so, we use it.
-		for(i = 1; i <= next.length; i++) {
+		n = next.length;
+		for(i = 1; i <= n; i++) {
 			if(next[i].overlaps(v))
 				return(next[i]);
 		}
@@ -283,7 +284,7 @@ class RTree: object
 	// it goes from having n children (where n is >= maxBranches)
 	// to having two children, each with ~(maxBranches / 2) children.
 	_orderedSplitRootNode(lst) {
-		local i, lf0, lf1, n;
+		local i, len, lf0, lf1, n;
 
 		// Create the two new nodes that will end up with all
 		// the branches.
@@ -293,11 +294,13 @@ class RTree: object
 		// Clear our own list of branches.
 		next = nil;
 
+		len = lst.length;
+
 		// Half the branch list.
-		n = lst.length / 2;
+		n = len / 2;
 
 		// Go through all the branches.
-		for(i = 1; i <= lst.length; i++) {
+		for(i = 1; i <= len; i++) {
 			// Half of the branches go to one node, half to the
 			// other.
 			if(i < n)
@@ -316,7 +319,7 @@ class RTree: object
 
 	// Do an ordered split on a branch node.
 	_orderedSplitBranchNode(lst) {
-		local i, lf, n;
+		local i, len, lf, n;
 
 		// Create our new sibling.
 		lf = new RTree();
@@ -325,12 +328,14 @@ class RTree: object
 		next = nil;
 		_boundingBox = nil;
 
+		len = lst.length;
+
 		// Half the branch list.
-		n = lst.length / 2;
+		n = len / 2;
 
 		// Give ourselves the first half of the branches, our
 		// new sibling the other half.
-		for(i = 1; i <= lst.length; i++) {
+		for(i = 1; i <= len; i++) {
 			if(i < n)
 				addNode(lst[i]);
 			else
@@ -373,7 +378,7 @@ class RTree: object
 	}
 
 	_minAreaSplitRootNode(lst, b0, b1) {
-		local a0, a1, i, n0, n1;
+		local a0, a1, i, n, n0, n1;
 
 		// Create two new nodes.
 		n0 = new RTree();
@@ -386,8 +391,10 @@ class RTree: object
 		// Clear our own branch list.
 		next = nil;
 
+		n = lst.length - 1;
+
 		// Iterate over all branches except for the seed branches.
-		for(i = 2; i <= (lst.length - 1); i++) {
+		for(i = 2; i <= n; i++) {
 			// Get the area each of the new nodes would
 			// have if the branch under consideration was added
 			// to it.
@@ -414,7 +421,7 @@ class RTree: object
 	}
 
 	_minAreaSplitBranchNode(lst, b0, b1) {
-		local a0, a1, i, n1;
+		local a0, a1, i, n, n1;
 
 		// The new sibling node.
 		n1 = new RTree();
@@ -429,8 +436,10 @@ class RTree: object
 		// Add the other to the new node.
 		n1.addNode(b1);
 
+		n = lst.length - 1;
+
 		// Iterate over all the branches except the seed branches.
-		for(i = 2; i <= (lst.length - 1); i++) {
+		for(i = 2; i <= n; i++) {
 			// Get the area of the bounding box if the branch
 			// being considered was added to it.
 			a0 = getBoundingBox().areaWith(lst[i].getBoundingBox());
@@ -515,7 +524,7 @@ class RTree: object
 	// Recompute the size of our bounding box from the bounding
 	// boxes of our branches.
 	recomputeBoundingBox() {
-		local i;
+		local i, n;
 
 		// We can't recompute the size of a leaf node's
 		// bounding box.
@@ -535,9 +544,11 @@ class RTree: object
 		// box.
 		setBoundingBox(next[1].getBoundingBox());
 
+		n = next.length;
+
 		// Expand our bounding box to include all our branches'
 		// bounding boxen.
-		for(i = 2; i <= next.length; i++)
+		for(i = 2; i <= n; i++)
 			expand(next[i].getBoundingBox());
 
 		// If we changed, our parent changed.

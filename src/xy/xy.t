@@ -18,7 +18,11 @@
 
 #ifdef USE_XY
 
-class XY: object
+// Base XY class.  This class expects callers to handle validation of
+// all arguments themselves.  Specifically so callers with tight pipelines
+// can use _XY instead of XY if they can do type validation once instead
+// of on every operation.
+class _XY: object
 	x = nil
 	y = nil
 
@@ -29,7 +33,6 @@ class XY: object
 
 	// Copy the values from the passed argument to ourselves.
 	copy(v) {
-		if(!isXY(v)) return(nil);
 		x = v.x;
 		y = v.y;
 		return(true);
@@ -37,109 +40,41 @@ class XY: object
 
 	// Returns integer approximation of our distance from the origin.
 	length() {
-		if(!isInteger(x) || !isInteger(y)) return(nil);
 		return(Matrix._sqrtInt((x * x) + (y * y)));
 	}
 
-	operator +(x) { return(add(x)); }
-
 	// Returns the sum of ourselves and the passed XY instance.
-	add(v, fl?) {
-		if(!isXY(v)) return(nil);
-		if(fl == true) {
-			x += v.x;
-			y += v.y;
-			return(self);
-		}
-		return(new XY(x + v.x, y + v.y));
-	}
-
-	unsafeAdd(v, fl?) {
-		if(fl == true) {
-			x += v.x;
-			y += v.y;
-			return(self);
-		}
-		return(new XY(x + v.x, y + v.y));
-	}
-
-	operator -(x) { return(subtract(x)); }
+	add(v) { return(new XY(x + v.x, y + v.y)); }
+	operator +(x) { return(add(x)); }
+	iadd(v) { x += v.x; y += v.y; return(self); }
 
 	// Returns the difference of ourselves and the passed XY instance.
-	subtract(v, fl?) {
-		if(!isXY(v)) return(nil);
-		if(fl == true) {
-			x -= v.x;
-			y -= v.y;
-			return(self);
-		}
-		return(new XY(x - v.x, y - v.y));
-	}
-
-	unsafeSubtract(v, fl?) {
-		if(fl == true) {
-			x -= v.x;
-			y -= v.y;
-			return(self);
-		}
-		return(new XY(x - v.x, y - v.y));
-	}
-
-	operator *(x) { return(multiply(x)); }
+	subtract(v) { return(new XY(x - v.x, y - v.y)); }
+	operator -(x) { return(subtract(x)); }
+	isubtract(v) { x -= v.x; y -= v.y; return(self); }
 
 	// Scale by the given factor.
-	multiply(n, fl?) {
-		if(!isInteger(n)) return(nil);
-		if(fl == true) {
-			x *= n;
-			y *= n;
-			return(self);
-		}
-		return(new XY(x * n, y * n));
-	}
-
-	unsafeMultiply(n, fl?) {
-		if(fl == true) {
-			x *= n;
-			y *= n;
-			return(self);
-		}
-		return(new XY(x * n, y * n));
-	}
-
-
-	operator /(x) { return(divide(x)); }
+	multiply(n) { return(new XY(x * n, y * n)); }
+	operator *(x) { return(multiply(x)); }
+	imultiply(n) { x *= n; y *= n; return(self); }
 
 	// Shrink by the given factor.
-	divide(n, fl?) {
-		if(!isInteger(n)) return(nil);
+	divide(n) {
 		if(n == 0) return(nil);
-		if(fl == true) {
-			x /= n;
-			y /= n;
-			return(self);
-		}
 		return(new XY(x / n, y / n));
 	}
+	operator /(x) { return(divide(x)); }
 
-	unsafeDivide(n, fl?) {
-		if(n == 0) return(nil);
-		if(fl == true) {
-			x /= n;
-			y /= n;
-			return(self);
-		}
-		return(new XY(x / n, y / n));
-	}
+	idivide(n) { if(n == 0) return(nil); x /= n; y /= n; return(self); }
 
 	// Return an integer approximation of the distance between ourselves
 	// and the given XY instance.
 	distance(v) {
 		local v0, v1;
 
-		if(!isXY(v)) return(nil);
 		v0 = x - v.x;
 		v1 = y - v.y;
+
 		return(Matrix._sqrtInt((v0 * v0) + (v1 * v1)));
 	}
 
@@ -161,13 +96,9 @@ class XY: object
 		return(v);
 	}
 
-	equals(v) {
-		if(!isXY(v)) return(nil);
-		return((x == v.x) && (y == v.y));
-	}
+	equals(v) { return((x == v.x) && (y == v.y)); }
 
 	isAdjacent(v) {
-		if(!isXY(v)) return(nil);
 		if(equals(v)) return(nil);
 		if(abs(x - v.x) > 1) return(nil);
 		if(abs(y - v.y) > 1) return(nil);
@@ -176,18 +107,63 @@ class XY: object
 
 	isAdjacentToAll(lst) {
 		local i;
-		if(!isCollection(lst)) return(nil);
 		for(i = 1; i <= lst.length; i++)
 			if(!isAdjacent(lst[i])) return(nil);
 		return(true);
 	}
 
-	dot(v) {
-		if(!isXY(v)) return(nil);
-		return((x * v.x) + (y * v.y));
-	}
+	dot(v) { return((x * v.x) + (y * v.y)); }
+	idot(v) { x *= v.x; y *= v.y; return(self); }
 
 	toStr() { return('(<<toString(x)>>, <<toString(y)>>)'); }
+;
+
+// Version of the XY logic with safety checks on the arguments.
+class XY: _XY
+	copy(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	length() {
+		if(!isInteger(x) || !isInteger(y)) return(nil);
+		return(inherited());
+	}
+	add(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	subtract(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	multiply(n) {
+		if(!isInteger(n)) return(nil);
+		return(inherited(n));
+	}
+	divide(n) {
+		if(!isInteger(n)) return(nil);
+		return(inherited(n));
+	}
+	distance(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	equals(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	isAdjacent(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
+	isAdjacentToAll(lst) {
+		if(!isCollection(lst)) return(nil);
+		return(inherited(lst));
+	}
+	dot(v) {
+		if(!isXY(v)) return(nil);
+		return(inherited(v));
+	}
 ;
 
 #endif // USE_XY

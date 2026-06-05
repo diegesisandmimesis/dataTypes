@@ -210,7 +210,7 @@ WangTile template 'label' [ pattern ];
 #endif // INT_MATH_H
 
 // Type tests
-#define isXY(obj) (isType(obj, XY))
+#define isXY(obj) (isType(obj, _XY))
 
 #define isRectangle(obj) (isType(obj, Rectangle))
 #define isLineSegment(obj) (isType(obj, LineSegment))
