@@ -27,6 +27,7 @@ source: src/xy/rectangle.t
 source: src/xy/lineSegment.t
 source: src/xy/quadTree.t
 source: src/xy/rTree.t
+source: src/xy/spline.t
 source: src/ts/ts.t
 source: src/ts/tsProf.t
 source: src/hashTable/hashTable.t

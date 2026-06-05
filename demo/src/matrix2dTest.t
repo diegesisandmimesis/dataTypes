@@ -29,7 +29,7 @@ gameMain: GameMainDef
 	matrixSize = 3
 
 	newGame() {
-		if(test2D && testAsymmetric() && testOOB()
+		if(test2D() && testAsymmetric() && testOOB()
 			&& testTranspose() && testMultiply()
 			&& testAdd() && testSubtract()) {
 			"\npassed all tests\n ";
