@@ -12,22 +12,26 @@
 
 #ifdef USE_XY
 
+// Useless stub at this point, mostly a placeholder because MAYBE
+// there will be other spline types.
 class Spline: object
+	initSpline() {}
 ;
 
 class BezierSpline: Spline
-	_points = nil
+	segments = 16		// number of spline segments
 
-	p0 = nil
-	p1 = nil
-	p2 = nil
+	p0 = nil		// endpoint
+	p1 = nil		// control point
+	p2 = nil		// endpoint
 
-	a1 = nil
+	a1 = nil		// constructed
 
-	xyClass = _XY
+	_points = nil		// array containing the points
 
-	scale = 64
-	segments = 16
+	xyClass = _XY		// class to use for xy values
+
+	scale = 64		// arbitrary integer scale factor
 
 	construct(v0?, v1?, v2?) {
 		if(isXY(v0)) p0 = v0;
@@ -39,6 +43,8 @@ class BezierSpline: Spline
 		if(_points != nil)
 			return;
 
+		// Figure out if we have an existing control point or if
+		// we have to compute the midpoint of a line segment.
 		if(a1 == nil) {
 			if(p1 != nil) {
 				a1 = p1;
@@ -53,8 +59,9 @@ class BezierSpline: Spline
 		_initSplinePoints(a1);
 	}
 
+	// Compute the points for a quadratic Bezier curve.
 	_initSplinePoints(a1) {
-		local i, n, n2, t0, t1;
+		local i, n, n2, t0, t1, v0, v1, v2;
 
 		_points = new Vector(segments + 1);
 
@@ -65,15 +72,23 @@ class BezierSpline: Spline
 			t1 = i;
 			t0 = n - i;
 
+			// Precompute values for the polynomial that
+			// we use multiple times.
+			v0 = t0 * t0;
+			v1 = 2 * t0 * t1;
+			v2 = t1 * t1;
+
 			_points.append(xyClass.createInstance(
-				(((t0 * t0 * p0.x) + (2 * t0 * t1 * a1.x)
-					+ (t1 * t1 * p2.x)) * scale) / n2,
-				(((t0 * t0 * p0.y) + (2 * t0 * t1 * a1.y)
-					+ (t1 * t1 * p2.y)) * scale) / n2
+				(((v0 * p0.x) + (v1 * a1.x)
+					+ (v2 * p2.x)) * scale) / n2,
+				(((v0 * p0.y) + (v1 * a1.y)
+					+ (v2 * p2.y)) * scale) / n2
 			));
 		}
 	}
 
+	// Returns the index of the spline point nearest to the argument
+	// point (which is assumed to be an XY instance).
 	nearestPointTo(p) {
 		local d, i, n, minD, r, x, y;
 

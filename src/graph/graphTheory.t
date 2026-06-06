@@ -172,4 +172,17 @@ modify Graph
 
 		return(true);
 	}
+
+	blockTreeCut() {
+		local l;
+
+		l = getVertices();
+		if(l.length < 1)
+			return([]);
+
+		return(_getCut(l[1], 0));
+	}
+
+	_getCut(v0, d) {
+	}
 ;
