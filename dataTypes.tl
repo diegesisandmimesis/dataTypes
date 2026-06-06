@@ -12,6 +12,7 @@ source: src/graph/graphDijkstra.t
 source: src/graph/adjacencyMatrix.t
 source: src/graph/graphInit.t
 source: src/graph/graphTheory.t
+source: src/graph/blockCutTree.t
 source: src/finiteStateMachine/finiteStateMachine.t
 source: src/finiteStateMachine/finiteStateMachineInit.t
 source: src/markovChain/markovState.t
