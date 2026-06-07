@@ -59,6 +59,14 @@ class BezierSpline: Spline
 		_initSplinePoints(a1);
 	}
 
+	getSpline() { return(_points ? _points : []); }
+	getSplinePoint(idx) {
+		local l;
+		l = getSpline();
+		if(idx > l.length) return(nil);
+		return(l[idx]);
+	}
+
 	// Compute the points for a quadratic Bezier curve.
 	_initSplinePoints(a1) {
 		local i, n, n2, t0, t1, v0, v1, v2;
