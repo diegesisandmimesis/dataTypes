@@ -357,14 +357,7 @@ modify Vector
 	// Rectified linear unit function.  Returns the non-negatve
 	// part of the array.  Only works for integer arrays.
 	relu() {
-		local i, n, r;
-
-		n = length;
-		r = new Vector(n);
-		for(i = 1; i <= n; i++)
-			r.append((self[i] > 0) ? self[i] : 0);
-
-		return(r);
+		return(mapAll({ x: ((x > 0) ? x : 0) }));
 	}
 ;
 
