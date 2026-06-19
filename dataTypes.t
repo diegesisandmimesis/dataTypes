@@ -288,7 +288,7 @@ modify Vector
 	}
 
 	iadd(v) {
-		local i, n, r;
+		local i, n;
 
 		if(v.length != length)
 			return(nil);
@@ -303,7 +303,7 @@ modify Vector
 	}
 
 	isubtract(v) {
-		local i, n, r;
+		local i, n;
 
 		if(v.length != length)
 			return(nil);
