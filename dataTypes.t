@@ -287,6 +287,36 @@ modify Vector
 		return(r);
 	}
 
+	iadd(v) {
+		local i, n, r;
+
+		if(v.length != length)
+			return(nil);
+
+		n = length;
+
+		for(i = 1; i <= n; i++) {
+			self[i] += v[i];
+		}
+
+		return(self);
+	}
+
+	isubtract(v) {
+		local i, n, r;
+
+		if(v.length != length)
+			return(nil);
+
+		n = length;
+
+		for(i = 1; i <= n; i++) {
+			self[i] -= v[i];
+		}
+
+		return(self);
+	}
+
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
 		local i, n, r;
