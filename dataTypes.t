@@ -246,6 +246,15 @@ modify Vector
 
 	maxAbs() { return(max(abs(minVal()), abs(maxVal()))); }
 
+	norm() {
+		local r;
+
+		r = 0;
+		self.forEach({ x: r += x * x });
+
+		return(Matrix._sqrtInt(r));
+	}
+
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
@@ -316,6 +325,9 @@ modify Vector
 
 		return(self);
 	}
+
+	imultiply(n) { applyAll({ x: x * n }); }
+	idivide(n) { applyAll({ x: x / n }); }
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
