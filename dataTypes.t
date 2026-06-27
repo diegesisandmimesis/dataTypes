@@ -15,6 +15,16 @@ dataTypesModuleID: ModuleID {
         listingOrder = 99
 }
 
+chomp(v) { return(rexReplace('<Newline>+$', v, '')); }
+depad(v) {
+	v = rexReplace('^<Space>+', v, '');
+	return(rexReplace('<Space>+$', v, ''));
+}
+
+modify String
+	ucFirst() { return(substr(1, 1).toUpper() + substr(2)); }
+;
+
 // Extension to the builtin Vector class.
 modify Vector
 	// Swap the ith and jth elements.
