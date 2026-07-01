@@ -250,6 +250,9 @@ modify Vector
 		insertAt(1, v);
 	}
 
+	multiply(n) { return(mapAll({ x: x * n })); }
+	divide(n) { return(mapAll({ x: x / n })); }
+
 	// In-place versions of the math functions.
 	// Only on Vector, because only vector allows in-place modification.
 	iadd(v) {
@@ -356,8 +359,8 @@ modify Collection
 		return(mapAll({ x: x - v[i++] }));
 	}
 
-	multiply(n) { return(new Vector(self).imultiply(n)); }
-	divide(n) { return(new Vector(self).imultiply(n)); }
+	multiply(n) { return(mapAll({ x: x * n })); }
+	divide(n) { return(mapAll({ x: x / n })); }
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
