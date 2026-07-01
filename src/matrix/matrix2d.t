@@ -319,6 +319,11 @@ class Matrix2D: object
 		return(Matrix._sqrtInt(rows * columns * v * v));
 	}
 
+	maxAbs() {
+		return(_matrix ? _matrix.mapAll({ x: x.maxAbs() }).maxVal()
+			: nil);
+	}
+
 	log() {
 		if(!_matrix) "\nno matrix\n ";
 		_matrix.forEach({ x: "\n[ <<x.join(', ')>> ]\n " });
