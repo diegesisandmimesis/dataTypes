@@ -107,14 +107,10 @@ modify Vector
 	// contain the same elements.  If the second argument is boolean
 	// true the elements must be in the same order, if not they can
 	// be in any order.
-	// Optional third argument is a test function.  If given, it will
-	// be passed two arguments (elements from the vectors being
-	// compared) and should return boolean true if they should be
-	// considered equal.
 	equals(v, ord?) {
 		local i, n, s;
 
-		if(!isVector(v)) return(nil);
+		if(!isCollection(v)) return(nil);
 		if(self.length() != v.length()) return(nil);
 		n = length;
 		for(i = 1; i <= n; i++) {
@@ -254,6 +250,75 @@ modify Vector
 		insertAt(1, v);
 	}
 
+	// In-place versions of the math functions.
+	// Only on Vector, because only vector allows in-place modification.
+	iadd(v) {
+		local i;
+
+		if(v.length != length)
+			return(nil);
+
+		i = 1;
+		return(applyAll({ x: x + v[i++] }));
+	}
+
+	isubtract(v) {
+		local i;
+
+		if(v.length != length)
+			return(nil);
+
+		i = 1;
+		return(applyAll({ x: x - v[i++] }));
+	}
+
+	imultiply(n) { return(applyAll({ x: x * n })); }
+	idivide(n) { return(applyAll({ x: x / n })); }
+;
+
+modify Collection
+	// Generate permutations using Heap's algorithm.
+	// Collection must contain 8 or fewer items; more will
+	// return (instead of generating a runtime error as the
+	// VM explodes).
+	permutations() {
+		local r;
+
+		// Sanity check the argument.
+		if(length() > 8) return(nil);
+
+		// For the return value.
+		r = new Vector();
+
+		// Call the "private" method.
+		_heapPermute(r, length(), new Vector(self));
+
+		return(r);
+	}
+
+	// "Private" function used by the above.  This is the recursive
+	// Heap algorithm.
+	_heapPermute(r, n, lst) {
+		local i;
+
+		if(n == 1) {
+			r.append(new Vector(lst));
+			return;
+		}
+
+		for(i = 1; i <= n; i++) {
+			_heapPermute(r, n - 1, lst);
+			if(n % 2)
+				lst.swap(1, n);
+			else
+				lst.swap(i, n);
+		}
+	}
+
+	validIndex(idx) {
+		return(isInteger(idx) && (idx > 0) && (idx <= self.length()));
+	}
+
 	maxAbs() { return(max(abs(minVal()), abs(maxVal()))); }
 
 	norm() {
@@ -268,76 +333,31 @@ modify Vector
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
-		local i, n, r;
+		local i;
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
-		if(!isVector(v) || (v.length != length))
+		if(!isCollection(v) || (v.length != length))
 			return(nil);
 
-		n = length;
-
-		r = new Vector(n);
-		for(i = 1; i <= n; i++) {
-			if(!isInteger(self[i]) || !isInteger(v[i]))
-				return(nil);
-			r.append(self[i] + v[i]);
-		}
-
-		return(r);
+		i = 1;
+		return(mapAll({ x: x + v[i++] }));
 	}
 
 	subtract(v) {
-		local i, n, r;
+		local i;
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
-		if(!isVector(v) || (v.length != length))
+		if(!isCollection(v) || (v.length != length))
 			return(nil);
 
-		n = length;
-		r = new Vector(n);
-		for(i = 1; i <= n; i++) {
-			if(!isInteger(self[i]) || !isInteger(v[i]))
-				return(nil);
-			r.append(self[i] - v[i]);
-		}
-
-		return(r);
+		i = 1;
+		return(mapAll({ x: x - v[i++] }));
 	}
 
-	iadd(v) {
-		local i, n;
-
-		if(v.length != length)
-			return(nil);
-
-		n = length;
-
-		for(i = 1; i <= n; i++) {
-			self[i] += v[i];
-		}
-
-		return(self);
-	}
-
-	isubtract(v) {
-		local i, n;
-
-		if(v.length != length)
-			return(nil);
-
-		n = length;
-
-		for(i = 1; i <= n; i++) {
-			self[i] -= v[i];
-		}
-
-		return(self);
-	}
-
-	imultiply(n) { applyAll({ x: x * n }); }
-	idivide(n) { applyAll({ x: x / n }); }
+	multiply(n) { return(new Vector(self).imultiply(n)); }
+	divide(n) { return(new Vector(self).imultiply(n)); }
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
@@ -345,7 +365,7 @@ modify Vector
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
-		if(!isVector(v) || (v.length != length))
+		if(!isCollection(v) || (v.length != length))
 			return(nil);
 
 		r = 0;
@@ -406,54 +426,20 @@ modify Vector
 		return(r);
 	}
 
+	equals(l) {
+		local i, n;
+		if(!isCollection(l)) return(nil);
+		if(length != l.length) return(nil);
+		n = l.length;
+		for(i = 1; i <= n; i++)
+			if(l[i] != self[i]) return(nil);
+		return(true);
+	}
+
 	// Rectified linear unit function.  Returns the non-negatve
 	// part of the array.  Only works for integer arrays.
 	relu() {
 		return(mapAll({ x: ((x > 0) ? x : 0) }));
-	}
-;
-
-modify Collection
-	// Generate permutations using Heap's algorithm.
-	// Collection must contain 8 or fewer items; more will
-	// return (instead of generating a runtime error as the
-	// VM explodes).
-	permutations() {
-		local r;
-
-		// Sanity check the argument.
-		if(length() > 8) return(nil);
-
-		// For the return value.
-		r = new Vector();
-
-		// Call the "private" method.
-		_heapPermute(r, length(), new Vector(self));
-
-		return(r);
-	}
-
-	// "Private" function used by the above.  This is the recursive
-	// Heap algorithm.
-	_heapPermute(r, n, lst) {
-		local i;
-
-		if(n == 1) {
-			r.append(new Vector(lst));
-			return;
-		}
-
-		for(i = 1; i <= n; i++) {
-			_heapPermute(r, n - 1, lst);
-			if(n % 2)
-				lst.swap(1, n);
-			else
-				lst.swap(i, n);
-		}
-	}
-
-	validIndex(idx) {
-		return(isInteger(idx) && (idx > 0) && (idx <= self.length()));
 	}
 ;
 
@@ -525,6 +511,7 @@ modify LookupTable
 	}
 ;
 
+/* Moved to Collection
 modify List
 	equals(l) {
 		local i, n;
@@ -536,3 +523,4 @@ modify List
 		return(true);
 	}
 ;
+*/

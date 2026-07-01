@@ -42,6 +42,44 @@ gameMain: GameMainDef
 			err += 1;
 		}
 
+		v0 = [ 1, 3, 5 ];
+		v1 = [ 7, 11, 13 ];
+		r = [ 8, 14, 18 ];
+		if(!v0.add(v1).equals(r) || !v1.add(v0).equals(r)) {
+			"\nERROR: list addition tests failed\n ";
+			err += 1;
+		}
+
+		v0 = new Vector([ 8, 14, 18 ]);
+		v1 = new Vector([ 7, 11, 13 ]);
+		r = new Vector([ 1, 3, 5 ]);
+		if(!v0.subtract(v1).equals(r) || !v0.subtract(r).equals(v1)) {
+			"\nERROR: vector subtraction tests failed\n ";
+			err += 1;
+		}
+
+		v0 = [ 8, 14, 18 ];
+		v1 = [ 7, 11, 13 ];
+		r = [ 1, 3, 5 ];
+		if(!v0.subtract(v1).equals(r) || !v0.subtract(r).equals(v1)) {
+			"\nERROR: list subtraction tests failed\n ";
+			err += 1;
+		}
+
+		v0 = new Vector([ 1, 2, 3 ]);
+		r = new Vector([ 2, 4, 6 ]);
+		if(!v0.imultiply(2).equals(r)) {
+			"\nERROR: vector multiplication tests failed\n ";
+			err += 1;
+		}
+
+		v0 = new Vector([ 2, 4, 6 ]);
+		r = new Vector([ 1, 2, 3 ]);
+		if(!v0.idivide(2).equals(r)) {
+			"\nERROR: vector division tests failed\n ";
+			err += 1;
+		}
+
 		v0 = new Vector([ 1, 3, -5 ]);
 		r = new Vector([ 1, 3, 0 ]);
 		if(!v0.relu().equals(r)) {
