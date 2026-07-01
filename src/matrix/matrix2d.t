@@ -130,7 +130,7 @@ class Matrix2D: object
 			for(j = 1; j <= n; j++) {
 				//row1 = m[j];
 				row1 = m.unsafeGetRow(j);
-				row.append(row0.unsafeDot(row1));
+				row.append(row0.dot(row1));
 			}
 			r.append(row);
 		}
@@ -165,6 +165,16 @@ class Matrix2D: object
 	multiplyVector(v) {
 		local r;
 
+		r = new Vector(v.length);
+		_matrix.forEach({ x: r.append(v.dot(x)) });
+
+		return(r);
+	}
+
+	/*
+	unsafeMultiplyVector(v) {
+		local r;
+
 		if(!isVector(v))
 			return(nil);
 
@@ -173,18 +183,7 @@ class Matrix2D: object
 
 		return(r);
 	}
-
-	unsafeMultiplyVector(v) {
-		local r;
-
-		if(!isVector(v))
-			return(nil);
-
-		r = new Vector(v.length);
-		_matrix.forEach({ x: r.append(v.unsafeDot(x)) });
-
-		return(r);
-	}
+	*/
 
 	transpose() {
 		local i, j, nColumns, nRows, r, v;

@@ -31,7 +31,8 @@ gameMain: GameMainDef
 	newGame() {
 		if(test2D() && testAsymmetric() && testOOB()
 			&& testTranspose() && testMultiply()
-			&& testAdd() && testSubtract()) {
+			&& testAdd() && testSubtract()
+			&& testMultiplyVector()) {
 			"\npassed all tests\n ";
 		} else {
 			"\nERROR: failed one or more tests\n ";
@@ -254,6 +255,28 @@ gameMain: GameMainDef
 
 		if(!mr.equals(r)) {
 			"\nERROR: multiply() failed\n ";
+			return(nil);
+		}
+
+		return(true);
+
+	}
+
+	testMultiplyVector() {
+		local m0, mr, r, v;
+
+		m0 = new Matrix2D([
+			[ 1, 2, 3 ],
+			[ 4, 5, 6 ]
+		]);
+
+		v = [ 2, 3, 4 ];
+
+		mr = [ 20, 47 ];
+		r = m0.multiplyVector(v);
+
+		if(!mr.equals(r)) {
+			"\nERROR: multiplyVector() failed\n ";
 			return(nil);
 		}
 

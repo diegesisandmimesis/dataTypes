@@ -250,8 +250,8 @@ modify Vector
 		insertAt(1, v);
 	}
 
-	multiply(n) { return(mapAll({ x: x * n })); }
-	divide(n) { return(mapAll({ x: x / n })); }
+	//multiply(n) { return(mapAll({ x: x * n })); }
+	//divide(n) { return(mapAll({ x: x / n })); }
 
 	// In-place versions of the math functions.
 	// Only on Vector, because only vector allows in-place modification.
@@ -338,9 +338,7 @@ modify Collection
 	add(v) {
 		local i;
 
-		// Arg must be a vector and its length must be the same as
-		// ours.
-		if(!isCollection(v) || (v.length != length))
+		if(v.length != length)
 			return(nil);
 
 		i = 1;
@@ -352,7 +350,7 @@ modify Collection
 
 		// Arg must be a vector and its length must be the same as
 		// ours.
-		if(!isCollection(v) || (v.length != length))
+		if(v.length != length)
 			return(nil);
 
 		i = 1;
@@ -364,26 +362,19 @@ modify Collection
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
-		local i, n, r;
+		local i, r;
 
-		// Arg must be a vector and its length must be the same as
-		// ours.
-		if(!isCollection(v) || (v.length != length))
+		if(v.length != length)
 			return(nil);
 
 		r = 0;
-		n = length;
-		for(i = 1; i <= n; i++) {
-			// Make sure both elements are integers.
-			if(!isInteger(self[i]) || !isInteger(v[i]))
-				return(nil);
-
-			r += self[i] * v[i];
-		}
+		i = 1;
+		forEach({ x:  r += (x * v[i++]) });
 
 		return(r);
 	}
 
+	/*
 	// Dot product.  Only works for vectors of integers and doesn't do
 	// any type checking.
 	unsafeDot(v) {
@@ -402,32 +393,25 @@ modify Collection
 	}
 
 	unsafeAdd(v) {
-		local i, n, r;
+		local i;
 
 		if(v.length != length)
 			return(nil);
 
-		n = length;
-		r = new Vector(n);
-		for(i = 1; i <= n; i++)
-			r.append(self[i] + v[i]);
-
-		return(r);
+		i = 1;
+		return(mapAll({ x: x + v[i++] }));
 	}
 
 	unsafeSubtract(v) {
-		local i, n, r;
+		local i;
 
 		if(v.length != length)
 			return(nil);
 
-		n = length;
-		r = new Vector(n);
-		for(i = 1; i <= n; i++)
-			r.append(self[i] - v[i]);
-
-		return(r);
+		i = 1;
+		return(mapAll({ x: x - v[i++] }));
 	}
+	*/
 
 	equals(l) {
 		local i, n;
