@@ -250,9 +250,6 @@ modify Vector
 		insertAt(1, v);
 	}
 
-	//multiply(n) { return(mapAll({ x: x * n })); }
-	//divide(n) { return(mapAll({ x: x / n })); }
-
 	// In-place versions of the math functions.
 	// Only on Vector, because only vector allows in-place modification.
 	iadd(v) {

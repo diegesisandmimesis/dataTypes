@@ -240,7 +240,7 @@ class Matrix2D: object
 	query(i, j) { return(get(i, j)); }
 
 	equals(m) {
-		local i, j, nColumns, nRows;
+		local i, j, nColumns, nRows, r0, r1;
 
 		if(!isMatrix2D(m))
 			return(nil);
@@ -249,9 +249,11 @@ class Matrix2D: object
 
 		nColumns = columns;
 		nRows = rows;
-		for(j = 1; j <= nColumns; j++) {
-			for(i = 1; i <= nRows; i++) {
-				if(m.get(i, j) != get(i, j))
+		for(j = 1; j <= nRows; j++) {
+			r0 = getRow(j);
+			r1 = m.getRow(j);
+			for(i = 1; i <= nColumns; i++) {
+				if(r0[i] != r1[i])
 					return(nil);
 			}
 		}
