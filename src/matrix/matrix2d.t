@@ -25,8 +25,10 @@ class Matrix2D: object
 	construct(v0, v1?, v2?) {
 		if(isInteger(v0) && isInteger(v1))
 			createMatrix(v0, v1, v2);
-		if(isCollection(v0) && (v1 == nil))
+		else if(isCollection(v0) && (v1 == nil))
 			initMatrix(v0);
+		else if(validate())
+			_setDimensions();
 	}
 
 	// Wraps an matrix around an existing vector-of-vectors.  Relies
