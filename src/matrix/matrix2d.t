@@ -17,7 +17,7 @@ class Matrix2D: object
 	columns = 0
 
 	// Matrix in row-first, vector-of-vectors format.
-	_matrix = nil
+	matrix = nil
 
 	// Matrix transpose.
 	_transpose = nil
@@ -33,22 +33,22 @@ class Matrix2D: object
 	// on the caller to validate the argument.
 	// This is mostly done as a performance tweak for the various
 	// arithmatic methods that construct known-valid vector-of-vector
-	// matrix definitions (the thing that will live in _matrix in
+	// matrix definitions (the thing that will live in matrix in
 	// an instance), so going through the constructor would just
 	// be burning cycles creating a new copy of the valid new data.
 	_wrap(v) {
 		local r;
 
 		r = createInstanceOfSelf();
-		r._matrix = v;
+		r.matrix = v;
 		r._setDimensions();
 
 		return(r);
 	}
 
 	_setDimensions() {
-		rows = (_matrix ? _matrix.length : 0);
-		columns = ((_matrix && _matrix.length) ? _matrix[1].length : 0);
+		rows = (matrix ? matrix.length : 0);
+		columns = ((matrix && matrix.length) ? matrix[1].length : 0);
 	}
 
 	markDirty() {
@@ -60,9 +60,9 @@ class Matrix2D: object
 
 		v = (v ? v : defaultValue);
 
-		_matrix = new Vector(r);
+		matrix = new Vector(r);
 		for(i = 0; i < r; i++)
-			_matrix.append(new Vector(c).fillValue(v, 1, c));
+			matrix.append(new Vector(c).fillValue(v, 1, c));
 		_setDimensions();
 	}
 
@@ -70,8 +70,8 @@ class Matrix2D: object
 		if(!validate(v))
 			return(nil);
 
-		_matrix = new Vector(v.length);
-		v.forEach({ x: _matrix.append(new Vector(x)) });
+		matrix = new Vector(v.length);
+		v.forEach({ x: matrix.append(new Vector(x)) });
 		markDirty();
 		_setDimensions();
 
@@ -79,7 +79,7 @@ class Matrix2D: object
 	}
 
 	validate(v?) {
-		v = (v ? v : _matrix);
+		v = (v ? v : matrix);
 
 		// The 2D matrix is an array of arrays, so we make sure
 		// we're array-like and have a non-zero length.
@@ -101,13 +101,13 @@ class Matrix2D: object
 		return(true);
 	}
 
-	clone() { return(createInstanceOfSelf(_matrix)); }
+	clone() { return(createInstanceOfSelf(matrix)); }
 
 	// Fill the matrix with a single value.
 	fill(v) {
-		if(!_matrix) return(nil);
+		if(!matrix) return(nil);
 
-		_matrix.forEach({ x: x.fillValue(v, 1, _matrix[1].length) });
+		matrix.forEach({ x: x.fillValue(v, 1, matrix[1].length) });
 		markDirty();
 
 		return(true);
@@ -145,7 +145,7 @@ class Matrix2D: object
 			return(nil);
 
 		r = new Vector(rows);
-		_matrix.forEach({ x: r.append(x.mapAll({ y: y * v })) });
+		matrix.forEach({ x: r.append(x.mapAll({ y: y * v })) });
 
 		return(_wrap(r));
 	}
@@ -157,7 +157,7 @@ class Matrix2D: object
 			return(nil);
 
 		r = new Vector(rows);
-		_matrix.forEach({ x: r.append(x.mapAll({ y: (fn)(y) })) });
+		matrix.forEach({ x: r.append(x.mapAll({ y: (fn)(y) })) });
 
 		return(_wrap(r));
 	}
@@ -166,7 +166,7 @@ class Matrix2D: object
 		local r;
 
 		r = new Vector(v.length);
-		_matrix.forEach({ x: r.append(v.dot(x)) });
+		matrix.forEach({ x: r.append(v.dot(x)) });
 
 		return(r);
 	}
@@ -179,7 +179,7 @@ class Matrix2D: object
 			return(nil);
 
 		r = new Vector(v.length);
-		_matrix.forEach({ x: r.append(v.dot(x)) });
+		matrix.forEach({ x: r.append(v.dot(x)) });
 
 		return(r);
 	}
@@ -198,7 +198,7 @@ class Matrix2D: object
 		for(j = 1; j <= nColumns; j++) {
 			v = new Vector(nRows);
 			for(i = 1; i <= nRows; i++)
-				v.append(_matrix[i][j]);
+				v.append(matrix[i][j]);
 			r.append(v);
 		}
 
@@ -216,22 +216,22 @@ class Matrix2D: object
 
 	getRow(i) {
 		if(!isInteger(i) || (i < 1) || (i > rows)) return(nil);
-		return(_matrix ? _matrix[i] : nil);
+		return(matrix ? matrix[i] : nil);
 	}
 
 	unsafeGetRow(i) {
-		return(_matrix ? _matrix[i] : nil);
+		return(matrix ? matrix[i] : nil);
 	}
 
 	get(i, j) {
 		if(!_validateCoord(i, j)) return(nil);
-		return(_matrix ? _matrix[i][j] : nil);
+		return(matrix ? matrix[i][j] : nil);
 	}
 
 	set(i, j, v) {
-		if(!_matrix) return(nil);
+		if(!matrix) return(nil);
 		if(!_validateCoord(i, j)) return(nil);
-		_matrix[i][j] = v;
+		matrix[i][j] = v;
 		markDirty();
 		return(true);
 	}
@@ -321,14 +321,14 @@ class Matrix2D: object
 	}
 
 	maxAbs() {
-		return(_matrix ? _matrix.mapAll({ x: x.maxAbs() }).maxVal()
+		return(matrix ? matrix.mapAll({ x: x.maxAbs() }).maxVal()
 			: nil);
 	}
 
 	log() {
-		if(!_matrix) "\nno matrix\n ";
-		_matrix.forEach({ x: "\n[ <<x.join(', ')>> ]\n " });
+		if(!matrix) "\nno matrix\n ";
+		matrix.forEach({ x: "\n[ <<x.join(', ')>> ]\n " });
 	}
 
-	forEach(fn) { return(_matrix.forEach(fn)); }
+	forEach(fn) { return(matrix.forEach(fn)); }
 ;
