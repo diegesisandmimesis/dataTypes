@@ -26,9 +26,16 @@ class Matrix2D: object
 		if(isInteger(v0) && isInteger(v1))
 			createMatrix(v0, v1, v2);
 		else if(isCollection(v0) && (v1 == nil))
-			initMatrix(v0);
-		else if(validate())
-			_setDimensions();
+			loadMatrix(v0);
+		else
+			touchMatrix();
+	}
+
+	touchMatrix() {
+		if(!validate())
+			return(nil);
+		setDimensions();
+		return(true);
 	}
 
 	// Wraps an matrix around an existing vector-of-vectors.  Relies
@@ -43,12 +50,12 @@ class Matrix2D: object
 
 		r = createInstanceOfSelf();
 		r.matrix = v;
-		r._setDimensions();
+		r.setDimensions();
 
 		return(r);
 	}
 
-	_setDimensions() {
+	setDimensions() {
 		rows = (matrix ? matrix.length : 0);
 		columns = ((matrix && matrix.length) ? matrix[1].length : 0);
 	}
@@ -57,6 +64,8 @@ class Matrix2D: object
 		_transpose = nil;
 	}
 
+	// Create a matrix with the given number of rows, columns, and
+	// default value.
 	createMatrix(r, c, v?) {
 		local i;
 
@@ -65,17 +74,18 @@ class Matrix2D: object
 		matrix = new Vector(r);
 		for(i = 0; i < r; i++)
 			matrix.append(new Vector(c).fillValue(v, 1, c));
-		_setDimensions();
+		setDimensions();
 	}
 
-	initMatrix(v) {
+	// Load a matrix from a row-first array-of-arrays argument.
+	loadMatrix(v) {
 		if(!validate(v))
 			return(nil);
 
 		matrix = new Vector(v.length);
 		v.forEach({ x: matrix.append(new Vector(x)) });
 		markDirty();
-		_setDimensions();
+		setDimensions();
 
 		return(true);
 	}
