@@ -321,6 +321,15 @@ modify Collection
 
 	maxAbs() { return(max(abs(minVal()), abs(maxVal()))); }
 
+	// Mean, optionally scaled by the argument.
+	mean(s?) {
+		local r;
+
+		r = 0;
+		self.forEach({ x: r += x });
+		return(r * (s ? s : 1) / self.length);
+	}
+
 	norm() {
 		local r;
 
