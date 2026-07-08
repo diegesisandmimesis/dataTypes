@@ -330,6 +330,19 @@ modify Collection
 		return(r * (s ? s : 1) / self.length);
 	}
 
+	// Mean and standard deviation.
+	meanAndSigma() {
+		local m, n, r;
+
+		if((n = length()) == 0)
+			return([ 0, 0 ]);
+
+		m = mean();
+		r = mapAll({ x: x - m });
+
+		return([ m, norm() / Matrix._sqrtInt(n) ]);
+	}
+
 	norm() {
 		local r;
 
