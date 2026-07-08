@@ -340,7 +340,7 @@ modify Collection
 		m = mean();
 		r = mapAll({ x: x - m });
 
-		return([ m, norm() / Matrix._sqrtInt(n) ]);
+		return([ m, r.norm() / Matrix._sqrtInt(n) ]);
 	}
 
 	norm() {
