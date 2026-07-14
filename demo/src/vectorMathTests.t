@@ -24,7 +24,6 @@ gameMain: GameMainDef
 	newGame() {
 		local err, r, v0, v1;
 
-
 		err = 0;
 
 		v0 = new Vector([ 1, 3, -5 ]);

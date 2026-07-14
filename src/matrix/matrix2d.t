@@ -183,20 +183,6 @@ class Matrix2D: object
 		return(r);
 	}
 
-	/*
-	unsafeMultiplyVector(v) {
-		local r;
-
-		if(!isVector(v))
-			return(nil);
-
-		r = new Vector(v.length);
-		matrix.forEach({ x: r.append(v.dot(x)) });
-
-		return(r);
-	}
-	*/
-
 	transpose() {
 		local i, j, nColumns, nRows, r, v;
 

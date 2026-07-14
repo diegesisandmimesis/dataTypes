@@ -343,6 +343,7 @@ modify Collection
 		return([ m, r.norm() / Matrix._sqrtInt(n) ]);
 	}
 
+	// Returns vector norm.
 	norm() {
 		local r;
 
@@ -350,6 +351,18 @@ modify Collection
 		self.forEach({ x: r += x * x });
 
 		return(Matrix._sqrtInt(r));
+	}
+
+	// Returns the product of the norm of this vector and the norm of
+	// the argument vector (which will, per the Cauchy-Schwarz inequality
+	// be upper bound on the absolute value of the dot product of the
+	// two vectors).
+	cauchySchwarz(v) {
+		local n;
+
+		if(!v || ((n = v.norm()) == nil))
+			return(nil);
+		return(norm() * n);
 	}
 
 	// Returns the sum of this vector with the argument vector.
@@ -393,7 +406,7 @@ modify Collection
 		return(r);
 	}
 
-	// Returns the distance to the given vector.
+	// Returns the distance between this vector and the argument vector.
 	distance(v) {
 		local d, i, n, r;
 
