@@ -138,6 +138,14 @@ gameMain: GameMainDef
 			err += 1;
 		}
 
+		v0 = [ 1, 1 ];
+		v1 = [ 3, 3 ];
+		r = 2;
+		if(v0.distance(v1) != r) {
+			"\nERROR: distance test failed\n ";
+			err += 1;
+		}
+
 		if(err == 0)
 			"\npassed all tests\n ";
 		else

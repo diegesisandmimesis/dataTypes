@@ -393,44 +393,20 @@ modify Collection
 		return(r);
 	}
 
-	/*
-	// Dot product.  Only works for vectors of integers and doesn't do
-	// any type checking.
-	unsafeDot(v) {
-		local i, n, r;
+	// Returns the distance to the given vector.
+	distance(v) {
+		local d, i, n, r;
 
-		// Still do the length check.
-		if(v.length != length)
+		n = v.length;
+		if(n != length)
 			return(nil);
-
 		r = 0;
-		n = length;
-		for(i = 1; i <= n; i++)
-			r += self[i] * v[i];
-
-		return(r);
+		for(i = 1; i <= n; i++) {
+			d = self[i] - v[i];
+			r += d * d;
+		}
+		return(Matrix._sqrtInt(r));
 	}
-
-	unsafeAdd(v) {
-		local i;
-
-		if(v.length != length)
-			return(nil);
-
-		i = 1;
-		return(mapAll({ x: x + v[i++] }));
-	}
-
-	unsafeSubtract(v) {
-		local i;
-
-		if(v.length != length)
-			return(nil);
-
-		i = 1;
-		return(mapAll({ x: x - v[i++] }));
-	}
-	*/
 
 	equals(l) {
 		local i, n;
@@ -516,17 +492,3 @@ modify LookupTable
 		return(nil);
 	}
 ;
-
-/* Moved to Collection
-modify List
-	equals(l) {
-		local i, n;
-		if(!isCollection(l)) return(nil);
-		if(length != l.length) return(nil);
-		n = l.length;
-		for(i = 1; i <= n; i++)
-			if(l[i] != self[i]) return(nil);
-		return(true);
-	}
-;
-*/
