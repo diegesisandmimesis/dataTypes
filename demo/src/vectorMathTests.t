@@ -145,6 +145,22 @@ gameMain: GameMainDef
 			err += 1;
 		}
 
+		v0 = [ 1, 2, 3 ];
+		r = 3;
+		if(v0.norm() != r) {
+			"\nERROR: norm test failed\n ";
+			err += 1;
+		}
+
+		v0 = [ 1, 2, 3 ];
+		v1 = [ 4, 5, 6 ];
+		r = 24;
+		if(v0.cauchySchwarz(v1) != r) {
+			"\nERROR: cauchySchwarz test failed\n ";
+			err += 1;
+		}
+
+
 		if(err == 0)
 			"\npassed all tests\n ";
 		else
