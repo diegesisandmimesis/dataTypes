@@ -365,6 +365,24 @@ modify Collection
 		return(norm() * n);
 	}
 
+	// Sum of all elements.
+	sum() {
+		local r;
+
+		r = 0;
+		forEach({ x: r += x });
+		return(r);
+	}
+
+	// L1/Manhattan length of vector.
+	l1() {
+		local r;
+
+		r = 0;
+		forEach({ x: r += abs(x) });
+		return(r);
+	}
+
 	// Returns the sum of this vector with the argument vector.
 	// Only works with vectors of integers.
 	add(v) {
