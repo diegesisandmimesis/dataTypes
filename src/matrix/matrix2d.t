@@ -329,4 +329,20 @@ class Matrix2D: object
 	}
 
 	forEach(fn) { return(matrix.forEach(fn)); }
+
+	// Sets the value of of column j in every row to be value n,
+	// defaulting to zero if n is not given.
+	setColumnValue(j, n?) {
+		if(!matrix) return(nil);
+		n = (n ? n : 0);
+		matrix.forEach({ x: x[j] = n });
+		markDirty();
+		return(true);
+	}
+
+	// Returns column j as a new vector.
+	// IMPORTANT:  offline copy; can't be used to update matrix.
+	getColumn(j) {
+		return(Vector.generate({ x: matrix[x][j] }, rows));
+	}
 ;
