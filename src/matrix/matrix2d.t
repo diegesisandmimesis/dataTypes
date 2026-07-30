@@ -125,24 +125,31 @@ class Matrix2D: object
 		return(true);
 	}
 
-	multiply(m) {
-		local i, j, n, nrows, r, row0, row1, row;
+	// Updated matrix multiply, per Golum & van Loan
+	multiply(mat) {
+		local a, i, j, k, m0, m1, n, nColumns, nRows, r,
+			row0, row1, row;
 
-		if(!isMatrix2D(m) || columns != m.rows)
+		if(!isMatrix2D(mat) || columns != mat.rows)
 			return(nil);
 
-		n = m.columns;
-		m = m.transpose();
+		m0 = mat.matrix;
+		n = mat.columns;
 
-		nrows = rows;
-		r = new Vector(nrows);
-		for(i = 1; i <= nrows; i++) {
-			row0 = unsafeGetRow(i);
-			row = new Vector(n);
-			for(j = 1; j <= n; j++) {
-				//row1 = m[j];
-				row1 = m.unsafeGetRow(j);
-				row.append(row0.dot(row1));
+		m1 = matrix;
+
+		nRows = rows;
+		nColumns = columns;
+
+		r = new Vector(nRows);
+		for(i = 1; i <= nRows; i++) {
+			row0 = m1[i];
+			row = new Vector(n).fillValue(0, 1, n);
+			for(k = 1; k <= nColumns; k++) {
+				a = row0[k];
+				row1 = m0[k];
+				for(j = 1; j <= n; j++)
+					row[j] += a * row1[j];
 			}
 			r.append(row);
 		}
@@ -175,10 +182,34 @@ class Matrix2D: object
 	}
 
 	multiplyVector(v) {
-		local r;
+		local m, r;
 
-		r = new Vector(v.length);
-		matrix.forEach({ x: r.append(v.dot(x)) });
+		if(v.length != columns)
+			return(nil);
+
+		r = new Vector(rows);
+		m = matrix;
+		m.forEach({ x: r.append(v.dot(x)) });
+
+		return(r);
+	}
+
+	multiplyVectorTranspose(v) {
+		local i, j, m, nColumns, nRows, r, row;
+
+		if(v.length != rows)
+			return(nil);
+
+		nRows = rows;
+		nColumns = columns;
+		m = matrix;
+
+		r = new Vector(n).fillValue(0, 1, nColumns);
+		for(i = 1; i <= nRows; i++) {
+			row = m[i];
+			for(j = 1; j <= n; j++)
+				r[j] += row[j] * v[i];
+		}
 
 		return(r);
 	}
@@ -189,8 +220,8 @@ class Matrix2D: object
 		if(_transpose != nil)
 			return(_transpose);
 
-		nColumns = columns;
 		nRows = rows;
+		nColumns = columns;
 		m = matrix;
 
 		r = new Vector(nColumns);
