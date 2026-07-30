@@ -412,14 +412,15 @@ modify Collection
 
 	// Dot product.  Only works for vectors of integers.
 	dot(v) {
-		local i, r;
+		local i, n, r;
 
 		if(v.length != length)
 			return(nil);
 
 		r = 0;
-		i = 1;
-		forEach({ x:  r += (x * v[i++]) });
+		n = length;
+		for(i = 1; i <= n; i++)
+			r += self[i] * v[i];
 
 		return(r);
 	}
