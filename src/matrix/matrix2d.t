@@ -184,19 +184,20 @@ class Matrix2D: object
 	}
 
 	transpose() {
-		local i, j, nColumns, nRows, r, v;
+		local i, j, m, nColumns, nRows, r, v;
 
-		if(isMatrix2D(_transpose))
+		if(_transpose != nil)
 			return(_transpose);
 
 		nColumns = columns;
 		nRows = rows;
+		m = matrix;
 
 		r = new Vector(nColumns);
 		for(j = 1; j <= nColumns; j++) {
 			v = new Vector(nRows);
 			for(i = 1; i <= nRows; i++)
-				v.append(matrix[i][j]);
+				v.append(m[i][j]);
 			r.append(v);
 		}
 
