@@ -22,7 +22,14 @@ class Matrix2D: object
 	// Matrix transpose.
 	_transpose = nil
 
-	construct(v0, v1?, v2?) {
+	// Three constructor usages:
+	//	-two integers (or three), row and column counts (optional third
+	//		is the value to set each cell to, default 0)
+	//	-one collection, assumed to be matrix def in row-first
+	//		array-of-arrays form
+	//	-none of the above, does nothing, sees if everything was
+	//		set on the class itself
+	construct(v0?, v1?, v2?) {
 		if(isInteger(v0) && isInteger(v1))
 			createMatrix(v0, v1, v2);
 		else if(isCollection(v0) && (v1 == nil))
