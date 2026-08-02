@@ -211,10 +211,10 @@ class Matrix2D: object
 		nColumns = columns;
 		m = matrix;
 
-		r = new Vector(n).fillValue(0, 1, nColumns);
+		r = new Vector(nColumns).fillValue(0, 1, nColumns);
 		for(i = 1; i <= nRows; i++) {
 			row = m[i];
-			for(j = 1; j <= n; j++)
+			for(j = 1; j <= nColumns; j++)
 				r[j] += row[j] * v[i];
 		}
 
