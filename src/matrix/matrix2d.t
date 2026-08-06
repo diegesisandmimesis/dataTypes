@@ -38,6 +38,11 @@ class Matrix2D: object
 			touchMatrix();
 	}
 
+	propNotDefined(prop, [args]) { return(matrix.(prop)(args...)); }
+	operator[](i) { return(matrix[i]); }
+	operator[]=(i,v) { matrix[i] = v; return(self); }
+	createIterator() { return(matrix.createIterator); }
+
 	touchMatrix() {
 		if(!validate())
 			return(nil);
@@ -167,11 +172,18 @@ class Matrix2D: object
 	multiplyScalar(v) {
 		local r;
 
-		if(!isInteger(v))
-			return(nil);
-
 		r = new Vector(rows);
 		matrix.forEach({ x: r.append(x.mapAll({ y: y * v })) });
+
+		return(_wrap(r));
+	}
+
+	divideScalar(v) {
+		local r;
+
+		r = new Vector(rows);
+		matrix.forEach({ x: r.append(x.mapAll({
+			y: intDivide(y, v) })) });
 
 		return(_wrap(r));
 	}
