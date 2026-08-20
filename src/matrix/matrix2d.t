@@ -182,8 +182,13 @@ class Matrix2D: object
 		local r;
 
 		r = new Vector(rows);
+#ifdef INT_MATH_H
 		matrix.forEach({ x: r.append(x.mapAll({
 			y: intDivide(y, v) })) });
+#else // INT_MATH_H
+		matrix.forEach({ x: r.append(x.mapAll({ y: y / v })) });
+#endif // INT_MATH_H
+			//y: intDivide(y, v) })) });
 
 		return(_wrap(r));
 	}

@@ -11,7 +11,14 @@ class DisjointSetForest: object
 	_forest = nil		// list of all our disjoint-sets
 
 	// Create a new disjoint-set instance with the given ID.
-	makeSet(v) { return(add(DisjointSet.createInstance(v))); }
+	makeSet(v) {
+		local s;
+
+		s = DisjointSet.createInstance(v);
+		if(!add(s))
+			return(nil);
+		return(s);
+	}
 
 	// Add a DisjointSet instance to our list.
 	add(v) {
