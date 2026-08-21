@@ -38,7 +38,9 @@ class Matrix2D: object
 			touchMatrix();
 	}
 
-	propNotDefined(prop, [args]) { return(matrix.(prop)(args...)); }
+	propNotDefined(prop, [args]) {
+		return(matrix ? matrix.(prop)(args...) : nil);
+	}
 	operator[](i) { return(matrix[i]); }
 	operator[]=(i,v) { matrix[i] = v; return(self); }
 	createIterator() { return(matrix.createIterator); }
